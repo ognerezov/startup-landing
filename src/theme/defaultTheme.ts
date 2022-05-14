@@ -7,6 +7,7 @@ const colors = {
 	blue: {
 		100: '#6AC0DD',
 		200: '#F0F9FC',
+		700: '#011135',
 	},
 	orange: '#E76000',
 	red: {
@@ -68,9 +69,20 @@ const components = {
 				padding: '1px 30px',
 			},
 			ghost : {
-				backgroundColor : 'black.700',
-				color : 'green.700',
-				padding: '1px 40px',
+				backgroundColor : 'blue.700',
+				color : 'white.700',
+				padding: '0.01vh 0.5vw',
+				_hover: {
+					background: 'fuchsia.100',
+				},
+			},
+			ghost_selected :{
+				backgroundColor : 'fuchsia.100',
+				color : 'white.700',
+				padding: '0.01vh 0.5vw',
+				_hover: {
+					background: 'fuchsia.100',
+				},
 			},
 			fuchsia: {
 				backgroundColor: 'fuchsia.100',
@@ -112,9 +124,9 @@ const components = {
 	Input: {
 		baseStyle: {
 			field: {
-				borderColor: 'green.700',
-				backgroundColor : 'black.700',
-				color : 'green.700',
+				borderColor: 'blue.100',
+				backgroundColor : 'blue.700',
+				color : 'white.700',
 				borderRadius: '2px',
 				borderWidth: '2px',
 			},
@@ -154,24 +166,24 @@ const components = {
 	FormLabel :{
 		baseStyle: {
 			fontWeight: '600',
-			color: 'green.700',
-			fontSize: '18px',
+			color: 'white.700',
+			fontSize: '2vh',
 		}
 	},
 	TextArea :{
 		baseStyle: {
 			fontWeight: '400',
-			color: 'green.700',
-			backgroundColor : 'black.700',
-			borderColor : 'green.700',
-			fontSize: '14px',
+			color: 'white.700',
+			backgroundColor : 'blue.700',
+			borderColor : 'blue.100',
+			fontSize: '1.2vh',
 		}
 	},
 	Text: {
 		baseStyle: {
 			fontWeight: '400',
 			color: 'white.700',
-			fontSize: '18px',
+			fontSize: '2vh',
 		},
 		sizes: {},
 		defaultProps: {},
@@ -184,40 +196,46 @@ const components = {
 				letterSpacing : '0.02em'
 			},
 			caption: {
-				backgroundColor: 'black.700',
-				color: 'green.700',
-				fontSize : '20px',
-				fontWeight : '700'
+				fontFamily : 'Helvetica Neue',
+				fontSize : '4vh',
+				fontWeight : '500',
+				lineHeight : '4.2vh',
+				letterSpacing : '0.01em'
 			},
 			header: {
-				backgroundColor: 'black.700',
-				color: 'green.700',
-				fontSize : '24px',
-				fontWeight : 'bold'
+				fontFamily : 'Helvetica Neue',
+				fontSize : '5vh',
+				fontWeight : '600',
+				lineHeight : '5.2vh',
+				letterSpacing : '0.01em'
 			},
 			solid: {
 				margin : '5px',
-				backgroundColor: 'green.700',
-				color: 'black.700'
 			},
 			outline: {
-				backgroundColor: 'black.700',
-				color: 'green.700',
-				borderColor: 'green.700',
+				borderColor: 'blue.100',
 				borderWidth: '1px'
 			},
 			ghost: {
-				backgroundColor: 'black.700',
-				color: 'green.700'
+				backgroundColor: 'blue.700',
+				color: 'white.700'
+			},
+			ghost_selected :{
+				backgroundColor : 'fuchsia.100',
+				color : 'white.700',
+				padding: '0.01vh 0.5vw',
+				_hover: {
+					background: 'fuchsia.100',
+				},
 			},
 			error: {
-				backgroundColor: 'black.700',
+				backgroundColor: 'blue.700',
 				color: 'fuchsia.700',
-				fontSize: '16px',
+				fontSize: '1.5vh',
 			},
 			tiny: {
 				fontWeight : '200',
-				fontSize : '12px',
+				fontSize : '1vh',
 			},
 		}
 	},
@@ -236,6 +254,15 @@ const components = {
 				backgroundColor: 'rgba(0, 0, 0, 0)',
 			},
 		},
+	},
+	Spinner: {
+		baseStyle: {
+			color: 'fuchsia.100',
+			margin: '5vmin',
+			width : '10vmin',
+			height : '10vmin',
+			borderWidth : '1vmin'
+		}
 	},
 };
 
