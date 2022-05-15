@@ -1,5 +1,5 @@
 import React, {useState} from 'react';
-import {Box, Button, Center, Text, useMediaQuery} from "@chakra-ui/react";
+import {Box, Button, Text, useMediaQuery, VStack} from "@chakra-ui/react";
 import BackgroundImage from "../components/BackgroundImage";
 import EmailDialog from "../dialogs/EmailDialog";
 import {QUERY_SCREEN_SIZE} from "./About";
@@ -19,14 +19,17 @@ function Home(){
     const [largeScreen] = useMediaQuery(QUERY_SCREEN_SIZE)
     return <Box bg={DEFAULT_GRADIENT} h='100vh' w='100vw'>
                 {getDialog()}
-                <Box position='fixed' left='11vw' top='24vh' width={largeScreen ? '54vw':'98vw'}>
+        <VStack
+            spacing='3vmin'
+            align='self-start'
+            position='fixed' left={largeScreen ? '11vw':'4vw'} top='24vh' width={largeScreen ? '54vw':'92vw'}>
                     <Text variant='max' className='gradient-text'>
                         Retail KPI
                         <br/>
                         analytics platform
                     </Text>
-                </Box>
-                <Box position='fixed' left='11vw' top='40vh' w={largeScreen ? '30vw' : '76vw'} borderRadius='1vmin' px='1.2vmin' py='2.4vmin'
+                <Box
+                    borderRadius='1vmin' px='1.2vmin' py='2.4vmin'
                      bg='linear-gradient(180deg, #152445 0%, rgba(21, 36, 69, 0) 100%)'>
                     <Text>
                         <li>
@@ -46,13 +49,14 @@ function Home(){
                         </li>
                     </Text>
                 </Box>
-                <Center position='fixed' left='11vw' top={largeScreen ? '65vh' : '90vh'} w='30vw'>
-                    <Button
-                        onClick={()=>setState({...state,showBookDialog:true})}
-                        variant='solid'>
-                        Book A Demo
-                    </Button>
-                </Center>
+                <Button
+                    w={largeScreen ? undefined :'100%'}
+                    onClick={()=>setState({...state,showBookDialog:true})}
+                    variant='solid'>
+                    Book A Demo
+                </Button>
+
+        </VStack>
                 <Box width='53vw' h='100vh' ms='46vw' zIndex={2}>
                     <BackgroundImage/>
                 </Box>

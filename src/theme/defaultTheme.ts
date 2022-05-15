@@ -50,7 +50,7 @@ const components = {
 			borderRadius: '1vmin',
 			padding: '0.5vh 7.6vw',
 			fontWeight: '600',
-			color: 'green.700',
+			color: 'white.700',
 			fontSize: '2.5vh',
 		},
 		variants: {
@@ -71,7 +71,7 @@ const components = {
 			ghost : {
 				backgroundColor : 'blue.700',
 				color : 'white.700',
-				padding: '0.01vh 0.5vw',
+				padding: '0.01vh 1vw',
 				_hover: {
 					background: 'fuchsia.100',
 				},
@@ -79,7 +79,7 @@ const components = {
 			ghost_selected :{
 				backgroundColor : 'fuchsia.100',
 				color : 'white.700',
-				padding: '0.01vh 0.5vw',
+				padding: '0.01vh 1vw',
 				_hover: {
 					background: 'fuchsia.100',
 				},
@@ -190,16 +190,16 @@ const components = {
 		variants: {
 			max: {
 				fontFamily : 'Helvetica Neue',
-				fontSize : '7vh',
+				fontSize : '7vmin',
 				fontWeight : '500',
-				lineHeight : '7.4vh',
+				lineHeight : '7.4vmin',
 				letterSpacing : '0.02em'
 			},
 			caption: {
 				fontFamily : 'Helvetica Neue',
-				fontSize : '4vh',
+				fontSize : '4vmin',
 				fontWeight : '500',
-				lineHeight : '4.2vh',
+				lineHeight : '4.2vmin',
 				letterSpacing : '0.01em'
 			},
 			header: {

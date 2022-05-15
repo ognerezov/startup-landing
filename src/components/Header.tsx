@@ -14,7 +14,7 @@ const Header : FC<HeaderProps> = props => {
                 backgroundColor='#011135'
                 position='fixed'
                 left='0' top='0' width='100vw' height = '9vh'
-                zIndex={1}>
+                zIndex={3}>
                 <Center >
                     <Text className='gradient-text' variant='caption'>
                         Place IT
