@@ -1,6 +1,8 @@
 import AWS, {AWSError} from 'aws-sdk';
 import {InvocationResponse} from "aws-sdk/clients/lambda";
+import {credentials} from "./AWSConfig";
 
+AWS.config.credentials = credentials;
 const lambda = new AWS.Lambda();
 
 export interface StatusCodeHolder {

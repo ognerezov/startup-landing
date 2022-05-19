@@ -13,6 +13,7 @@ import {QUERY_SCREEN_SIZE} from "../pages/About";
 
 export interface BasicDialogProps {
     onClose : ()=>void
+    onSuccess :()=>void
 }
 
 export interface DialogProps extends BasicDialogProps{
@@ -33,7 +34,7 @@ const EmailDialog : FC<DialogProps> = props => {
                             <EmailMe
                                 subject='From book a Demo landing'
                                 onClose={props.onClose}
-                                onSuccess={props.onClose}
+                                onSuccess={props.onSuccess}
                                 width={largeScreen? '50vw':'96vw'}
                                 textNotRequired={true}/>
                         </Center>
