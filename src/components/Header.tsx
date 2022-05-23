@@ -17,7 +17,7 @@ const Header : FC<HeaderProps> = props => {
                 zIndex={3}>
                 <Center >
                     <Text className='gradient-text' variant='caption'>
-                        Place IT
+                        Team Heart
                     </Text>
                 </Center>
                 <Spacer/>

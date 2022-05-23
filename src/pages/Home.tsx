@@ -41,22 +41,22 @@ const Home: FC<HomeProps>= props=>{
             align='self-start'
             position='fixed' left={largeScreen ? '11vw':'4vw'} top='24vh' width={largeScreen ? '54vw':'92vw'}>
                     <Text variant='max' className='gradient-text'>
-                        Retail KPI
+                        Optimal stress level
                         <br/>
-                        analytics platform
+                        Best performance
                     </Text>
                 <Box
                     borderRadius='1vmin' px='1.2vmin' py='2.4vmin'
                      bg='linear-gradient(180deg, #152445 0%, rgba(21, 36, 69, 0) 100%)'>
                     <Text>
                         <li>
-                            Total control over your items
+                            Understand your team better
                         </li>
                         <li>
-                            Data integration and visualization
+                            Find best time in a game for each player
                         </li>
                         <li>
-                            Data analytics
+                            Avoid excessive training
                         </li>
                         <li>
                             Easy to use

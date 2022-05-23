@@ -18,7 +18,7 @@ function About(){
                      bg='linear-gradient(180deg, #152445 0%, rgba(21, 36, 69, 0) 100%)'>
                     <Text>
                         <li>
-                            Internation team based in Valencia, Spain
+                            International team based in Valencia, Spain
                         </li>
                         <li>
                             Supported and funded by Demium and TBC
