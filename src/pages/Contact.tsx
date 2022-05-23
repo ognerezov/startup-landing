@@ -14,7 +14,7 @@ const Contact :FC<BasicDialogProps> = props => {
             <EmailMe
                 subject='From contact page landing'
                 onClose={props.onClose}
-                onSuccess={props.onClose}
+                onSuccess={props.onSuccess}
                 height='80vh'
             />
         </Box>

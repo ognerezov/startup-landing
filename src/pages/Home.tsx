@@ -1,19 +1,36 @@
-import React, {useState} from 'react';
+import React, {FC, useState} from 'react';
 import {Box, Button, Text, useMediaQuery, VStack} from "@chakra-ui/react";
 import BackgroundImage from "../components/BackgroundImage";
 import EmailDialog from "../dialogs/EmailDialog";
 import {QUERY_SCREEN_SIZE} from "./About";
 
 export const DEFAULT_GRADIENT = 'linear-gradient(45deg, #000B2A 0%, #011E4C 100%)'
+
+interface HomeProps{
+    onReport :(event: string)=>void;
+}
+
 interface HomeState{
     showBookDialog : boolean
 }
 
-function Home(){
+const Home: FC<HomeProps>= props=>{
+
+    function onClose(){
+        setState({...state,showBookDialog:false})
+        props.onReport('Cancel Book a Demo')
+    }
+
+    function onSent(){
+        setState({...state,showBookDialog:false})
+        props.onReport('Demo booked!!!')
+    }
+
     function getDialog(){
         return<EmailDialog
             isOpen={state.showBookDialog}
-            onClose={()=>setState({...state,showBookDialog:false})}/>
+            onClose={onClose}
+            onSuccess={onSent}/>
     }
     const [state, setState] = useState<HomeState>({showBookDialog : false});
     const [largeScreen] = useMediaQuery(QUERY_SCREEN_SIZE)
