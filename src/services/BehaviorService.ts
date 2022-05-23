@@ -5,6 +5,7 @@ import {credentials} from "./AWSConfig";
 AWS.config.credentials = credentials;
 const sqs = new AWS.SQS();
 const QUEUE_URL = 'https://sqs.eu-west-1.amazonaws.com/992648939501/landing-events';
+const PROJECT = 'RFID retail analytics'
 
 export function report(event : string, ip : string, info : ClientInfo){
     const params = {
@@ -24,6 +25,10 @@ export function report(event : string, ip : string, info : ClientInfo){
             "Agent": {
                 DataType: "String",
                 StringValue: info.userAgent
+            },
+            "Project": {
+                DataType: "String",
+                StringValue: PROJECT
             },
         },
         MessageBody: event,
