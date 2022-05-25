@@ -204,9 +204,9 @@ const components = {
 			},
 			caption_s: {
 				fontFamily : 'Helvetica Neue',
-				fontSize : '3vmin',
+				fontSize : '2.7vmin',
 				fontWeight : '400',
-				lineHeight : '3.1vmin',
+				lineHeight : '3vmin',
 				letterSpacing : '0.01em'
 			},
 			header: {

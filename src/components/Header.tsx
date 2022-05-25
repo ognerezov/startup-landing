@@ -1,6 +1,7 @@
 import React, {FC} from 'react';
 import {Center, Flex, HStack, Spacer, Text} from "@chakra-ui/react";
 import RadioButton from "./RadioButton";
+import {useIntl} from "react-intl";
 
 interface HeaderProps{
     selected ?: string
@@ -9,6 +10,8 @@ interface HeaderProps{
 }
 
 const Header : FC<HeaderProps> = props => {
+    const intl = useIntl();
+
     return <Flex
                 px = '1vw'
                 backgroundColor='#011135'
@@ -17,7 +20,7 @@ const Header : FC<HeaderProps> = props => {
                 zIndex={3}>
                 <Center >
                     <Text className='gradient-text' variant='caption'>
-                        Team Heart
+                        {intl.formatMessage({id: 'Company.name'})}
                     </Text>
                 </Center>
                 <Spacer/>
