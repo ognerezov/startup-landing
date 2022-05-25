@@ -12,6 +12,7 @@ import Contact from "./pages/Contact";
 import {getIP} from "./services/FetchIP";
 import {ClientInfo, getClientInfo} from "./services/ClientInfo";
 import {report} from "./services/BehaviorService";
+import {HowItWorks} from "./pages/HowItWorks";
 
 interface AppState{
     tab : string
@@ -22,6 +23,7 @@ interface AppState{
 const HOME = 'Home'
 const ABOUT = 'About'
 const CONTACT = 'Contact'
+const HOW_IT_WORKS = 'Solution'
 
 
 function App() {
@@ -48,6 +50,8 @@ function App() {
         switch (state.tab) {
             case HOME:
                 return <Home onReport={onReport}/>
+            case HOW_IT_WORKS:
+                return <HowItWorks/>
             case ABOUT:
                 return <About/>
             case CONTACT :
@@ -75,7 +79,7 @@ function App() {
         <Header
             selected={state.tab}
             select={changeTab}
-            buttons={['Home','About','Contact']}
+            buttons={[HOME,HOW_IT_WORKS,ABOUT,CONTACT]}
         />
           {getPage()}
           </IntlProvider>

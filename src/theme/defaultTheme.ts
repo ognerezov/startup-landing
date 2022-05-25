@@ -51,7 +51,7 @@ const components = {
 			padding: '0.5vh 7.6vw',
 			fontWeight: '600',
 			color: 'white.700',
-			fontSize: '2.5vh',
+			fontSize: '2.2vh',
 		},
 		variants: {
 			solid : {
@@ -200,6 +200,13 @@ const components = {
 				fontSize : '4vmin',
 				fontWeight : '500',
 				lineHeight : '4.2vmin',
+				letterSpacing : '0.01em'
+			},
+			caption_s: {
+				fontFamily : 'Helvetica Neue',
+				fontSize : '3vmin',
+				fontWeight : '400',
+				lineHeight : '3.1vmin',
 				letterSpacing : '0.01em'
 			},
 			header: {
