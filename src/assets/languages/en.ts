@@ -2,7 +2,7 @@ export const en: Record<string, string> = {
 	'Company.name' : 'Metrix',
 
 	'Home.1' : 'ACTIONABLE INSIGHTS',
-	'Home.2' : 'AT YOUR FINGERPRINT',
+	'Home.2' : 'AT YOUR FINGERTIPS',
 
 	'Feature.0': 'AI-powered retail data analytics platform',
 	'Feature.1': 'Store KPI’s',
@@ -18,7 +18,7 @@ export const en: Record<string, string> = {
 	'About.3': 'Best software engineers',
 
 	'Solution.1' : 'Various data sources integration in METRIX cloud platform',
-	'Solution.2' : 'You combine a data and chose view template',
+	'Solution.2' : 'Easily cross data and choose preferred dashboard view',
 	'Solution.3' : 'Powerful AI insights and forecasts',
 	'Solution.4' : '',
 
