@@ -216,6 +216,13 @@ const components = {
 			fontWeight : '300',
 			lineHeight : '1.7vh',
 		},
+			title_b: {
+				color : 'black.700',
+				fontFamily : 'Helvetica Neue',
+				fontSize : '2.6vh',
+				fontWeight : '500',
+				lineHeight : '2.7vh',
+			},
 			header: {
 				fontFamily : 'Helvetica Neue',
 				fontSize : '5vh',

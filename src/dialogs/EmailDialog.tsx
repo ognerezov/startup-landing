@@ -27,7 +27,7 @@ const EmailDialog : FC<DialogProps> = props => {
                 isOpen={props.isOpen}
                 onClose={props.onClose}>
                 <ModalOverlay />
-                <ModalContent maxW={largeScreen ? '54vw':'98vw'} background='#011135'>
+                <ModalContent maxW={largeScreen ? '66vw':'98vw'} background='#011135'>
                     <ModalHeader color='#FFF'>{props.title}</ModalHeader>
                     <ModalCloseButton color='#FFF'/>
                     <ModalBody>

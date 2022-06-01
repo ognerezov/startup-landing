@@ -1,5 +1,5 @@
 import React, {FC, useState} from 'react'
-import {Grid, useMediaQuery, VStack} from "@chakra-ui/react";
+import {Box, Grid, useMediaQuery, VStack, Text, Center} from "@chakra-ui/react";
 import {QUERY_SCREEN_SIZE} from "../pages/About";
 import {ButtonCard} from "./ButtonCard";
 import {CategoryViewer} from "./CategoryViewer";
@@ -29,31 +29,43 @@ export const Categories : FC<CategoriesProps> = props => {
     }
 
     function getContent(){
-        console.log(state.category)
         if(!state.category){
             return getItems()
         }
-        const title = intl.formatMessage({id: 'Email.missing1'}) +
-            intl.formatMessage({id: `Category.${state.category}`});
+        const title = intl.formatMessage({id: 'Email.missing2'})
+            // + intl.formatMessage({id: `Category.${state.category}`});
         return <CategoryViewer
                     id = {state.category}
                     title={title}
                     onExit={()=>{setState({...state, category : undefined})}}/>
     }
-    return largeScreen ? <Grid
+    return <Box
+        height='90vh'
+        position='fixed' top='9vh'
+        left ={largeScreen ? '6vw' : '1vw'}
+    >
+        <Center w='100%' h={largeScreen ? '20vh' : '2vh'} >
+            <Text variant='title_b'>
+                {intl.formatMessage({id: 'Company.slogan'})}
+            </Text>
+        </Center>
+        {largeScreen ?
+        <Grid
             alignItems='center'
-            position='fixed' top='9vh' left ='6vw'
+            justifyItems='center'
             px='1vw'
-            py='20vh'
-            templateColumns='repeat(5, 1fr)' gap={6} width='88vw' height='90vh'>
+            pb='25vh'
+            templateColumns='repeat(5, 1fr)' gap={6} width='88vw' h='100%'>
         {getContent()}
     </Grid> : <VStack
-                position='fixed' top='9vh' left ='1vw'
                 w = '98vw'
                 px='4w'
-                py='5vh'
+                pt ='3vh'
+                pb='6vh'
                 overflowX='hidden' overflowY='scroll' maxHeight='90vh'
+                h='100%'
             >
         {getContent()}
-    </VStack>
+    </VStack>}
+    </Box>
 }
