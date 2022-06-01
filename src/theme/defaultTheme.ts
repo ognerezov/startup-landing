@@ -209,6 +209,13 @@ const components = {
 				lineHeight : '3vmin',
 				letterSpacing : '0.01em'
 			},
+		caption_b: {
+			color : 'black.700',
+			fontFamily : 'Helvetica Neue',
+			fontSize : '1.6vh',
+			fontWeight : '300',
+			lineHeight : '1.7vh',
+		},
 			header: {
 				fontFamily : 'Helvetica Neue',
 				fontSize : '5vh',

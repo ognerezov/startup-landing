@@ -3,7 +3,6 @@ import './App.css';
 import {ChakraProvider} from '@chakra-ui/react';
 import {defaultTheme} from "./theme/defaultTheme";
 import Header from "./components/Header";
-import Home from "./pages/Home";
 import NotFound from "./pages/NotFound";
 import About from "./pages/About";
 import {IntlProvider} from "react-intl";
@@ -13,6 +12,7 @@ import {getIP} from "./services/FetchIP";
 import {ClientInfo, getClientInfo} from "./services/ClientInfo";
 import {report} from "./services/BehaviorService";
 import {HowItWorks} from "./pages/HowItWorks";
+import {Categories} from "./components/Categories";
 
 interface AppState{
     tab : string
@@ -49,7 +49,11 @@ function App() {
     function getPage(){
         switch (state.tab) {
             case HOME:
-                return <Home onReport={onReport}/>
+                return <Categories
+                    onReport={onReport}
+                    categories={['photo','drones','sports','music','hiking',
+                    'tools','gaming', 'kids', 'events', 'camping']}/>
+                // return <Home onReport={onReport}/>
             case HOW_IT_WORKS:
                 return <HowItWorks/>
             case ABOUT:
@@ -79,7 +83,7 @@ function App() {
         <Header
             selected={state.tab}
             select={changeTab}
-            buttons={[HOME,HOW_IT_WORKS,ABOUT,CONTACT]}
+            buttons={[HOME,ABOUT,CONTACT]}
         />
           {getPage()}
           </IntlProvider>

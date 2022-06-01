@@ -1,5 +1,5 @@
 export const en: Record<string, string> = {
-	'Company.name' : 'Metrix',
+	'Company.name' : 'JetRent',
 
 	'Home.1' : 'ACTIONABLE INSIGHTS',
 	'Home.2' : 'AT YOUR FINGERTIPS',
@@ -22,6 +22,20 @@ export const en: Record<string, string> = {
 	'Solution.3' : 'Powerful AI insights and forecasts',
 	'Solution.4' : '',
 
+	'Category.photo' : 'Photography',
+	'Category.drones' : 'Drones',
+	'Category.sports' : 'Sports',
+	'Category.music' : 'Music',
+	'Category.hiking' : 'Hiking',
+	'Category.tools' : 'Tools',
+	'Category.gaming' : 'Gaming',
+	'Category.kids' : 'For kids',
+	'Category.events' : 'For events',
+	'Category.camping' : 'Camping',
+
+	'Email.missing1' : "Unfortunately we have nothing of this. Please let us know if you are willing to rent out at category: ",
+	'Email.missing2' : " ",
+	'Email.title' : 'Book A Demo',
 	'Email.email': 'Email or mobile phone number',
 	'Email.description': 'Please provide a valid contact info.',
 	'Email.text': 'Your message',

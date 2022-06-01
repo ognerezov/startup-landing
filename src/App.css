@@ -12,3 +12,20 @@
   text-fill-color: transparent;
   white-space: pre;
 }
+
+.round-corners{
+  border-radius: 2vmin;
+}
+
+.crop {
+  width: 15vw;
+  height: 15vw;
+  text-align: center;
+  overflow: hidden;
+}
+
+.crop img {
+  width: 300px;
+}
+
+.centered-and-cropped { object-fit: cover }

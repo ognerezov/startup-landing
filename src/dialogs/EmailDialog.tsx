@@ -18,6 +18,7 @@ export interface BasicDialogProps {
 
 export interface DialogProps extends BasicDialogProps{
     isOpen : boolean
+    title : string
 }
 
 const EmailDialog : FC<DialogProps> = props => {
@@ -27,7 +28,7 @@ const EmailDialog : FC<DialogProps> = props => {
                 onClose={props.onClose}>
                 <ModalOverlay />
                 <ModalContent maxW={largeScreen ? '54vw':'98vw'} background='#011135'>
-                    <ModalHeader color='#FFF'>Book A Demo</ModalHeader>
+                    <ModalHeader color='#FFF'>{props.title}</ModalHeader>
                     <ModalCloseButton color='#FFF'/>
                     <ModalBody>
                         <Center>
