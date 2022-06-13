@@ -48,5 +48,16 @@ export const en: Record<string, string> = {
 	'Cancel' : 'Cancel',
 	'Submit' : 'Submit',
 	'Contact' : 'I want to contact you.',
-	'Hint' : 'Use ↑ ↓ keys for navigation. Use Enter or number keys to chose an option.'
+	'Hint' : 'Use ↑ ↓ keys for navigation. Use Enter or number keys to chose an option.',
+
+	'Description' : 'Description',
+	'Location' : 'Location',
+
+	'Price.day' : 'Price per day',
+	'Price.hour' : 'Price per hour',
+	'Price.week' : 'Price per week',
+	'Price.month' : 'Price per month',
+	'Price.book' : 'Book this item',
+	'Price.booked' : 'Your successfully applied for this item',
+	'Price.email' : 'Please leave your email or phone and our manage will contact you',
 };

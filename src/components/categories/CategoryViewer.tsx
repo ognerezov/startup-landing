@@ -5,6 +5,7 @@ import {MapView} from "../maps/MapView";
 import {Box, useMediaQuery} from "@chakra-ui/react";
 import {QUERY_SCREEN_SIZE} from "../../pages/About";
 import {ItemGrid} from "../items/ItemGrid";
+import {ItemContext} from "../../context/context";
 
 interface CategoryViewerProps {
     id : number
@@ -16,34 +17,38 @@ interface CategoryViewerProps {
 export const CategoryViewer : FC<CategoryViewerProps> = props => {
     const [largeScreen] = useMediaQuery(QUERY_SCREEN_SIZE)
     return props.items && props.items.length >0 ?
-        <Box
-            width='100vw'
-            height='91vh'
-            position='fixed' top='9vh'
-            left ='0'
-        >
+        <ItemContext.Consumer>{data =>
             <Box
-                display ='block'
-                position='fixed'
-                left ='0'
-                maxHeight = '100%'
-                height = '100%'
-                overflowX='hidden' overflowY='auto'
-                width='34vw' maxWidth='34vw' >
-                <ItemGrid columns={2} w='34vw' h='100%'  items={props.items}/>
-            </Box>
-
-            <Box
-                position='fixed'
-                zIndex = {2}
-                left ='33vw'
-                maxHeight='100%'
-                overflowX='hidden' overflowY='auto'
-                width='67vw' maxWidth='67vw'
+                width='100vw'
+                height='91vh'
+                position='fixed' top='9vh'
+                left='0'
             >
-                <MapView items={props.items}/>
+                <Box
+                    display='block'
+                    position='fixed'
+                    left='0'
+                    maxHeight='100%'
+                    height='100%'
+                    overflowX='hidden' overflowY='auto'
+                    width='34vw' maxWidth='34vw'>
+                    <ItemGrid columns={2} w='34vw' h='100%' items={data.context.itemList}/>
+                </Box>
+
+                <Box
+                    position='fixed'
+                    zIndex={2}
+                    left='33vw'
+                    maxHeight='100%'
+                    overflowX='hidden' overflowY='auto'
+                    width='67vw' maxWidth='67vw'
+                >
+                    <MapView {...data.context} className='map-container-landscape'/>
+                </Box>
             </Box>
-        </Box>:
+        }
+        </ItemContext.Consumer>
+            :
         <EmailDialog
         title={props.title}
         isOpen={true}

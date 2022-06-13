@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState} from 'react'
 import mapboxgl from 'mapbox-gl';
-import {DEFAULT_SPOT} from "../../services/GeoSearch"; // eslint-disable-line import/no-webpack-loader-syntax
+import {DEFAULT_SPOT} from "../../backend/GeoSearch"; // eslint-disable-line import/no-webpack-loader-syntax
 
 mapboxgl.accessToken = 'pk.eyJ1IjoicG9sYXJvc28iLCJhIjoiY2w0NWx0OHA3MDI3bTNrbjZyeWIxcG95aSJ9.XJVCOv41BrAzsKm9Ye2ygQ';
 

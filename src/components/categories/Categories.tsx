@@ -4,7 +4,7 @@ import {QUERY_SCREEN_SIZE} from "../../pages/About";
 import {ButtonCard} from "../ButtonCard";
 import {CategoryViewer} from "./CategoryViewer";
 import {useIntl} from "react-intl";
-import {findByCategoryNearBy} from "../../services/GeoSearch";
+import {findByCategoryNearBy} from "../../backend/GeoSearch";
 import {Item} from "../../model/items";
 import {IItemContext} from "../../context/context";
 
@@ -12,6 +12,7 @@ interface CategoriesProps {
     categories : number[]
     onReport : (event : string)=>void
     setItems : (items : Item[]) => void;
+    context : IItemContext
 }
 
 interface CategoriesState{
@@ -26,6 +27,7 @@ export const Categories : FC<CategoriesProps> = props => {
     async function onChangeCategory(category : number){
         props.onReport('Category selected: '+ state.category);
         const items : Item[] = await findByCategoryNearBy(category);
+        setState({...state, category})
         props.setItems(items)
     }
 
@@ -42,7 +44,8 @@ export const Categories : FC<CategoriesProps> = props => {
         }
         const title = intl.formatMessage({id: 'Email.missing2'})
             // + intl.formatMessage({id: `Category.${state.category}`});
-        return <CategoryViewer
+        return  <CategoryViewer
+                    items={props.context.itemList}
                     id = {state.category}
                     title={title}
                     onExit={()=>{setState({...state, category : undefined})}}/>

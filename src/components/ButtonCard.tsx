@@ -32,7 +32,7 @@ export const ButtonCard : FC<ButtonCardProps> = props => {
     const text = intl.formatMessage({id: `Category.${props.id}`});
     return <Box w={props.size} h={props.size}
                 position='relative'
-                boxShadow='0.5vmin 0.5vmin 1vmin #2A3D5A'
+                boxShadow='0.5vmin 0.5vmin 1vmin #000'
                 onClick={()=>{props.onSelect(props.id)}}
                 className='round-corners'
                 cursor='pointer'>

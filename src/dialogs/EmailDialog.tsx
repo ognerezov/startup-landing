@@ -19,6 +19,7 @@ export interface BasicDialogProps {
 export interface DialogProps extends BasicDialogProps{
     isOpen : boolean
     title : string
+    subject ?: string
 }
 
 const EmailDialog : FC<DialogProps> = props => {
@@ -33,7 +34,7 @@ const EmailDialog : FC<DialogProps> = props => {
                     <ModalBody>
                         <Center>
                             <EmailMe
-                                subject='From book a Demo landing'
+                                subject={props.subject ? props.subject : 'From book a Demo landing'}
                                 onClose={props.onClose}
                                 onSuccess={props.onSuccess}
                                 width={largeScreen? '50vw':'96vw'}

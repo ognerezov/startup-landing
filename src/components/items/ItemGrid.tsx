@@ -3,6 +3,7 @@ import {ItemsConsumer} from "../../model/common";
 import {Grid, GridItem} from "@chakra-ui/react";
 import {Item} from "../../model/items";
 import {ItemCard} from "./ItemCard";
+import {ItemContext} from "../../context/context";
 
 interface ItemGridProps extends ItemsConsumer{
     items ?: Item[]
@@ -27,11 +28,13 @@ export const ItemGrid : FC<ItemGridProps> = props => {
         templateColumns={`repeat(${props.columns}, 1fr)`} gap={1}>
             {props.items.map(item =>
                 <GridItem key={item.id} h='20vh'>
-                    <ItemCard
-                    item={item}
-                    onSelect={item=>{}}
-                    h={'100%'}
-                    w={'100%'}/>
+                    <ItemContext.Consumer>{ data =>
+                        <ItemCard
+                        item={item}
+                        onSelect={data.selectItem}
+                        h={'100%'}
+                        w={'100%'}/> }
+                    </ItemContext.Consumer>
                 </GridItem>)
             }
         </Grid> : null

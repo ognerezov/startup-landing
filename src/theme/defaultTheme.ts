@@ -233,12 +233,22 @@ const components = {
 				lineHeight : '1.7vh',
 				textAlign : 'start'
 			},
+			price_xl: {
+				color : 'green.100',
+				fontFamily : 'Helvetica Neue',
+				fontSize : '2.6vh',
+				fontWeight : '700',
+				lineHeight : '2.7vh',
+				textAlign : 'center',
+				py : '1vh'
+			},
 			title_b: {
 				color : 'black',
 				fontFamily : 'Helvetica Neue',
 				fontSize : '2.6vh',
 				fontWeight : '500',
 				lineHeight : '2.7vh',
+				marginY : '1vh'
 			},
 			header: {
 				fontFamily : 'Helvetica Neue',

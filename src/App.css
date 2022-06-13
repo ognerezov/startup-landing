@@ -34,3 +34,8 @@
     height: 91vh;
     width: 67vw;
 }
+
+.map-container-mini {
+  height: 20vh;
+  width: 100%;
+}

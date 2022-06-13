@@ -1,38 +1,22 @@
 import React, {FC, useEffect, useRef, useState} from 'react'
 import mapboxgl from 'mapbox-gl';
-import {DEFAULT_SPOT} from "../../services/GeoSearch";
+import {DEFAULT_SPOT} from "../../backend/GeoSearch";
 import {loadImages} from "../../services/MapboxUtil";
-import {Dict, ItemDict, ItemsConsumer} from "../../model/common"; // eslint-disable-line import/no-webpack-loader-syntax
+import {IItemContext} from "../../context/context"; // eslint-disable-line import/no-webpack-loader-syntax
 
 mapboxgl.accessToken = 'pk.eyJ1IjoicG9sYXJvc28iLCJhIjoiY2w0NWx0OHA3MDI3bTNrbjZyeWIxcG95aSJ9.XJVCOv41BrAzsKm9Ye2ygQ';
 
-interface ItemsState{
-    images : Dict
-    items : ItemDict
+interface MapViewProps extends IItemContext{
+    className ?: string
 }
 
-export const MapView :FC<ItemsConsumer> = props => {
+export const MapView :FC<MapViewProps> = ({items,images, className}) => {
     const mapContainer = useRef<HTMLElement>(null);
     const map = useRef<mapboxgl.Map | null>(null);
 
     const [lng, setLng] = useState<number>(DEFAULT_SPOT.lon);
     const [lat, setLat] = useState<number>(DEFAULT_SPOT.lat);
     const [zoom, setZoom] = useState<number>(13);
-    const [items, setItems] = useState<ItemsState | undefined>(undefined);
-
-    useEffect(()=>{
-        if(!props.items){
-            return
-        }
-        const images : Dict ={};
-        const items : ItemDict = {};
-        for(let item of props.items){
-            images[item.id + ''] = 'https://d2qk3mwcnqg7zi.cloudfront.net/' + item.id + '/default.jpg'
-            items[item.id + ''] = item
-        }
-        console.log(items)
-        setItems({images,items})
-    },[props])
 
     useEffect(() => {
         if (map.current) {
@@ -42,7 +26,7 @@ export const MapView :FC<ItemsConsumer> = props => {
                 setZoom(+map.current!.getZoom().toFixed(2));
 
             });
-            items && loadImages(map.current!,items.images,loaded => {
+            items && loadImages(map.current!,images!,loaded => {
                 map.current!.on('load', () => {
                     const features : GeoJSON.Feature<GeoJSON.Geometry>[]= [];
                     for(const key in loaded){
@@ -52,7 +36,7 @@ export const MapView :FC<ItemsConsumer> = props => {
                         map.current!.addImage(key, loaded[key]!, {
                             pixelRatio: 2
                         });
-                        const item = items.items[key];
+                        const item = items[key];
                         features.push(
                             {
                                 'type': 'Feature',
@@ -62,7 +46,7 @@ export const MapView :FC<ItemsConsumer> = props => {
                                 },
                                 'properties': {
                                     'image-name': key,
-                                    'name': (items.items[key].pricePerDay / 100) + '€/day'
+                                    'name': (items[key].pricePerDay / 100) + '€/day'
                                 }
                             }
                         )
@@ -108,5 +92,5 @@ export const MapView :FC<ItemsConsumer> = props => {
         });
 
     });
-    return <div><div ref={mapContainer as React.RefObject<HTMLDivElement>} className="map-container-landscape" /></div>
+    return <div><div ref={mapContainer as React.RefObject<HTMLDivElement>} className={className} /></div>
 }

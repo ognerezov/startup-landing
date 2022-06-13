@@ -12,11 +12,14 @@ export interface IItemContext{
 export interface ItemContextService {
     context : IItemContext,
     setContext : (data : IItemContext) => void;
+    selectedItem ?: number
+    selectItem : (item : Item) => void
 }
 
 export const ItemContext = createContext<ItemContextService>({
     context : {},
-    setContext : data => {}
+    setContext : data => {},
+    selectItem : item =>{}
 });
 
 export function expandItems(itemList : Item[]) : IItemContext{
@@ -26,7 +29,6 @@ export function expandItems(itemList : Item[]) : IItemContext{
         images[item.id + ''] = 'https://d2qk3mwcnqg7zi.cloudfront.net/' + item.id + '/default.jpg'
         items[item.id + ''] = item
     }
-    console.log(items)
     return {
         itemList,
         images,
