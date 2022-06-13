@@ -1,30 +1,38 @@
 import React, {FC, useState} from 'react'
 import {Box, Grid, useMediaQuery, VStack, Text, Center} from "@chakra-ui/react";
-import {QUERY_SCREEN_SIZE} from "../pages/About";
-import {ButtonCard} from "./ButtonCard";
+import {QUERY_SCREEN_SIZE} from "../../pages/About";
+import {ButtonCard} from "../ButtonCard";
 import {CategoryViewer} from "./CategoryViewer";
 import {useIntl} from "react-intl";
+import {findByCategoryNearBy} from "../../services/GeoSearch";
+import {Item} from "../../model/items";
+import {IItemContext} from "../../context/context";
 
 interface CategoriesProps {
-    categories : string[]
+    categories : number[]
     onReport : (event : string)=>void
+    setItems : (items : Item[]) => void;
 }
 
 interface CategoriesState{
-    category ?: string
+    category ?: number
 }
-
 
 export const Categories : FC<CategoriesProps> = props => {
     const [largeScreen] = useMediaQuery(QUERY_SCREEN_SIZE)
     const [state,setState] = useState<CategoriesState>({category : undefined})
     const intl = useIntl()
+
+    async function onChangeCategory(category : number){
+        props.onReport('Category selected: '+ state.category);
+        const items : Item[] = await findByCategoryNearBy(category);
+        props.setItems(items)
+    }
+
     function getItems(){
         return props.categories.map(id=>(
             <ButtonCard id={id} key={id}
-                        onSelect={category=>{
-                            props.onReport('Category selected: '+ state.category)
-                            setState({...state,category })}} size={largeScreen ? '15vw' : '90vw'}/>
+                        onSelect={onChangeCategory} size={largeScreen ? '15vw' : '90vw'}/>
         ))
     }
 

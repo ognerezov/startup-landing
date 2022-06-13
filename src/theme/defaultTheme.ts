@@ -6,12 +6,14 @@ const colors = {
 	},
 	blue: {
 		100: '#6AC0DD',
-		200: '#F0F9FC',
+		200: '#B7D2E2',
+		500: '#2A3D5A',
 		700: '#011135',
 	},
 	orange: '#E76000',
 	red: {
 		100: '#DD3E26',
+		200: '#D77B5F',
 	},
 	black: {
 		100: '#272727',
@@ -209,15 +211,30 @@ const components = {
 				lineHeight : '3vmin',
 				letterSpacing : '0.01em'
 			},
-		caption_b: {
-			color : 'black.700',
-			fontFamily : 'Helvetica Neue',
-			fontSize : '1.6vh',
-			fontWeight : '300',
-			lineHeight : '1.7vh',
-		},
+			regular: {
+				color : 'black',
+				fontFamily : 'Helvetica Neue',
+				fontSize : '1.6vh',
+				fontWeight : '300',
+				lineHeight : '1.7vh',
+			},
+			bold: {
+				color : 'black',
+				fontFamily : 'Helvetica Neue',
+				fontSize : '1.7vh',
+				fontWeight : '700',
+				lineHeight : '1.7vh',
+			},
+			price: {
+				color : 'green.100',
+				fontFamily : 'Helvetica Neue',
+				fontSize : '1.6vh',
+				fontWeight : '700',
+				lineHeight : '1.7vh',
+				textAlign : 'start'
+			},
 			title_b: {
-				color : 'black.700',
+				color : 'black',
 				fontFamily : 'Helvetica Neue',
 				fontSize : '2.6vh',
 				fontWeight : '500',

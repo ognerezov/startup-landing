@@ -12,7 +12,9 @@ import {getIP} from "./services/FetchIP";
 import {ClientInfo, getClientInfo} from "./services/ClientInfo";
 import {report} from "./services/BehaviorService";
 import {HowItWorks} from "./pages/HowItWorks";
-import {Categories} from "./components/Categories";
+import {Categories} from "./components/categories/Categories";
+import {expandItems, IItemContext, ItemContext} from "./context/context";
+import {Item} from "./model/items";
 
 interface AppState{
     tab : string
@@ -28,6 +30,11 @@ const HOW_IT_WORKS = 'Solution'
 
 function App() {
     const [state, setState] = useState<AppState>({tab : HOME, clientInfo : getClientInfo()});
+    const [data, setData] = useState<IItemContext>({});
+
+    function setItems(items : Item[]){
+        setData(expandItems(items))
+    }
 
     function onReport(event : string){
         state.ip && report(event,state.ip, state.clientInfo)
@@ -50,9 +57,9 @@ function App() {
         switch (state.tab) {
             case HOME:
                 return <Categories
+                    setItems={setItems}
                     onReport={onReport}
-                    categories={['photo','drones','sports','music','hiking',
-                    'tools','gaming', 'kids', 'events', 'camping']}/>
+                    categories={[1,2,3,4,5,6,7,8,9,10]}/>
                 // return <Home onReport={onReport}/>
             case HOW_IT_WORKS:
                 return <HowItWorks/>
@@ -80,12 +87,14 @@ function App() {
   return (
       <ChakraProvider theme={defaultTheme}>
           <IntlProvider messages={languages[currentLanguage]} locale={currentLanguage}>
+              <ItemContext.Provider value={{context : data, setContext : setData}}>
         <Header
             selected={state.tab}
             select={changeTab}
             buttons={[HOME,ABOUT,CONTACT]}
         />
           {getPage()}
+              </ItemContext.Provider>
           </IntlProvider>
       </ChakraProvider>
   );

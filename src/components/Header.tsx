@@ -14,12 +14,12 @@ const Header : FC<HeaderProps> = props => {
 
     return <Flex
                 px = '1vw'
-                backgroundColor='#011135'
+                backgroundColor='white'
                 position='fixed'
                 left='0' top='0' width='100vw' height = '9vh'
                 zIndex={3}>
                 <Center >
-                    <Text className='gradient-text' variant='caption'>
+                    <Text variant='title_b'>
                         {intl.formatMessage({id: 'Company.name'})}
                     </Text>
                 </Center>

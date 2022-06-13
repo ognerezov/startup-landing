@@ -11,26 +11,19 @@ import gamingCat from '../images/categories/gaming.png'
 import kidsCat from '../images/categories/kids.png'
 import eventsCat from '../images/categories/events.png'
 import campingCat from '../images/categories/camping.png'
+import {ButtonCardProps, Dict} from "../model/common";
 
-interface ButtonCardProps{
-    id : string
-    onSelect : (id : string)=>void
-    size : string
-}
-export interface Dict {
-    [key: string] : string
-}
 export const IMAGES : Dict= {
-    photo : photoCat,
-    drones : dronesCat,
-    sports : sportsCat,
-    music : musicCat,
-    hiking : hikingCat,
-    tools : toolsCat,
-    gaming : gamingCat,
-    kids : kidsCat,
-    events : eventsCat,
-    camping : campingCat
+    '1' : photoCat,
+    '2' : dronesCat,
+    '3' : sportsCat,
+    '4' : musicCat,
+    '5' : hikingCat,
+    '6' : toolsCat,
+    '7' : gamingCat,
+    '8' : kidsCat,
+    '9' : eventsCat,
+    '10' : campingCat
 }
 
 
@@ -39,11 +32,11 @@ export const ButtonCard : FC<ButtonCardProps> = props => {
     const text = intl.formatMessage({id: `Category.${props.id}`});
     return <Box w={props.size} h={props.size}
                 position='relative'
-                boxShadow='0.5vmin 0.5vmin 1vmin #3D3D3D'
+                boxShadow='0.5vmin 0.5vmin 1vmin #2A3D5A'
                 onClick={()=>{props.onSelect(props.id)}}
                 className='round-corners'
                 cursor='pointer'>
-        <img src={IMAGES[props.id]} className='round-corners' height='100%' alt={text}/>
+        <img src={IMAGES[props.id+'']} className='round-corners' height='100%' alt={text}/>
         <Box backgroundColor='white'
              position='absolute'
              borderRadius='2vmin 2vmin 0px 0px' w='100%' h='18%' top='0'>
