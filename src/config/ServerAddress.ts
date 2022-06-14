@@ -21,6 +21,18 @@ export enum Protocol{
     Https ='https://'
 }
 
+export function goToPath(path : string){
+    window.open(getHome() + path, "_blank")
+}
+
+export function goHome(){
+    window.open(getHome(),"_self")
+}
+
+export function goToItem(id : string|number){
+    goToPath("/item/"+id)
+}
+
 export function getUrl(path : string) : string{
     return getProtocol() + getBaseUrl() + path;
 }

@@ -1,5 +1,5 @@
 export const en: Record<string, string> = {
-	'Company.name' : 'Rentsby',
+	'Company.name' : 'RentsBy',
 	'Company.slogan' : 'Rent & Save your wallet and the Planet',
 
 	'Home.1' : 'ACTIONABLE INSIGHTS',
@@ -33,6 +33,8 @@ export const en: Record<string, string> = {
 	'Category.8' : 'For kids',
 	'Category.9' : 'For events',
 	'Category.10' : 'Camping',
+	'Category.view.list' : "View list",
+	'Category.view.map' : "View map",
 
 	'Email.missing1' : "Unfortunately we have nothing of this. Please let us know if you are willing to rent out at category: ",
 	'Email.missing2' : "Coming soon! Thank you for your interest, please leave your details below if you'd want to rent out some of your stuff",
@@ -60,4 +62,6 @@ export const en: Record<string, string> = {
 	'Price.book' : 'Book this item',
 	'Price.booked' : 'Your successfully applied for this item',
 	'Price.email' : 'Please leave your email or phone and our manage will contact you',
+
+	'Item.owner.name' : 'Owner name',
 };

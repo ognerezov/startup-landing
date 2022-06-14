@@ -24,9 +24,9 @@ export const ItemView : FC<ItemViewProps> = ({item}) => {
         <Flex direction='column' height = '100%' maxHeight = '90vh' overflowX='hidden' overflowY='auto'>
             <PriceBlock item={item} left='50vw' w={largeScreen ? '25vw' : '49vw'} top = '9vh' h='25vw'/>
             <ItemImage path={item.id + '/default.jpg'} alt={item.name} width='50%'/>
-              <Box
-                borderRadius='0 0 2vmin 2vmin' h='50%'
-                py='0.5vh'
+            <Box
+                h={largeScreen ? '50%' : '70%'}
+                py={largeScreen ? '0.5vh':'2vh'}
             >
                 <Text variant ='title_b'>
                     {intl.formatMessage({id: 'Description'})}
@@ -34,11 +34,17 @@ export const ItemView : FC<ItemViewProps> = ({item}) => {
                 <Text variant='regular'>
                     {item.description }
                 </Text>
-                <Text variant ='title_b'>
-                    {intl.formatMessage({id: 'Location'})}
-                </Text>
+                  <Text variant ='title_b'>
+                      {intl.formatMessage({id: 'Item.owner.name'})}
+                  </Text>
+                  <Text variant='regular'>
+                      {item.firstName }
+                  </Text>
+                  <Text variant ='title_b'>
+                      {intl.formatMessage({id: 'Location'})}
+                  </Text>
                 <MapView
-                    className='map-container-mini'
+                    className={largeScreen ? 'map-container-mini' : 'map-container-mini-portrait'}
                     {... expandItems([item])}
                 />
             </Box>

@@ -13,7 +13,7 @@ export interface ItemContextService {
     context : IItemContext,
     setContext : (data : IItemContext) => void;
     selectedItem ?: number
-    selectItem : (item : Item) => void
+    selectItem : (item ?: Item) => void
 }
 
 export const ItemContext = createContext<ItemContextService>({

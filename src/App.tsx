@@ -55,13 +55,10 @@ const App: FC = () => {
         }
     },[params,data])
     function setItems(items : Item[]){
-        console.log("set items")
-        console.log(items)
         setData(expandItems(items))
     }
 
-    function selectItem(item :Item){
-        console.log(item)
+    function selectItem(item ?:Item){
         setItem(item)
     }
 
@@ -122,8 +119,9 @@ const App: FC = () => {
   return (
       <ChakraProvider theme={defaultTheme}>
           <IntlProvider messages={languages[currentLanguage]} locale={currentLanguage}>
-              <ItemContext.Provider value={{context : data, setContext : setData, selectItem}}>
+              <ItemContext.Provider value={{context : data, setContext : setData, selectItem,selectedItem : item?.id}}>
         <Header
+            context={{context : data, setContext : setData, selectItem,selectedItem : item?.id}}
             selected={state.tab}
             select={changeTab}
             buttons={[HOME,ABOUT,CONTACT]}

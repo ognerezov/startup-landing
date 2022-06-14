@@ -43,7 +43,6 @@ export const Categories : FC<CategoriesProps> = props => {
             return getItems()
         }
         const title = intl.formatMessage({id: 'Email.missing2'})
-            // + intl.formatMessage({id: `Category.${state.category}`});
         return  <CategoryViewer
                     items={props.context.itemList}
                     id = {state.category}
@@ -55,7 +54,7 @@ export const Categories : FC<CategoriesProps> = props => {
         position='fixed' top='9vh'
         left ={largeScreen ? '6vw' : '1vw'}
     >
-        <Center w='100%' h={largeScreen ? '20vh' : '2vh'} >
+        <Center w='100%' h={'20vh'} display={largeScreen ? undefined : 'none'}>
             <Text variant='title_b'>
                 {intl.formatMessage({id: 'Company.slogan'})}
             </Text>
