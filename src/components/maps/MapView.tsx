@@ -42,7 +42,8 @@ export const MapView :FC<MapViewProps> = ({items,images, className}) => {
                 map.current!.on('load', () => {
                     const features : GeoJSON.Feature<GeoJSON.Geometry>[]= [];
                     for(const key in loaded){
-                        if(!loaded[key] || map.current!.hasImage(key)) continue;
+                    // || map.current!.hasImage(key)
+                        if(!loaded[key] ) continue;
                         map.current!.addImage(key, loaded[key]!, {
                             pixelRatio: 2
                         });

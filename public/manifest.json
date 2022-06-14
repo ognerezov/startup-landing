@@ -1,5 +1,5 @@
 {
-  "short_name": "GreenRent",
+  "short_name": "RentsBy",
   "name": "Smart item renting service",
   "icons": [
     {
@@ -21,5 +21,5 @@
   "start_url": ".",
   "display": "standalone",
   "theme_color": "#ffffff",
-  "background_color": "#011135"
+  "background_color": "#2F75BB"
 }
