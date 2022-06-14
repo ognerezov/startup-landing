@@ -34,11 +34,11 @@ export function report(event : string, ip : string, info : ClientInfo){
         MessageBody: event,
         QueueUrl: QUEUE_URL
     };
-    // sqs.sendMessage(params, function(err, data) {
-    //     if (err) {
-    //         console.log("Error", err);
-    //     } else {
-    //         console.log("Success", data.MessageId);
-    //     }
-    // });
+    sqs.sendMessage(params, function(err, data) {
+        if (err) {
+            console.log("Error", err);
+        } else {
+            console.log("Success", data.MessageId);
+        }
+    });
 }

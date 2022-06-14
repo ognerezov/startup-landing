@@ -11,7 +11,6 @@ import Contact from "./pages/Contact";
 import {getIP} from "./services/FetchIP";
 import {ClientInfo, getClientInfo} from "./services/ClientInfo";
 import {report} from "./services/BehaviorService";
-import {HowItWorks} from "./pages/HowItWorks";
 import {Categories} from "./components/categories/Categories";
 import {expandItems, IItemContext, ItemContext} from "./context/context";
 import {Item} from "./model/items";
@@ -28,7 +27,6 @@ interface AppState{
 const HOME = 'Home'
 const ABOUT = 'About'
 const CONTACT = 'Contact'
-const HOW_IT_WORKS = 'Solution'
 
 interface RouteParams{
     scope ?: string
@@ -62,7 +60,6 @@ const App: FC = () => {
         setItem(item)
     }
 
-
     function onReport(event : string){
         state.ip && report(event,state.ip, state.clientInfo)
     }
@@ -93,8 +90,6 @@ const App: FC = () => {
                     onReport={onReport}
                     categories={[1,2,3,4,5,6,7,8,9,10]}/>
                 // return <Home onReport={onReport}/>
-            case HOW_IT_WORKS:
-                return <HowItWorks/>
             case ABOUT:
                 return <About/>
             case CONTACT :
@@ -119,9 +114,9 @@ const App: FC = () => {
   return (
       <ChakraProvider theme={defaultTheme}>
           <IntlProvider messages={languages[currentLanguage]} locale={currentLanguage}>
-              <ItemContext.Provider value={{context : data, setContext : setData, selectItem,selectedItem : item?.id}}>
+              <ItemContext.Provider value={{context : data, setContext : setData, selectItem,selectedItem : item?.id, onReport}}>
         <Header
-            context={{context : data, setContext : setData, selectItem,selectedItem : item?.id}}
+            context={{context : data, setContext : setData, selectItem,selectedItem : item?.id, onReport}}
             selected={state.tab}
             select={changeTab}
             buttons={[HOME,ABOUT,CONTACT]}

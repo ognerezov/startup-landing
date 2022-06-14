@@ -14,12 +14,14 @@ export interface ItemContextService {
     setContext : (data : IItemContext) => void;
     selectedItem ?: number
     selectItem : (item ?: Item) => void
+    onReport : (event : string) => void
 }
 
 export const ItemContext = createContext<ItemContextService>({
     context : {},
     setContext : data => {},
-    selectItem : item =>{}
+    selectItem : item =>{},
+    onReport : event =>{}
 });
 
 export function expandItems(itemList : Item[]) : IItemContext{

@@ -3,6 +3,7 @@ import {Box, Button, Text} from "@chakra-ui/react";
 import {Item} from "../../model/items";
 import {useIntl} from "react-intl";
 import EmailDialog from "../../dialogs/EmailDialog";
+import {ItemContext, ItemContextService} from "../../context/context";
 
 interface PriceBlockProps{
     item : Item
@@ -21,15 +22,22 @@ export const PriceBlock : FC<PriceBlockProps> = ({
     const [showBookingForm, setShowBookingForm] = useState(false)
     const [success, setSuccess] = useState(false)
     const euro = "€"
-    function bookingForm(){
+    function bookingForm(data : ItemContextService){
        return <EmailDialog
            subject={`Book item request id: ${item.id} name:${item.name} owner: ${item.email}`}
            title={intl.formatMessage({id:'Price.email'})}
            isOpen={showBookingForm}
-           onClose={()=>setShowBookingForm(false)}
-           onSuccess={()=>setSuccess(true)}/>
+           onClose={()=>{
+               data.onReport(`Booking of ${item.name} is canceled. Item id: ${item.id} `)
+               setShowBookingForm(false)
+           }}
+           onSuccess={()=>{
+               data.onReport(`Item ${item.name} was booked. Item id: ${item.id} `)
+               setSuccess(true)
+           }}/>
     }
-    return showBookingForm ? bookingForm() : <Box
+    return showBookingForm ? <ItemContext.Consumer>{bookingForm}</ItemContext.Consumer> :
+        <Box
         left = {left}
         top = {top}
         position ='fixed'

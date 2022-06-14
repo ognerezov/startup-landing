@@ -1,8 +1,8 @@
 export const DEVELOPMENT_URL : string = 'localhost:8080/v1/';
-export const PRODUCTION_URL : string = 'nau-mag.com/v1/';
+export const PRODUCTION_URL : string = '89kkdndqhb.execute-api.eu-west-1.amazonaws.com/v1/';
 
 
-export const PRODUCTION_HOME_URL : string = 'nau-mag.com';
+export const PRODUCTION_HOME_URL : string = 'demium-rent.s3.eu-west-1.amazonaws.com';
 export const DEVELOPMENT_HOME_URL : string = 'localhost:3000';
 
 export enum Method {
