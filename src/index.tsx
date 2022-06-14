@@ -1,15 +1,25 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import './index.css';
+import 'mapbox-gl/dist/mapbox-gl.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
+import {BrowserRouter, Routes, Route} from "react-router-dom";
+
 
 const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement
 );
 root.render(
   <React.StrictMode>
-    <App />
+      <BrowserRouter>
+          <Routes>
+              <Route path='/' element={<App/>}/>
+              <Route path='/:scope' element={<App/>}/>
+              <Route path='/:scope/:id' element={<App/>}/>
+              <Route path='/:scope/:id/:query' element={<App/>}/>
+          </Routes>
+      </BrowserRouter>
   </React.StrictMode>
 );
 

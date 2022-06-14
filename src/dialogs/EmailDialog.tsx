@@ -18,6 +18,8 @@ export interface BasicDialogProps {
 
 export interface DialogProps extends BasicDialogProps{
     isOpen : boolean
+    title : string
+    subject ?: string
 }
 
 const EmailDialog : FC<DialogProps> = props => {
@@ -26,13 +28,13 @@ const EmailDialog : FC<DialogProps> = props => {
                 isOpen={props.isOpen}
                 onClose={props.onClose}>
                 <ModalOverlay />
-                <ModalContent maxW={largeScreen ? '54vw':'98vw'} background='#011135'>
-                    <ModalHeader color='#FFF'>Book A Demo</ModalHeader>
+                <ModalContent maxW={largeScreen ? '66vw':'98vw'} background='#011135'>
+                    <ModalHeader color='#FFF'>{props.title}</ModalHeader>
                     <ModalCloseButton color='#FFF'/>
                     <ModalBody>
                         <Center>
                             <EmailMe
-                                subject='From book a Demo landing'
+                                subject={props.subject ? props.subject : 'From book a Demo landing'}
                                 onClose={props.onClose}
                                 onSuccess={props.onSuccess}
                                 width={largeScreen? '50vw':'96vw'}

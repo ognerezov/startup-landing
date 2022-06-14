@@ -6,12 +6,15 @@ const colors = {
 	},
 	blue: {
 		100: '#6AC0DD',
-		200: '#F0F9FC',
+		200: '#B7D2E2',
+		300 : '#2F75BB',
+		500: '#2A3D5A',
 		700: '#011135',
 	},
 	orange: '#E76000',
 	red: {
 		100: '#DD3E26',
+		200: '#D77B5F',
 	},
 	black: {
 		100: '#272727',
@@ -36,6 +39,7 @@ const colors = {
 	},
 	green: {
 		100: '#00a788',
+		300 : '#BBE37F',
 		700 : '#00ff00'
 	},
 	card: {
@@ -69,19 +73,30 @@ const components = {
 				padding: '1px 30px',
 			},
 			ghost : {
-				backgroundColor : 'blue.700',
+				backgroundColor : 'blue.300',
 				color : 'white.700',
 				padding: '0.01vh 1vw',
 				_hover: {
-					background: 'fuchsia.100',
+					background: 'green.300',
 				},
 			},
 			ghost_selected :{
-				backgroundColor : 'fuchsia.100',
+				backgroundColor : 'green.300',
 				color : 'white.700',
 				padding: '0.01vh 1vw',
 				_hover: {
-					background: 'fuchsia.100',
+					background: 'blue.300',
+				},
+			},
+
+			small : {
+				backgroundColor: 'green.300',
+				color: 'white.700',
+				padding: '0.1vmin',
+				fontWeight: '300',
+				fontSize: '1.5vh',
+				_hover: {
+					background: 'blue.300',
 				},
 			},
 			fuchsia: {
@@ -208,6 +223,56 @@ const components = {
 				fontWeight : '400',
 				lineHeight : '3vmin',
 				letterSpacing : '0.01em'
+			},
+			regular: {
+				color : 'black',
+				fontFamily : 'Helvetica Neue',
+				fontSize : '1.6vh',
+				fontWeight : '300',
+				lineHeight : '1.7vh',
+			},
+			bold: {
+				color : 'blue.300',
+				fontFamily : 'Helvetica Neue',
+				fontSize : '1.7vh',
+				fontWeight : '700',
+				lineHeight : '1.7vh',
+			},
+			price: {
+				color : 'green.300',
+				fontFamily : 'Helvetica Neue',
+				fontSize : '1.6vh',
+				fontWeight : '700',
+				lineHeight : '1.7vh',
+				textAlign : 'start'
+			},
+			price_xl: {
+				color : 'green.300',
+				fontFamily : 'Helvetica Neue',
+				fontSize : '2.6vh',
+				fontWeight : '700',
+				lineHeight : '2.7vh',
+				textAlign : 'center',
+				py : '1vh'
+			},
+			title_b: {
+				color : 'blue.300',
+				fontFamily : 'Helvetica Neue',
+				fontSize : '2.6vh',
+				fontWeight : '500',
+				lineHeight : '2.7vh',
+				marginY : '1vh'
+			},
+			small : {
+				backgroundColor: 'green.300',
+				color: 'white.700',
+				padding: '1vmin',
+				fontWeight: '300',
+				fontSize: '1.5vh',
+				borderRadius : '0.5vmin',
+				_hover: {
+					background: 'blue.300',
+				},
 			},
 			header: {
 				fontFamily : 'Helvetica Neue',

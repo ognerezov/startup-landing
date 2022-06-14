@@ -12,3 +12,40 @@
   text-fill-color: transparent;
   white-space: pre;
 }
+
+.round-corners{
+  border-radius: 2vmin;
+}
+
+.crop {
+  width: 15vw;
+  height: 15vw;
+  text-align: center;
+  overflow: hidden;
+}
+
+.crop img {
+  height: 15vw;
+}
+
+.centered-and-cropped { object-fit: cover }
+
+.map-container-landscape {
+    height: 91vh;
+    width: 67vw;
+}
+
+.map-container-portrait {
+  height: 91vh;
+  width: 100vw;
+}
+
+.map-container-mini {
+  height: 20vh;
+  width: 100%;
+}
+
+.map-container-mini-portrait{
+  height: 40vh;
+  width: 100%;
+}

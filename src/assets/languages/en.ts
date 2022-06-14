@@ -1,5 +1,6 @@
 export const en: Record<string, string> = {
-	'Company.name' : 'Metrix',
+	'Company.name' : 'RentsBy',
+	'Company.slogan' : 'Rent & Save your wallet and the Planet',
 
 	'Home.1' : 'ACTIONABLE INSIGHTS',
 	'Home.2' : 'AT YOUR FINGERTIPS',
@@ -22,6 +23,22 @@ export const en: Record<string, string> = {
 	'Solution.3' : 'Powerful AI insights and forecasts',
 	'Solution.4' : '',
 
+	'Category.1' : 'Photography',
+	'Category.2' : 'Drones',
+	'Category.3' : 'Sports',
+	'Category.4' : 'Music',
+	'Category.5' : 'Hiking',
+	'Category.6' : 'Tools',
+	'Category.7' : 'Gaming',
+	'Category.8' : 'For kids',
+	'Category.9' : 'For events',
+	'Category.10' : 'Camping',
+	'Category.view.list' : "View list",
+	'Category.view.map' : "View map",
+
+	'Email.missing1' : "Unfortunately we have nothing of this. Please let us know if you are willing to rent out at category: ",
+	'Email.missing2' : "Coming soon! Thank you for your interest, please leave your details below if you'd want to rent out some of your stuff",
+	'Email.title' : 'Book A Demo',
 	'Email.email': 'Email or mobile phone number',
 	'Email.description': 'Please provide a valid contact info.',
 	'Email.text': 'Your message',
@@ -33,5 +50,18 @@ export const en: Record<string, string> = {
 	'Cancel' : 'Cancel',
 	'Submit' : 'Submit',
 	'Contact' : 'I want to contact you.',
-	'Hint' : 'Use ↑ ↓ keys for navigation. Use Enter or number keys to chose an option.'
+	'Hint' : 'Use ↑ ↓ keys for navigation. Use Enter or number keys to chose an option.',
+
+	'Description' : 'Description',
+	'Location' : 'Location',
+
+	'Price.day' : 'Price per day',
+	'Price.hour' : 'Price per hour',
+	'Price.week' : 'Price per week',
+	'Price.month' : 'Price per month',
+	'Price.book' : 'Book this item',
+	'Price.booked' : 'Your successfully applied for this item',
+	'Price.email' : 'Please leave your email or phone and our manage will contact you',
+
+	'Item.owner.name' : 'Owner name',
 };

@@ -5,7 +5,7 @@ import {credentials} from "./AWSConfig";
 AWS.config.credentials = credentials;
 const sqs = new AWS.SQS();
 const QUEUE_URL = 'https://sqs.eu-west-1.amazonaws.com/992648939501/landing-events';
-const PROJECT = 'Metrix'
+const PROJECT = 'Rent'
 
 export function report(event : string, ip : string, info : ClientInfo){
     const params = {

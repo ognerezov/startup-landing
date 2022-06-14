@@ -30,6 +30,7 @@ const Home: FC<HomeProps>= props=>{
 
     function getDialog(){
         return<EmailDialog
+            title={intl.formatMessage({id:'Email.title'})}
             isOpen={state.showBookDialog}
             onClose={onClose}
             onSuccess={onSent}/>
