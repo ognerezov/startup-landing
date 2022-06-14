@@ -6,7 +6,6 @@ import {IItemContext} from "../../context/context";
 import {Item} from "../../model/items";
 import {goToItem} from "../../config/ServerAddress"; // eslint-disable-line import/no-webpack-loader-syntax
 
-mapboxgl.accessToken = 'pk.eyJ1IjoicG9sYXJvc28iLCJhIjoiY2w0NWx0OHA3MDI3bTNrbjZyeWIxcG95aSJ9.XJVCOv41BrAzsKm9Ye2ygQ';
 
 interface MapViewProps extends IItemContext{
     className ?: string
