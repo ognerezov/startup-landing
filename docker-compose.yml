@@ -1,0 +1,11 @@
+version: '3.7'
+services:
+  web:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: ognerezov/north_pole_front
+    container_name: north_pole_front
+    ports:
+      - "80:80"
+    restart: always
