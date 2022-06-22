@@ -39,6 +39,7 @@ const App: FC = () => {
     const [state, setState] = useState<AppState>({tab : HOME, clientInfo : getClientInfo()});
     const [data, setData] = useState<IItemContext>({});
     const [item, setItem] = useState<Item|undefined>(undefined)
+    const [category, setCategory] = useState<number|undefined>(undefined)
 
     useEffect( ()=>{
         if(params.scope === 'item' && params.id){
@@ -50,7 +51,15 @@ const App: FC = () => {
                     .then(setItems)
                     .catch(console.log)
             }
+        } else if(params.scope === 'category' && params.id){
+            const num = +params.id
+            console.log(num)
+            if(!isNaN(num)) setCategory(+params.id)
         }
+        if(params.scope){
+            onReport(`application entered with params scope: ${params.scope}, id: ${params.id}, query: ${params.query} `)
+        }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     },[params,data])
     function setItems(items : Item[]){
         setData(expandItems(items))
@@ -85,6 +94,7 @@ const App: FC = () => {
         switch (state.tab) {
             case HOME:
                 return <Categories
+                    category={category}
                     context={data}
                     setItems={setItems}
                     onReport={onReport}

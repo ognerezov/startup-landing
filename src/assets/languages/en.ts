@@ -63,5 +63,5 @@ export const en: Record<string, string> = {
 	'Price.booked' : 'Your successfully applied for this item',
 	'Price.email' : 'Please leave your email or phone and our manage will contact you',
 
-	'Item.owner.name' : 'Owner name',
+	'Item.owner.name' : 'Owner',
 };

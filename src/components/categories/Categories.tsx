@@ -1,4 +1,4 @@
-import React, {FC, useState} from 'react'
+import React, {FC, useEffect, useState} from 'react'
 import {Box, Grid, useMediaQuery, VStack, Text, Center} from "@chakra-ui/react";
 import {QUERY_SCREEN_SIZE} from "../../pages/About";
 import {ButtonCard} from "../ButtonCard";
@@ -13,6 +13,7 @@ interface CategoriesProps {
     onReport : (event : string)=>void
     setItems : (items : Item[]) => void;
     context : IItemContext
+    category ?: number
 }
 
 interface CategoriesState{
@@ -23,6 +24,13 @@ export const Categories : FC<CategoriesProps> = props => {
     const [largeScreen] = useMediaQuery(QUERY_SCREEN_SIZE)
     const [state,setState] = useState<CategoriesState>({category : undefined})
     const intl = useIntl()
+
+    useEffect(()=>{
+        if(props.category && state.category !== props.category){
+            onChangeCategory(props.category).then(()=>{})
+        }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    },[props.category])
 
     async function onChangeCategory(category : number){
         props.onReport('Category selected: '+ state.category);

@@ -10,6 +10,7 @@ interface ItemGridProps extends ItemsConsumer{
     columns : number
     w : string
     h : string
+    highLighted ?: number
 }
 
 export const ItemGrid : FC<ItemGridProps> = props => {
@@ -30,10 +31,12 @@ export const ItemGrid : FC<ItemGridProps> = props => {
                 <GridItem key={item.id} h='20vh'>
                     <ItemContext.Consumer>{ data =>
                         <ItemCard
-                        item={item}
-                        onSelect={data.selectItem}
-                        h={'100%'}
-                        w={'100%'}/> }
+                            highLighted={props.highLighted === item.id}
+                            item={item}
+                            onSelect={data.selectItem}
+                            h={'100%'}
+                            w={'100%'}
+                        /> }
                     </ItemContext.Consumer>
                 </GridItem>)
             }

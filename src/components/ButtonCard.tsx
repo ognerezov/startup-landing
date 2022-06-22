@@ -41,7 +41,7 @@ export const ButtonCard : FC<ButtonCardProps> = props => {
              position='absolute'
              borderRadius='2vmin 2vmin 0px 0px' w='100%' h='18%' top='0'>
             <Center width='100%' height='100%'>
-                <Text align='center' variant='caption_b' width='80%'>
+                <Text align='center' variant='regular' width='80%'>
                     {intl.formatMessage({id: `Category.${props.id}`})}
                 </Text>
             </Center>

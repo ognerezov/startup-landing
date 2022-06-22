@@ -13,8 +13,26 @@
   white-space: pre;
 }
 
+.margin-top{
+  margin-top: 1vh;
+}
+
 .round-corners{
   border-radius: 2vmin;
+}
+
+.small-corners{
+  border-radius: 0.5vmin;
+}
+
+.bordered{
+  border-color: #aaaaaa;
+  border-width: 1px;
+}
+
+.vertical-margin{
+  margin-bottom: 20%;
+  margin-top: 20%;
 }
 
 .crop {
@@ -48,4 +66,8 @@
 .map-container-mini-portrait{
   height: 40vh;
   width: 100%;
+}
+
+.flex-one-third{
+  flex: 0 0 32%;
 }

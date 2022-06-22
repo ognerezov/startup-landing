@@ -231,6 +231,13 @@ const components = {
 				fontWeight : '300',
 				lineHeight : '1.7vh',
 			},
+			emphasis: {
+				color : 'white',
+				fontFamily : 'Helvetica Neue',
+				fontSize : '1.9vh',
+				fontWeight : '600',
+				lineHeight : '2.0vh',
+			},
 			bold: {
 				color : 'blue.300',
 				fontFamily : 'Helvetica Neue',
@@ -258,8 +265,16 @@ const components = {
 			title_b: {
 				color : 'blue.300',
 				fontFamily : 'Helvetica Neue',
-				fontSize : '2.6vh',
+				fontSize : '2.6vmin',
 				fontWeight : '500',
+				lineHeight : '2.7vmin',
+				marginY : '1vh'
+			},
+			title_g: {
+				color : 'green.300',
+				fontFamily : 'Helvetica Neue',
+				fontSize : '2.6vh',
+				fontWeight : '700',
 				lineHeight : '2.7vh',
 				marginY : '1vh'
 			},

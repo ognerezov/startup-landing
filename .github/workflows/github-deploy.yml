@@ -1,7 +1,7 @@
 name: Deploy s3
 on:
   push:
-    branches: [ main ]
+    branches: [ landing ]
 jobs:
   Explore-GitHub-Actions:
     runs-on: ubuntu-latest

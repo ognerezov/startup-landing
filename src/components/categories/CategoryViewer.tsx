@@ -18,6 +18,7 @@ interface CategoryViewerProps {
 export const CategoryViewer : FC<CategoryViewerProps> = props => {
     const [largeScreen] = useMediaQuery(QUERY_SCREEN_SIZE)
     const [viewMap, setViewMap] = useState(true)
+    const  [highLighted,highLight] = useState<number|undefined>(undefined);
     const intl = useIntl()
 
     function getFullScreenContent(data : ItemContextService){
@@ -35,7 +36,7 @@ export const CategoryViewer : FC<CategoryViewerProps> = props => {
                 height='100%'
                 overflowX='hidden' overflowY='auto'
                 width='34vw' maxWidth='34vw'>
-                <ItemGrid columns={2} w='34vw' h='100%' items={data.context.itemList}/>
+                <ItemGrid columns={2} w='34vw' h='100%' items={data.context.itemList} highLighted={highLighted}/>
             </Box>
 
             <Box
@@ -46,7 +47,7 @@ export const CategoryViewer : FC<CategoryViewerProps> = props => {
                 overflowX='hidden' overflowY='auto'
                 width='67vw' maxWidth='67vw'
             >
-                <MapView {...data.context} className='map-container-landscape' selectItem={data.selectItem}/>
+                <MapView {...data.context} className='map-container-landscape' selectItem={data.selectItem} highLightItem={highLight}/>
             </Box>
         </Box>
     }
@@ -58,7 +59,7 @@ export const CategoryViewer : FC<CategoryViewerProps> = props => {
             position='fixed' top='9vh'
             left='0'
         >
-                <MapView {...data.context} className='map-container-portrait ' selectItem={data.selectItem}/>
+                <MapView {...data.context} className='map-container-portrait ' selectItem={data.selectItem} highLightItem={highLight}/>
                 <Center position='fixed' top='94vh' zIndex={10} w='100%'>
                     <Text variant='small' onClick={()=>setViewMap(false)}>
                         {intl.formatMessage({id: 'Category.view.list'})}
@@ -71,7 +72,7 @@ export const CategoryViewer : FC<CategoryViewerProps> = props => {
                 position='fixed' top='9vh'
                 left='0'
             >
-                <ItemGrid columns={2} w='100vw' h='100%' items={data.context.itemList}/>
+                <ItemGrid columns={2} w='100vw' h='100%' items={data.context.itemList} highLighted={highLighted}/>
                 <Center position='fixed' top='94vh' zIndex={10} w='100%'>
                     <Text variant='small' onClick={()=>setViewMap(true)}>
                         {intl.formatMessage({id: 'Category.view.map'})}
@@ -86,6 +87,7 @@ export const CategoryViewer : FC<CategoryViewerProps> = props => {
         </ItemContext.Consumer>
             :
         <EmailDialog
+        subject={'from empty category '+ props.id}
         title={props.title}
         isOpen={true}
         onClose={props.onExit}

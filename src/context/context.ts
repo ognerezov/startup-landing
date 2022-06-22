@@ -1,6 +1,7 @@
 import {createContext} from "react";
 import {Item} from "../model/items";
 import {Dict, ItemDict} from "../model/common";
+import {IMAGE_CLOUDFRONT_URL, THUMBNAIL_CLOUDFRONT_URL} from "../config/ServerAddress";
 
 
 export interface IItemContext{
@@ -24,11 +25,21 @@ export const ItemContext = createContext<ItemContextService>({
     onReport : event =>{}
 });
 
+export function imageUrl(key : string):string{
+    return IMAGE_CLOUDFRONT_URL + key + '.jpg'
+}
+
+export function thumbnailUrl(key : string):string{
+    return THUMBNAIL_CLOUDFRONT_URL + key + '.png'
+}
+
+export const DEFAULT_IMAGE = '/default';
+
 export function expandItems(itemList : Item[]) : IItemContext{
     const images : Dict ={};
     const items : ItemDict = {};
     for(let item of itemList){
-        images[item.id + ''] = 'https://d2qk3mwcnqg7zi.cloudfront.net/' + item.id + '/default.jpg'
+        images[item.id + ''] =  item.id + DEFAULT_IMAGE
         items[item.id + ''] = item
     }
     return {

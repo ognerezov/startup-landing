@@ -4,8 +4,8 @@ import {Item} from "../../model/items";
 import {QUERY_SCREEN_SIZE} from "../../pages/About";
 import {useIntl} from "react-intl";
 import {MapView} from "../maps/MapView";
-import {expandItems} from "../../context/context";
-import {PriceBlock} from "./PriceBlock";
+import {DEFAULT_IMAGE, expandItems} from "../../context/context";
+import {PriceBlock} from "../prices/PriceBlock";
 import {ItemImage} from "../common/ItemImage";
 
 interface ItemViewProps{
@@ -22,8 +22,14 @@ export const ItemView : FC<ItemViewProps> = ({item}) => {
         width={largeScreen ? '50vw' : '98vw'}
     >
         <Flex direction='column' height = '100%' maxHeight = '90vh' overflowX='hidden' overflowY='auto'>
-            <PriceBlock item={item} left='50vw' w={largeScreen ? '25vw' : '49vw'} top = '9vh' h='25vw'/>
-            <ItemImage path={item.id + '/default.jpg'} alt={item.name} width='50%'/>
+            <ItemImage path={item.id + DEFAULT_IMAGE} alt={item.name} width={largeScreen ? '50%' : '100%'}/>
+            <PriceBlock item={item}
+                        left='50vw'
+                        w={largeScreen ? '25vw' : '100%'}
+                        top = '9vh'
+                        position={largeScreen ? "fixed" : undefined}
+                        h={largeScreen ? '25vw' : '100%'}
+                        className='round-corners'/>
             <Box
                 h={largeScreen ? '50%' : '70%'}
                 py={largeScreen ? '0.5vh':'2vh'}

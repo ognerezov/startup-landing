@@ -2,8 +2,12 @@ export const DEVELOPMENT_URL : string = 'localhost:8080/v1/';
 export const PRODUCTION_URL : string = '89kkdndqhb.execute-api.eu-west-1.amazonaws.com/v1/';
 
 
-export const PRODUCTION_HOME_URL : string = 'demium-rent.s3.eu-west-1.amazonaws.com';
+export const PRODUCTION_HOME_URL : string = 'app.rentsby.com';
 export const DEVELOPMENT_HOME_URL : string = 'localhost:3000';
+// export const DEVELOPMENT_HOME_URL : string = '89kkdndqhb.execute-api.eu-west-1.amazonaws.com';
+
+export const IMAGE_CLOUDFRONT_URL = 'https://d2g79p4t72w59h.cloudfront.net/'
+export const THUMBNAIL_CLOUDFRONT_URL = 'https://d2qk3mwcnqg7zi.cloudfront.net/'
 
 export enum Method {
     GET,
