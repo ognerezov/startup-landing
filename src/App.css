@@ -49,12 +49,12 @@
 .centered-and-cropped { object-fit: cover }
 
 .map-container-landscape {
-    height: 91vh;
+    height: 94vh;
     width: 67vw;
 }
 
 .map-container-portrait {
-  height: 91vh;
+  height: 94vh;
   width: 100vw;
 }
 

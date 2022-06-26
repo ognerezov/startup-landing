@@ -24,9 +24,11 @@ export const CategoryViewer : FC<CategoryViewerProps> = props => {
     function getFullScreenContent(data : ItemContextService){
         return  <Box
             width='100vw'
-            height='91vh'
-            position='fixed' top='9vh'
+            height='94vh'
+            position='fixed' top='6vh'
             left='0'
+            borderColor={'blue.300'}
+            borderBottomWidth={'1px'}
         >
             <Box
                 display='block'
@@ -55,9 +57,11 @@ export const CategoryViewer : FC<CategoryViewerProps> = props => {
     function getMobileContent(data : ItemContextService){
         return viewMap ? <Box
             width='100vw'
-            height='91vh'
-            position='fixed' top='9vh'
+            height='94vh'
+            position='fixed' top='6vh'
             left='0'
+            borderColor={'blue.300'}
+            borderBottomWidth={'1px'}
         >
                 <MapView {...data.context} className='map-container-portrait ' selectItem={data.selectItem} highLightItem={highLight}/>
                 <Center position='fixed' top='94vh' zIndex={10} w='100%'>
@@ -68,8 +72,8 @@ export const CategoryViewer : FC<CategoryViewerProps> = props => {
         </Box> :
             <Box
                 width='100vw'
-                height='91vh'
-                position='fixed' top='9vh'
+                height='94vh'
+                position='fixed' top='6vh'
                 left='0'
             >
                 <ItemGrid columns={2} w='100vw' h='100%' items={data.context.itemList} highLighted={highLighted}/>

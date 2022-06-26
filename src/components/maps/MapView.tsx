@@ -1,7 +1,7 @@
 import React, {FC, useEffect, useRef, useState} from 'react'
 import mapboxgl, {GeoJSONSource, MapboxGeoJSONFeature} from 'mapbox-gl';
 import {DEFAULT_SPOT} from "../../backend/GeoSearch";
-import {loadImages} from "../../services/MapboxUtil";
+import {Images, loadImages} from "../../services/MapboxUtil";
 import {IItemContext} from "../../context/context";
 import {Item} from "../../model/items";
 import {goToItem} from "../../config/ServerAddress"; // eslint-disable-line import/no-webpack-loader-syntax
@@ -21,6 +21,8 @@ export const MapView :FC<MapViewProps> = ({items,images, className,highLightItem
     const [lng, setLng] = useState<number>(DEFAULT_SPOT.lon);
     const [lat, setLat] = useState<number>(DEFAULT_SPOT.lat);
     const [zoom, setZoom] = useState<number>(13);
+    const [areImagesLoading, setImagesLoading] = useState<boolean>(false);
+    const [mapWasLoaded, setMapWasloaded] = useState<boolean>(false);
 
     function onSelectFeatures(features : MapboxGeoJSONFeature[]){
         for(const feature of features){
@@ -30,51 +32,61 @@ export const MapView :FC<MapViewProps> = ({items,images, className,highLightItem
         }
     }
 
+    function onImagesLoaded(loaded: Images) {
+        const features: GeoJSON.Feature<GeoJSON.Geometry>[] = [];
+        console.log('setting images')
+        for (const key in loaded) {
+            if (!loaded[key] || map.current!.hasImage(key)) continue;
+            map.current!.addImage(key, loaded[key]!, {
+                pixelRatio: 2
+            });
+            console.log('adding features')
+            const item = items![key];
+            features.push(
+                {
+                    'type': 'Feature',
+                    'geometry': {
+                        'type': 'Point',
+                        'coordinates': [item.lon, item.lat]
+                    },
+                    'properties': {
+                        'image-name': key,
+                        'name': (items![key].pricePerDay / 100) + '€/day',
+                        'id': key,
+                        'type': 'item',
+                        'size': 0.25,
+                        'size2': 0.3
+                    }
+                }
+            )
+        }
+        console.log(features.length)
+        setImagesLoading(false)
+        updateItemLayer(map.current!, features)
+    }
 
     useEffect(()=>{
-        if(!items || !images || !map.current || Object.keys(items).length === 0){
+        if(areImagesLoading || !items || !images || !map.current || Object.keys(items).length === 0 || Object.keys(images).length === 0){
             return
         }
         console.log(items)
+        setImagesLoading(true)
         loadImages(map.current, images, loaded => {
+            if(mapWasLoaded){
+                onImagesLoaded(loaded);
+                return;
+            }
             map.current!.on('load', () => {
-                const features: GeoJSON.Feature<GeoJSON.Geometry>[] = [];
-                console.log('setting images')
-                for (const key in loaded) {
-                    if (!loaded[key] || map.current!.hasImage(key)) continue;
-                    map.current!.addImage(key, loaded[key]!, {
-                        pixelRatio: 2
-                    });
-                    console.log('adding features')
-                    const item = items[key];
-                    features.push(
-                        {
-                            'type': 'Feature',
-                            'geometry': {
-                                'type': 'Point',
-                                'coordinates': [item.lon, item.lat]
-                            },
-                            'properties': {
-                                'image-name': key,
-                                'name': (items[key].pricePerDay / 100) + '€/day',
-                                'id': key,
-                                'type': 'item',
-                                'size': 0.25,
-                                'size2': 0.3
-                            }
-                        }
-                    )
-                }
-                console.log(features.length)
-                updateItemLayer(map.current!,features)
+                onImagesLoaded(loaded);
             })
 
         })
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    },[items])
+    },[items, map.current])
+
 
     function updateItemLayer(map: mapboxgl.Map,features: GeoJSON.Feature<GeoJSON.Geometry>[] ){
-        // console.log("update item layers");
+        console.log("update item layers");
         // console.log(items)
         // console.log(features);
         (map.getSource('points') as GeoJSONSource).setData({
@@ -184,6 +196,7 @@ export const MapView :FC<MapViewProps> = ({items,images, className,highLightItem
 
         map.current.on('load',()=>{
             console.log('map init data layers')
+            setMapWasloaded(true)
             initDataLayers(map.current!);
         })
 

@@ -1,5 +1,5 @@
 import React, {FC} from 'react';
-import {Button, Center, Flex, HStack, Spacer, Text} from "@chakra-ui/react";
+import {Center, Flex, HStack, Spacer, Text} from "@chakra-ui/react";
 import RadioButton from "./RadioButton";
 import {useIntl} from "react-intl";
 import {goHome} from "../config/ServerAddress";
@@ -17,20 +17,25 @@ const Header : FC<HeaderProps> = props => {
     return <Flex
                 px = '1vw'
                 backgroundColor='white'
+                borderColor={'blue.300'}
+                borderBottomWidth={'1px'}
                 position='fixed'
-                left='0' top='0' width='100vw' height = '9vh'
+                left='0' top='0' width='100vw' height = '6vh'
                 zIndex={3}>
                 <Center onClick={goHome} cursor='pointer'>
-                    <Text variant='title_b'>
+                    <Text variant='medium'>
                         {intl.formatMessage({id: 'Company.name'})}
                     </Text>
                 </Center>
                 <Spacer/>
         {  props.context.selectedItem ?
-            <Center >
-                <Button variant = 'ghost' onClick={()=>props.context.selectItem(undefined)}>
+            <Center onClick={()=>{
+                props.context.selectItem(undefined)
+                goHome()
+            }} cursor='pointer' >
+                <Text variant = 'medium' >
                     {intl.formatMessage({id: 'Back'})}
-                </Button>
+                </Text>
             </Center>:
             <HStack spacing='0.5vw'>
                 {props.buttons.map(btn => <RadioButton

@@ -22,6 +22,7 @@ const colors = {
 		700: '#000'
 	},
 	grey: {
+		50 : '#aaaaaa',
 		100: '#E5E5E5',
 		200: '#6E675E',
 		300: '#F5F4F4',
@@ -51,10 +52,9 @@ const components = {
 	Button: {
 		baseStyle: {
 			fontFamily: 'Helvetica Neue',
-			borderRadius: '1vmin',
+			borderRadius: '0.7vmin',
 			padding: '0.5vh 7.6vw',
 			fontWeight: '600',
-			color: 'white.700',
 			fontSize: '2.2vh',
 		},
 		variants: {
@@ -73,6 +73,8 @@ const components = {
 				padding: '1px 30px',
 			},
 			ghost : {
+				my : '1vh',
+				mx : '0.2vw',
 				backgroundColor : 'blue.300',
 				color : 'white.700',
 				padding: '0.01vh 1vw',
@@ -81,6 +83,8 @@ const components = {
 				},
 			},
 			ghost_selected :{
+				my : '1vh',
+				mx : '0.2vw',
 				backgroundColor : 'green.300',
 				color : 'white.700',
 				padding: '0.01vh 1vw',
@@ -289,6 +293,27 @@ const components = {
 					background: 'blue.300',
 				},
 			},
+		medium : {
+			backgroundColor: 'white',
+			color: 'blue.300',
+			px: '1.1vmin',
+			py : '0.5vmin',
+			borderRadius : '0.5vmin',
+			fontWeight: '700',
+			fontSize: '2.0vh',
+			_hover: {
+				background: 'blue.300',
+				color : 'white'
+			},
+		},
+		medium_ghost : {
+			backgroundColor: 'white',
+			color: 'green.300',
+			px: '1.1vmin',
+			py : '0.5vmin',
+			fontWeight: 'bold',
+			fontSize: '2.0vh'
+		},
 			header: {
 				fontFamily : 'Helvetica Neue',
 				fontSize : '5vh',

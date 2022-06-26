@@ -34,19 +34,19 @@ export const ItemView : FC<ItemViewProps> = ({item}) => {
                 h={largeScreen ? '50%' : '70%'}
                 py={largeScreen ? '0.5vh':'2vh'}
             >
-                <Text variant ='title_b'>
+                <Text variant ='medium'>
                     {intl.formatMessage({id: 'Description'})}
                 </Text>
                 <Text variant='regular'>
                     {item.description }
                 </Text>
-                  <Text variant ='title_b'>
+                  <Text variant ='medium'>
                       {intl.formatMessage({id: 'Item.owner.name'})}
                   </Text>
                   <Text variant='regular'>
                       {item.firstName }
                   </Text>
-                  <Text variant ='title_b'>
+                  <Text variant ='medium'>
                       {intl.formatMessage({id: 'Location'})}
                   </Text>
                 <MapView

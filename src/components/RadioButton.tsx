@@ -1,23 +1,24 @@
 import React, {FC} from 'react';
-import {Button, Center} from "@chakra-ui/react";
+import {Center, Text} from "@chakra-ui/react";
 
 interface RadioButtonProps{
     id : string
     selected ?: string
     select : (val: string)=>void
+    className ?: string
 }
 
 const RadioButton : FC<RadioButtonProps> = props => {
     return props.id === props.selected ?
-        <Center >
-            <Button variant ='ghost_selected'>
+        <Center cursor={'pointer'}>
+            <Text variant ={'medium_ghost'} className={props.className}>
                 {props.id}
-            </Button>
+            </Text>
         </Center> :
-        <Center >
-            <Button variant ='ghost' onClick={()=>{props.select(props.id)}}>
+        <Center cursor={'pointer'} onClick={()=>{props.select(props.id)}} >
+            <Text variant ={'medium'} onClick={()=>{props.select(props.id)}} className={props.className}>
                 {props.id}
-            </Button>
+            </Text>
         </Center>
 }
 export default RadioButton;
