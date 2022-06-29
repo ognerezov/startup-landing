@@ -6,36 +6,34 @@ import {CategoryViewer} from "./CategoryViewer";
 import {useIntl} from "react-intl";
 import {findByCategoryNearBy} from "../../backend/GeoSearch";
 import {Item} from "../../model/items";
-import {IItemContext} from "../../context/context";
+import {ItemContextService} from "../../context/context";
 
 interface CategoriesProps {
     categories : number[]
     onReport : (event : string)=>void
     setItems : (items : Item[]) => void;
-    context : IItemContext
-    category ?: number
-}
-
-interface CategoriesState{
-    category ?: number
+    context : ItemContextService
+    previousCategory ?: number
 }
 
 export const Categories : FC<CategoriesProps> = props => {
     const [largeScreen] = useMediaQuery(QUERY_SCREEN_SIZE)
-    const [state,setState] = useState<CategoriesState>({category : undefined})
+    const [fetching, setFetching] = useState(false)
     const intl = useIntl()
 
     useEffect(()=>{
-        if(props.category && state.category !== props.category){
-            onChangeCategory(props.category).then(()=>{})
+        if(props.context.selectedCategory&& props.context.selectedCategory !== props.previousCategory){
+            onChangeCategory(props.context.selectedCategory).then(()=>{})
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    },[props.category])
+    },[props.previousCategory, props.context.selectedCategory])
 
     async function onChangeCategory(category : number){
-        props.onReport('Category selected: '+ state.category);
+        props.onReport('Category selected: '+ category);
+        setFetching(true);
         const items : Item[] = await findByCategoryNearBy(category);
-        setState({...state, category})
+        setFetching(false);
+        props.context.selectCategory( category)
         props.setItems(items)
     }
 
@@ -47,15 +45,15 @@ export const Categories : FC<CategoriesProps> = props => {
     }
 
     function getContent(){
-        if(!state.category){
+        if(!props.context.selectedCategory || fetching){
             return getItems()
         }
         const title = intl.formatMessage({id: 'Email.missing2'})
         return  <CategoryViewer
-                    items={props.context.itemList}
-                    id = {state.category}
+                    items={props.context.context.itemList}
+                    id = {props.context.selectedCategory}
                     title={title}
-                    onExit={()=>{setState({...state, category : undefined})}}/>
+                    onExit={()=>{props.context.selectCategory(undefined)}}/>
     }
     return <Box
         height='90vh'
@@ -63,7 +61,7 @@ export const Categories : FC<CategoriesProps> = props => {
         left ={largeScreen ? '6vw' : '1vw'}
     >
         <Center w='100%' h={'20vh'} display={largeScreen ? undefined : 'none'}>
-            <Text variant='title_b'>
+            <Text variant='medium'>
                 {intl.formatMessage({id: 'Company.slogan'})}
             </Text>
         </Center>

@@ -1,5 +1,6 @@
 import React, {FC, useEffect, useRef, useState} from 'react'
 import mapboxgl, {GeoJSONSource, MapboxGeoJSONFeature} from 'mapbox-gl';
+import MapboxGeocoder from '@mapbox/mapbox-gl-geocoder';
 import {DEFAULT_SPOT} from "../../backend/GeoSearch";
 import {Images, loadImages} from "../../services/MapboxUtil";
 import {IItemContext} from "../../context/context";
@@ -231,6 +232,24 @@ export const MapView :FC<MapViewProps> = ({items,images, className,highLightItem
             setZoom(+map.current!.getZoom().toFixed(2));
 
         });
+        map.current.addControl(
+            new MapboxGeocoder({
+                accessToken: mapboxgl.accessToken,
+                placeholder: 'input location',
+                marker: false,
+            })
+        );
+        map.current.addControl(
+            new mapboxgl.GeolocateControl({
+                positionOptions: {
+                    enableHighAccuracy: true
+                },
+                trackUserLocation: true,
+            })
+        );
+        map.current.addControl(new mapboxgl.FullscreenControl());
+        map.current.addControl(new mapboxgl.NavigationControl());
+
     });
     //console.log('render map')
     return <div><div ref={mapContainer as React.RefObject<HTMLDivElement>} className={className} /></div>

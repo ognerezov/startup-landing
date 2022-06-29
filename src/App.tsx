@@ -12,11 +12,21 @@ import {getIP} from "./services/FetchIP";
 import {ClientInfo, getClientInfo} from "./services/ClientInfo";
 import {report} from "./services/BehaviorService";
 import {Categories} from "./components/categories/Categories";
-import {expandItems, IItemContext, ItemContext} from "./context/context";
-import {Item} from "./model/items";
+import {
+    EditState,
+    expandItems,
+    IItemContext,
+    ItemContext,
+    ItemContextService,
+    ItemEditContext,
+    noneItemEditContext
+} from "./context/context";
+import {AddItemRequest, Item} from "./model/items";
 import {ItemView} from "./components/items/ItemView";
 import {useParams} from "react-router";
 import {getItemById} from "./backend/GetById";
+import '@mapbox/mapbox-gl-geocoder/dist/mapbox-gl-geocoder.css';
+import {ItemCreator} from "./components/items/ItemCreator";
 
 interface AppState{
     tab : string
@@ -40,6 +50,14 @@ const App: FC = () => {
     const [data, setData] = useState<IItemContext>({});
     const [item, setItem] = useState<Item|undefined>(undefined)
     const [category, setCategory] = useState<number|undefined>(undefined)
+    const [prevCategory, setPrevCategory] = useState<number|undefined>(undefined)
+    const [editContext, setEditContext] = useState<ItemEditContext>(noneItemEditContext(submitItem))
+
+    const context : ItemContextService = {context : data, setContext : setData, selectItem,selectedItem : item?.id, onReport,selectCategory :setCategory, selectedCategory : category, editContext, setEditContext}
+
+    function submitItem(item: AddItemRequest) {
+        console.log(item)
+    }
 
     useEffect( ()=>{
         if(params.scope === 'item' && params.id){
@@ -54,7 +72,10 @@ const App: FC = () => {
         } else if(params.scope === 'category' && params.id){
             const num = +params.id
             console.log(num)
-            if(!isNaN(num)) setCategory(+params.id)
+            if(!isNaN(num)) {
+                setPrevCategory(category)
+                setCategory(+params.id)
+            }
         }
         if(params.scope){
             onReport(`application entered with params scope: ${params.scope}, id: ${params.id}, query: ${params.query} `)
@@ -94,8 +115,8 @@ const App: FC = () => {
         switch (state.tab) {
             case HOME:
                 return <Categories
-                    category={category}
-                    context={data}
+                    previousCategory={prevCategory}
+                    context={context}
                     setItems={setItems}
                     onReport={onReport}
                     categories={[1,2,3,4,5,6,7,8,9,10]}/>
@@ -124,14 +145,15 @@ const App: FC = () => {
   return (
       <ChakraProvider theme={defaultTheme}>
           <IntlProvider messages={languages[currentLanguage]} locale={currentLanguage}>
-              <ItemContext.Provider value={{context : data, setContext : setData, selectItem,selectedItem : item?.id, onReport}}>
+              <ItemContext.Provider value={context}>
         <Header
-            context={{context : data, setContext : setData, selectItem,selectedItem : item?.id, onReport}}
+            context={context}
             selected={state.tab}
             select={changeTab}
             buttons={[HOME,ABOUT,CONTACT]}
         />
-          {getPage()}
+          {editContext.state !== EditState.NotStarted ?
+                       <ItemCreator context={context}/> : getPage()}
               </ItemContext.Provider>
           </IntlProvider>
       </ChakraProvider>

@@ -48,6 +48,8 @@ export const CategoryViewer : FC<CategoryViewerProps> = props => {
                 maxHeight='100%'
                 overflowX='hidden' overflowY='auto'
                 width='67vw' maxWidth='67vw'
+                borderColor={'blue.300'}
+                borderLeftWidth={'1px'}
             >
                 <MapView {...data.context} className='map-container-landscape' selectItem={data.selectItem} highLightItem={highLight}/>
             </Box>
@@ -60,8 +62,6 @@ export const CategoryViewer : FC<CategoryViewerProps> = props => {
             height='94vh'
             position='fixed' top='6vh'
             left='0'
-            borderColor={'blue.300'}
-            borderBottomWidth={'1px'}
         >
                 <MapView {...data.context} className='map-container-portrait ' selectItem={data.selectItem} highLightItem={highLight}/>
                 <Center position='fixed' top='94vh' zIndex={10} w='100%'>
@@ -86,7 +86,7 @@ export const CategoryViewer : FC<CategoryViewerProps> = props => {
 
     }
 
-    return props.items && props.items.length >0 ?
+    return props.items ?
         <ItemContext.Consumer>{largeScreen? getFullScreenContent : getMobileContent}
         </ItemContext.Consumer>
             :

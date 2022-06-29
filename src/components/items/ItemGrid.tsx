@@ -28,7 +28,7 @@ export const ItemGrid : FC<ItemGridProps> = props => {
         overflowX='hidden' overflowY='scroll'
         templateColumns={`repeat(${props.columns}, 1fr)`} gap={1}>
             {props.items.map(item =>
-                <GridItem key={item.id} h='20vh'>
+                <GridItem key={item.id} h='20vh' m={'1vmin'}>
                     <ItemContext.Consumer>{ data =>
                         <ItemCard
                             highLighted={props.highLighted === item.id}

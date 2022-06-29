@@ -1,10 +1,5 @@
 import {getUrl} from "../config/ServerAddress";
-
-export interface Spot{
-    radius : number
-    lon : number
-    lat : number
-}
+import {Spot} from "../model/geo";
 
 export const DEFAULT_SPOT : Spot = {
     radius : 30000,
