@@ -389,9 +389,26 @@ const components = {
 				fontSize: '1.5vh',
 			},
 			tiny: {
+				color : 'black',
 				fontWeight : '200',
 				fontSize : '1vh',
 			},
+			tiny_caption: {
+				color : 'blue.300',
+				fontWeight : '600',
+				fontSize : '1vh',
+			}
+			,
+			annotation: {
+				color : 'black',
+				fontWeight : '200',
+				fontSize : '1.25vh',
+			},
+			annotation_caption: {
+				color : 'blue.300',
+				fontWeight : '600',
+				fontSize : '1.25vh',
+			}
 		}
 	},
 	Link: {

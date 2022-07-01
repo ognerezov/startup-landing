@@ -30,6 +30,11 @@
   border-width: 1px;
 }
 
+.bordered-blue{
+  border-color: #2F75BB;
+  border-width: 1px;
+}
+
 .vertical-margin{
   margin-bottom: 20%;
   margin-top: 20%;

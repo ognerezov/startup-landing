@@ -54,7 +54,7 @@ export interface AddItemRequest{
     pricePerWeek ?: number;
     pricePerMonth ?: number;
     pricePerYear ?: number;
-    
+
     owner ?: number;
     place ?: number;
     category ?: number;
@@ -74,4 +74,14 @@ export interface AddItemRequest{
     apartment?: string;
     room?: string;
     floor  ?: number;
+}
+export function prepared(item : AddItemRequest):AddItemRequest{
+    return {
+        ...item,
+        pricePerHour : item.pricePerHour ? item.pricePerHour  * 100 : item.pricePerHour,
+        pricePerDay : item.pricePerDay ? item.pricePerDay  * 100 : item.pricePerDay,
+        pricePerWeek : item.pricePerWeek ? item.pricePerWeek  * 100 : item.pricePerWeek,
+        pricePerMonth : item.pricePerMonth ? item.pricePerMonth  * 100 : item.pricePerMonth,
+        pricePerYear : item.pricePerYear ? item.pricePerYear  * 100 : item.pricePerYear
+    }
 }

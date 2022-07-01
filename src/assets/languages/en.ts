@@ -72,4 +72,7 @@ export const en: Record<string, string> = {
 	'Create.item.lastName' : 'Owners last name',
 	'Create.item.name' : 'Item name',
 	'Create.item.description' : 'Item description',
+	'Create.item.location' : 'Your rent location',
+
+	'Location.fetching.address' : 'Fetching address...'
 };

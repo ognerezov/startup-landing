@@ -2,12 +2,12 @@ import React, {FC, useEffect, useRef, useState} from 'react'
 import mapboxgl, {GeoJSONSource, MapboxGeoJSONFeature} from 'mapbox-gl';
 import MapboxGeocoder from '@mapbox/mapbox-gl-geocoder';
 import {DEFAULT_SPOT} from "../../backend/GeoSearch";
-import {Images, loadImages} from "../../services/MapboxUtil";
+import {ACCESS_TOKEN, Images, loadImages} from "../../services/MapboxUtil";
 import {IItemContext} from "../../context/context";
 import {Item} from "../../model/items";
 import {goToItem} from "../../config/ServerAddress"; // eslint-disable-line import/no-webpack-loader-syntax
 
-mapboxgl.accessToken = 'pk.eyJ1IjoicG9sYXJvc28iLCJhIjoiY2w0NWx0OHA3MDI3bTNrbjZyeWIxcG95aSJ9.XJVCOv41BrAzsKm9Ye2ygQ';
+mapboxgl.accessToken = ACCESS_TOKEN;
 
 interface MapViewProps extends IItemContext{
     className ?: string

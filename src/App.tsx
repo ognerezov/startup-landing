@@ -27,6 +27,7 @@ import {useParams} from "react-router";
 import {getItemById} from "./backend/GetById";
 import '@mapbox/mapbox-gl-geocoder/dist/mapbox-gl-geocoder.css';
 import {ItemCreator} from "./components/items/ItemCreator";
+import {creatItem} from "./backend/CreatItem";
 
 interface AppState{
     tab : string
@@ -57,6 +58,9 @@ const App: FC = () => {
 
     function submitItem(item: AddItemRequest) {
         console.log(item)
+        creatItem(item)
+            .then(console.log)
+            .catch(e => {console.log('error: '+e)})
     }
 
     useEffect( ()=>{

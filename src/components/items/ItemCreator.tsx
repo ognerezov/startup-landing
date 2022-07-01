@@ -2,8 +2,8 @@ import React, {FC, useEffect, useRef, useState} from 'react'
 import { ItemContextService} from "../../context/context";
 import {
     Box, Button, Center,
-    FormControl,
-    useMediaQuery
+    FormControl, Text,
+    useMediaQuery, VStack
 } from "@chakra-ui/react";
 import {QUERY_SCREEN_SIZE} from "../../pages/About";
 import {AddItemRequest} from "../../model/items";
@@ -14,7 +14,8 @@ import mapboxgl from "mapbox-gl";
 import MapboxGeocoder from "@mapbox/mapbox-gl-geocoder";
 import {getLocation} from "../../services/GeolocationService";
 import { Point } from '../../model/geo';
-import {TextButton} from "../common/TextButton";
+import {Annotation} from "../common/Anotation";
+import {fetchAddress} from "../../services/MapboxUtil";
 
 interface ItemCreatorProps{
     context : ItemContextService
@@ -35,10 +36,11 @@ export const ItemCreator : FC<ItemCreatorProps> = ({context}) => {
         pricePerDay : 0.0,
         pricePerWeek : 0.0,
         pricePerMonth : 0.0,
+        pricePerYear : 0.0,
         lon : DEFAULT_SPOT.lon,
         lat : DEFAULT_SPOT.lat,
+        category : context.editContext.category
     })
-
     function initMap(point : Point) {
         map.current = new mapboxgl.Map({
             container: mapContainer.current!,
@@ -77,7 +79,11 @@ export const ItemCreator : FC<ItemCreatorProps> = ({context}) => {
     }
     let marker :mapboxgl.Marker;
     function recenter(point: Point) {
-        setItem({...item, lat : point.lat, lon : point.lon})
+        fetchAddress(point)
+            .then(address => {
+                setItem({...item,...address, lon : point.lon, lat : point.lat})
+            })
+            .catch(()=>setItem({...item,address : undefined, lon : point.lon, lat : point.lat}))
         map.current?.setCenter([point.lon, point.lat])
         marker && marker.remove();
         marker = new mapboxgl.Marker()
@@ -94,11 +100,33 @@ export const ItemCreator : FC<ItemCreatorProps> = ({context}) => {
             .then(recenter)
     });
 
-    return  <Box w={'100%'} h={'100%'}>
+    function getAddressString(){
+        if(item.address){
+            return item.address;
+        }
 
-                <div>
-                    <div ref={mapContainer as React.RefObject<HTMLDivElement>} className={'map-container-mini-portrait'} />
-                </div>
+        const lon = (item.lon+'').slice(0,8);
+        const lat = (item.lat + '').slice(0,8);
+        return lon +', '+lat
+    }
+    return  <Box w={'100%'} h={'100%'}>
+        <Annotation w={largeScreen ? '17vw' :'50vw'} h={'8vh'} left={'1vw'} top={'6.5vh'} backgroundColor={'white'}>
+            <VStack>
+                <Center>
+                    <Text variant ='annotation_caption'>
+                        {intl.formatMessage({id: 'Create.item.location'})}
+                    </Text>
+                </Center>
+                <Center>
+                    <Text variant ='tiny'>
+                        {getAddressString()}
+                    </Text>
+                </Center>
+            </VStack>
+        </Annotation>
+        <div>
+            <div ref={mapContainer as React.RefObject<HTMLDivElement>} className={'map-container-mini-portrait'} />
+        </div>
         <Box   overflowY={'auto'}
                 overflowX={'hidden'}
                 maxHeight={'64vh'}
@@ -141,7 +169,7 @@ export const ItemCreator : FC<ItemCreatorProps> = ({context}) => {
                                     value={item.pricePerHour}
                                     label={'Price.hour'}
                                     type={'number'}
-                                    step={0.01}
+                                    step={1.0}
                                     onChange={ val =>
                                         setItem({...item,pricePerHour : +val})
                                     } />
@@ -149,7 +177,7 @@ export const ItemCreator : FC<ItemCreatorProps> = ({context}) => {
                                     value={item.pricePerDay}
                                     label={'Price.day'}
                                     type={'number'}
-                                    step={0.01}
+                                    step={1.0}
                                     onChange={ val =>
                                         setItem({...item,pricePerDay : +val})
                                     } />
@@ -157,7 +185,7 @@ export const ItemCreator : FC<ItemCreatorProps> = ({context}) => {
                                     value={item.pricePerWeek}
                                     label={'Price.week'}
                                     type={'number'}
-                                    step={0.01}
+                                    step={1.0}
                                     onChange={ val =>
                                         setItem({...item,pricePerWeek : +val})
                                     } />
@@ -165,7 +193,7 @@ export const ItemCreator : FC<ItemCreatorProps> = ({context}) => {
                                     value={item.pricePerMonth}
                                     label={'Price.month'}
                                     type={'number'}
-                                    step={0.01}
+                                    step={1.0}
                                     onChange={ val =>
                                         setItem({...item,pricePerMonth : +val})
                                     } />
