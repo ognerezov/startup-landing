@@ -2,6 +2,8 @@ import {createContext} from "react";
 import {AddItemRequest, Item} from "../model/items";
 import {Dict, ItemDict} from "../model/common";
 import {IMAGE_CLOUDFRONT_URL, THUMBNAIL_CLOUDFRONT_URL} from "../config/ServerAddress";
+export const JPG = '.jpg';
+export const PNG = '.png';
 
 
 export interface IItemContext{
@@ -55,11 +57,11 @@ export const ItemContext = createContext<ItemContextService>({
 });
 
 export function imageUrl(key : string):string{
-    return IMAGE_CLOUDFRONT_URL + key + '.jpg'
+    return IMAGE_CLOUDFRONT_URL + key + JPG
 }
 
 export function thumbnailUrl(key : string):string{
-    return THUMBNAIL_CLOUDFRONT_URL + key + '.png'
+    return THUMBNAIL_CLOUDFRONT_URL + key + PNG
 }
 
 export const DEFAULT_IMAGE = '/default';

@@ -42,7 +42,7 @@ const Header : FC<HeaderProps> = props => {
             variant = 'medium_solid'/> : null}
         {  props.context.selectedItem || props.context.selectedCategory ?
             <TextButton onClick={()=>{
-                if(props.context.editContext.state === EditState.NotStarted){
+                if(props.context.editContext.state !== EditState.NotStarted){
                     props.context.setEditContext({...props.context.editContext, state : EditState.NotStarted})
                 } else {
                     props.context.selectItem(undefined)
