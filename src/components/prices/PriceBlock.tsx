@@ -24,7 +24,7 @@ export const PriceBlock : FC<PriceBlockProps> = ({
     const intl = useIntl();
     const [showBookingForm, setShowBookingForm] = useState(false)
     const [success, setSuccess] = useState(false)
-    const euro = "€"
+
     function bookingForm(data : ItemContextService){
        return <EmailDialog
            subject={`Book item request id: ${item.id} name:${item.name} owner: ${item.email}`}
@@ -69,15 +69,15 @@ export const PriceBlock : FC<PriceBlockProps> = ({
                 <Price
                     className='small-corners bordered flex-one-third'
                     title={intl.formatMessage({id: 'Price.hour'})}
-                    price={item.pricePerHour/100 + euro}/>
+                    price={item.pricePerHour}/>
                 <Price
                     className='small-corners bordered flex-one-third'
                     title={intl.formatMessage({id: 'Price.day'})}
-                    price={item.pricePerDay/100 + euro}/>
+                    price={item.pricePerDay}/>
                 <Price
                     className='small-corners bordered flex-one-third'
                     title={intl.formatMessage({id: 'Price.week'})}
-                    price={item.pricePerWeek/100 + euro}/>
+                    price={item.pricePerWeek}/>
                 </HStack>
             </VStack>
             <Center flex={1} w='100%' mt='2vw'>

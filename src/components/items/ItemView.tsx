@@ -52,6 +52,7 @@ export const ItemView : FC<ItemViewProps> = ({item}) => {
                 <MapView
                     className={largeScreen ? 'map-container-mini' : 'map-container-mini-portrait'}
                     {... expandItems([item])}
+                    point={{lon : item.lon, lat : item.lat}}
                 />
             </Box>
         </Flex>

@@ -35,6 +35,7 @@ export const en: Record<string, string> = {
 	'Category.10' : 'Camping',
 	'Category.view.list' : "View list",
 	'Category.view.map' : "View map",
+	'Category.list.items' : 'List your item',
 
 	'Email.missing1' : "Unfortunately we have nothing of this. Please let us know if you are willing to rent out at category: ",
 	'Email.missing2' : "Coming soon! Thank you for your interest, please leave your details below if you'd want to rent out some of your stuff",
@@ -64,4 +65,20 @@ export const en: Record<string, string> = {
 	'Price.email' : 'Please leave your email or phone and our manage will contact you',
 
 	'Item.owner.name' : 'Owner',
+
+	'Create.item.image' : 'Your item photo',
+	'Create.item.category' : 'List item in category ',
+	'Create.item.email' : 'Owners email',
+	'Create.item.firstName' : 'Owners first name',
+	'Create.item.lastName' : 'Owners last name',
+	'Create.item.name' : 'Item name',
+	'Create.item.description' : 'Item description',
+	'Create.item.location' : 'Your rent location',
+
+	'Create.item.success' : 'You have successfully listed your item!',
+	'Create.item.view' : 'View your items page',
+	'Create.item.error' : 'Error listing an item. Please contact support',
+	'Create.item.another' : 'List one more item',
+
+	'Location.fetching.address' : 'Fetching address...'
 };

@@ -140,14 +140,27 @@ const components = {
 			variant: 'fuchsia',
 		},
 	},
+	NumberInput: {
+		baseStyle: {
+			field: {
+				borderColor: 'blue.300',
+				backgroundColor: 'white',
+				color: 'black',
+				fontWeight: '400',
+				fontSize: '1.5vh',
+			},
+		},
+	},
 	Input: {
 		baseStyle: {
 			field: {
-				borderColor: 'blue.100',
-				backgroundColor : 'blue.700',
-				color : 'white.700',
-				borderRadius: '2px',
-				borderWidth: '2px',
+				borderColor: 'blue.300',
+				backgroundColor: 'white',
+				color: 'black',
+				py: '0.5vmin',
+				borderRadius: '0.5vmin',
+				fontWeight: '700',
+				fontSize: '2.0vh',
 			},
 		},
 		variants: {
@@ -162,6 +175,17 @@ const components = {
 					fontSize: '14px',
 				},
 			},
+			medium : {
+				field : {
+					borderColor: 'blue.300',
+					backgroundColor: 'white',
+					color: 'black',
+					py: '0.5vmin',
+					borderRadius: '0.5vmin',
+					fontWeight: '400',
+					fontSize: '1vh',
+				}
+			}
 		},
 		sizes: {
 			normal: {
@@ -187,6 +211,15 @@ const components = {
 			fontWeight: '600',
 			color: 'white.700',
 			fontSize: '2vh',
+		}, variants : {
+			medium : {
+				backgroundColor: 'white',
+				color: 'blue.300',
+				py : '0.5vmin',
+				borderRadius : '0.5vmin',
+				fontWeight: '700',
+				fontSize: '2.0vh',
+			}
 		}
 	},
 	TextArea :{
@@ -213,6 +246,13 @@ const components = {
 				fontWeight : '500',
 				lineHeight : '7.4vmin',
 				letterSpacing : '0.02em'
+			},
+			success: {
+				fontSize : '3vmin',
+				fontWeight : 'bold',
+				lineHeight : '3.5vmin',
+				letterSpacing : '0.02em',
+				color : 'green.300'
 			},
 			caption: {
 				fontFamily : 'Helvetica Neue',
@@ -296,7 +336,6 @@ const components = {
 		medium : {
 			backgroundColor: 'white',
 			color: 'blue.300',
-			px: '1.1vmin',
 			py : '0.5vmin',
 			borderRadius : '0.5vmin',
 			fontWeight: '700',
@@ -306,10 +345,21 @@ const components = {
 				color : 'white'
 			},
 		},
+			medium_solid : {
+				backgroundColor: 'blue.300',
+				color: 'white',
+				py : '0.5vmin',
+				borderRadius : '0.5vmin',
+				fontWeight: '700',
+				fontSize: '2.0vh',
+				_hover: {
+					background: 'green.300',
+					color : 'white'
+				},
+			},
 		medium_ghost : {
 			backgroundColor: 'white',
 			color: 'green.300',
-			px: '1.1vmin',
 			py : '0.5vmin',
 			fontWeight: 'bold',
 			fontSize: '2.0vh'
@@ -341,14 +391,34 @@ const components = {
 				},
 			},
 			error: {
-				backgroundColor: 'blue.700',
-				color: 'fuchsia.700',
-				fontSize: '1.5vh',
+				backgroundColor: 'fuchsia.100',
+				color: 'white',
+				fontSize: '2.1vh',
+				fontWeight : '700',
+				width: '100%',
+				padding : '1vmax'
 			},
 			tiny: {
+				color : 'black',
 				fontWeight : '200',
 				fontSize : '1vh',
 			},
+			tiny_caption: {
+				color : 'blue.300',
+				fontWeight : '600',
+				fontSize : '1vh',
+			}
+			,
+			annotation: {
+				color : 'black',
+				fontWeight : '200',
+				fontSize : '1.25vh',
+			},
+			annotation_caption: {
+				color : 'blue.300',
+				fontWeight : '600',
+				fontSize : '1.25vh',
+			}
 		}
 	},
 	Link: {

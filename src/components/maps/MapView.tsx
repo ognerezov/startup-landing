@@ -1,25 +1,28 @@
 import React, {FC, useEffect, useRef, useState} from 'react'
 import mapboxgl, {GeoJSONSource, MapboxGeoJSONFeature} from 'mapbox-gl';
+import MapboxGeocoder from '@mapbox/mapbox-gl-geocoder';
 import {DEFAULT_SPOT} from "../../backend/GeoSearch";
-import {Images, loadImages} from "../../services/MapboxUtil";
+import {ACCESS_TOKEN, Images, loadImages} from "../../services/MapboxUtil";
 import {IItemContext} from "../../context/context";
 import {Item} from "../../model/items";
-import {goToItem} from "../../config/ServerAddress"; // eslint-disable-line import/no-webpack-loader-syntax
+import {goToItem} from "../../config/ServerAddress";
+import {Point} from "../../model/geo"; // eslint-disable-line import/no-webpack-loader-syntax
 
-mapboxgl.accessToken = 'pk.eyJ1IjoicG9sYXJvc28iLCJhIjoiY2w0NWx0OHA3MDI3bTNrbjZyeWIxcG95aSJ9.XJVCOv41BrAzsKm9Ye2ygQ';
+mapboxgl.accessToken = ACCESS_TOKEN;
 
 interface MapViewProps extends IItemContext{
     className ?: string
     selectItem ?: (item : Item) => void
     highLightItem ?: (id : number|undefined) => void
+    point ?: Point
 }
 
-export const MapView :FC<MapViewProps> = ({items,images, className,highLightItem}) => {
+export const MapView :FC<MapViewProps> = ({items,images, className,highLightItem, point}) => {
     const mapContainer = useRef<HTMLElement>(null);
     const map = useRef<mapboxgl.Map | null>(null);
 
-    const [lng, setLng] = useState<number>(DEFAULT_SPOT.lon);
-    const [lat, setLat] = useState<number>(DEFAULT_SPOT.lat);
+    const [lng, setLng] = useState<number>(point ? point.lon : DEFAULT_SPOT.lon);
+    const [lat, setLat] = useState<number>(point ? point.lat : DEFAULT_SPOT.lat);
     const [zoom, setZoom] = useState<number>(13);
     const [areImagesLoading, setImagesLoading] = useState<boolean>(false);
     const [mapWasLoaded, setMapWasloaded] = useState<boolean>(false);
@@ -231,6 +234,24 @@ export const MapView :FC<MapViewProps> = ({items,images, className,highLightItem
             setZoom(+map.current!.getZoom().toFixed(2));
 
         });
+        map.current.addControl(
+            new MapboxGeocoder({
+                accessToken: mapboxgl.accessToken,
+                placeholder: 'input location',
+                marker: false,
+            })
+        );
+        map.current.addControl(
+            new mapboxgl.GeolocateControl({
+                positionOptions: {
+                    enableHighAccuracy: true
+                },
+                trackUserLocation: true,
+            })
+        );
+        map.current.addControl(new mapboxgl.FullscreenControl());
+        map.current.addControl(new mapboxgl.NavigationControl());
+
     });
     //console.log('render map')
     return <div><div ref={mapContainer as React.RefObject<HTMLDivElement>} className={className} /></div>
