@@ -66,6 +66,7 @@ export const en: Record<string, string> = {
 
 	'Item.owner.name' : 'Owner',
 
+	'Create.item.image' : 'Your item photo',
 	'Create.item.category' : 'List item in category ',
 	'Create.item.email' : 'Owners email',
 	'Create.item.firstName' : 'Owners first name',
@@ -73,6 +74,11 @@ export const en: Record<string, string> = {
 	'Create.item.name' : 'Item name',
 	'Create.item.description' : 'Item description',
 	'Create.item.location' : 'Your rent location',
+
+	'Create.item.success' : 'You successfully list your item',
+	'Create.item.view' : 'Your items page',
+	'Create.item.error' : 'Error listing an item. Please contact support',
+	'Create.item.another' : 'List one more item',
 
 	'Location.fetching.address' : 'Fetching address...'
 };

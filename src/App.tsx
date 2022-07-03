@@ -57,10 +57,17 @@ const App: FC = () => {
     const context : ItemContextService = {context : data, setContext : setData, selectItem,selectedItem : item?.id, onReport,selectCategory :setCategory, selectedCategory : category, editContext, setEditContext}
 
     function submitItem(item: AddItemRequest) {
-        console.log(item)
+        setEditContext({...editContext, state : EditState.Submitting})
         creatItem(item)
-            .then(console.log)
-            .catch(e => {console.log('error: '+e)})
+            .then(data => {
+                onReport('item submitted: ' + data.id)
+                setEditContext({...editContext, state : EditState.Submitted, id : data.id})
+            })
+            .catch(e => {
+                onReport('error submitting an item: ' + e)
+                console.log('error: '+e)
+                setEditContext({...editContext, state : EditState.Error})
+            })
     }
 
     useEffect( ()=>{

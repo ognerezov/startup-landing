@@ -38,6 +38,8 @@ export interface Item{
 }
 
 export interface AddItemRequest{
+    file ?: File;
+
     firstName ?: string;
     lastName ?: string;
     email : string;
@@ -84,4 +86,17 @@ export function prepared(item : AddItemRequest):AddItemRequest{
         pricePerMonth : item.pricePerMonth ? item.pricePerMonth  * 100 : item.pricePerMonth,
         pricePerYear : item.pricePerYear ? item.pricePerYear  * 100 : item.pricePerYear
     }
+}
+
+export function toFormData(item : any) : FormData{
+    const data = new FormData()
+    Object.keys(item).forEach(key=>{
+        const val = item[key];
+        if (val !== undefined){
+            data.append(key,val)
+        }
+    })
+
+    console.log(data)
+    return data;
 }

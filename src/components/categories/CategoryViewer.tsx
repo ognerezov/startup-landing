@@ -38,7 +38,7 @@ export const CategoryViewer : FC<CategoryViewerProps> = props => {
                 height='100%'
                 overflowX='hidden' overflowY='auto'
                 width='34vw' maxWidth='34vw'>
-                <ItemGrid columns={2} w='34vw' h='100%' items={data.context.itemList} highLighted={highLighted}/>
+                <ItemGrid columns={2} w='34vw' items={data.context.itemList} highLighted={highLighted}/>
             </Box>
 
             <Box
@@ -75,8 +75,9 @@ export const CategoryViewer : FC<CategoryViewerProps> = props => {
                 height='94vh'
                 position='fixed' top='6vh'
                 left='0'
+                overflowX='hidden' overflowY='scroll'
             >
-                <ItemGrid columns={2} w='100vw' h='100%' items={data.context.itemList} highLighted={highLighted}/>
+                <ItemGrid columns={2} w='100vw' items={data.context.itemList} highLighted={highLighted}/>
                 <Center position='fixed' top='94vh' zIndex={10} w='100%'>
                     <Text variant='small' onClick={()=>setViewMap(true)}>
                         {intl.formatMessage({id: 'Category.view.map'})}

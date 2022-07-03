@@ -1,8 +1,8 @@
 import React, {FC, useEffect, useRef, useState} from 'react'
-import { ItemContextService} from "../../context/context";
+import {EditState, ItemContextService} from "../../context/context";
 import {
     Box, Button, Center,
-    FormControl, Text,
+    FormControl, Spinner, Text,
     useMediaQuery, VStack
 } from "@chakra-ui/react";
 import {QUERY_SCREEN_SIZE} from "../../pages/About";
@@ -16,6 +16,7 @@ import {getLocation} from "../../services/GeolocationService";
 import { Point } from '../../model/geo';
 import {Annotation} from "../common/Anotation";
 import {fetchAddress} from "../../services/MapboxUtil";
+import {FileInput} from "../common/FileInput";
 
 interface ItemCreatorProps{
     context : ItemContextService
@@ -109,6 +110,98 @@ export const ItemCreator : FC<ItemCreatorProps> = ({context}) => {
         const lat = (item.lat + '').slice(0,8);
         return lon +', '+lat
     }
+
+    function getForm(){
+        console.log(context.editContext.state)
+        switch (context.editContext.state){
+            case EditState.Submitting:
+                return <Center w={'100%'} h={'100%'}>
+                    <Spinner/>
+                </Center>
+            case EditState.Submitted:
+                return <div>{context.editContext.id}</div>
+            case EditState.Error:
+                return <div>Error</div>
+            case EditState.Started:
+            default:
+                return <FormControl  maxHeight={'200vh'} pb={'5vh'}>
+                    <FileInput id={'img'}
+                               label={'Create.item.image'}
+                               onChange={ file =>
+                                   setItem({...item,file})
+                               } />
+                    <InputField id={'email'}
+                                value={item.email}
+                                label={'Create.item.email'}
+                                type={'email'}
+                                onChange={ email =>
+                                    setItem({...item,email : email + ''})
+                                } />
+                    <InputField id={'firstName'}
+                                value={item.firstName}
+                                label={'Create.item.firstName'}
+                                onChange={ val =>
+                                    setItem({...item,firstName : val + ''})
+                                } />
+                    <InputField id={'lastName'}
+                                value={item.lastName}
+                                label={'Create.item.lastName'}
+                                onChange={ val =>
+                                    setItem({...item,lastName : val + ''})
+                                } />
+                    <InputField id={'name'}
+                                value={item.name}
+                                label={'Create.item.name'}
+                                onChange={ val =>
+                                    setItem({...item,name : val + ''})
+                                } />
+                    <InputField id={'description'}
+                                value={item.description}
+                                label={'Create.item.description'}
+                                onChange={ val =>
+                                    setItem({...item,description : val + ''})
+                                } />
+                    <InputField id={'p.hour'}
+                                value={item.pricePerHour}
+                                label={'Price.hour'}
+                                type={'number'}
+                                step={1.0}
+                                onChange={ val =>
+                                    setItem({...item,pricePerHour : +val})
+                                } />
+                    <InputField id={'p.day'}
+                                value={item.pricePerDay}
+                                label={'Price.day'}
+                                type={'number'}
+                                step={1.0}
+                                onChange={ val =>
+                                    setItem({...item,pricePerDay : +val})
+                                } />
+                    <InputField id={'p.week'}
+                                value={item.pricePerWeek}
+                                label={'Price.week'}
+                                type={'number'}
+                                step={1.0}
+                                onChange={ val =>
+                                    setItem({...item,pricePerWeek : +val})
+                                } />
+                    <InputField id={'p.month'}
+                                value={item.pricePerMonth}
+                                label={'Price.month'}
+                                type={'number'}
+                                step={1.0}
+                                onChange={ val =>
+                                    setItem({...item,pricePerMonth : +val})
+                                } />
+                    <Center>
+                        <Button className='bordered' w='60%' variant='ghost'  onClick={()=>context.editContext.submit(item)} id={'Submit'} >
+                            {intl.formatMessage({id :'Submit'})}</Button>
+                    </Center>
+                </FormControl>
+        }
+
+    }
+
     return  <Box w={'100%'} h={'100%'}>
         <Annotation w={largeScreen ? '17vw' :'50vw'} h={'8vh'} left={'1vw'} top={'6.5vh'} backgroundColor={'white'}>
             <VStack>
@@ -127,81 +220,15 @@ export const ItemCreator : FC<ItemCreatorProps> = ({context}) => {
         <div>
             <div ref={mapContainer as React.RefObject<HTMLDivElement>} className={'map-container-mini-portrait'} />
         </div>
-        <Box   overflowY={'auto'}
+        <Box    overflowY={'auto'}
                 overflowX={'hidden'}
                 maxHeight={'64vh'}
+                height = {'64vh'}
                 width={'100%'}
                 px = {largeScreen ? '15vw' : '1vw'}
-                py={'0.5vh'}>
-                    <FormControl  maxHeight={'120vh'} h={'120vh'}>
-                        <InputField id={'email'}
-                                    value={item.email}
-                                    label={'Create.item.email'}
-                                    type={'email'}
-                                    onChange={ email =>
-                            setItem({...item,email : email + ''})
-                        } />
-                        <InputField id={'firstName'}
-                                    value={item.firstName}
-                                    label={'Create.item.firstName'}
-                                    onChange={ val =>
-                                        setItem({...item,firstName : val + ''})
-                                    } />
-                        <InputField id={'lastName'}
-                                    value={item.lastName}
-                                    label={'Create.item.lastName'}
-                                    onChange={ val =>
-                                        setItem({...item,lastName : val + ''})
-                                    } />
-                        <InputField id={'name'}
-                                    value={item.name}
-                                    label={'Create.item.name'}
-                                    onChange={ val =>
-                                        setItem({...item,name : val + ''})
-                                    } />
-                        <InputField id={'description'}
-                                    value={item.description}
-                                    label={'Create.item.description'}
-                                    onChange={ val =>
-                                        setItem({...item,description : val + ''})
-                                    } />
-                        <InputField id={'p.hour'}
-                                    value={item.pricePerHour}
-                                    label={'Price.hour'}
-                                    type={'number'}
-                                    step={1.0}
-                                    onChange={ val =>
-                                        setItem({...item,pricePerHour : +val})
-                                    } />
-                        <InputField id={'p.day'}
-                                    value={item.pricePerDay}
-                                    label={'Price.day'}
-                                    type={'number'}
-                                    step={1.0}
-                                    onChange={ val =>
-                                        setItem({...item,pricePerDay : +val})
-                                    } />
-                        <InputField id={'p.week'}
-                                    value={item.pricePerWeek}
-                                    label={'Price.week'}
-                                    type={'number'}
-                                    step={1.0}
-                                    onChange={ val =>
-                                        setItem({...item,pricePerWeek : +val})
-                                    } />
-                        <InputField id={'p.month'}
-                                    value={item.pricePerMonth}
-                                    label={'Price.month'}
-                                    type={'number'}
-                                    step={1.0}
-                                    onChange={ val =>
-                                        setItem({...item,pricePerMonth : +val})
-                                    } />
-                        <Center>
-                            <Button className='bordered' w='60%' variant='ghost'  onClick={()=>context.editContext.submit(item)} id={'Submit'} >
-                                {intl.formatMessage({id :'Submit'})}</Button>
-                        </Center>
-                    </FormControl>
+                py={'0.5vh'}
+        >
+                {getForm()}
                 </Box>
 </Box>
 }
