@@ -32,7 +32,7 @@ export const ItemCard : FC<ItemCardProps> = props => {
                     highLighted = {props.highLighted}
                     className='small-corners margin-top'
                     title={props.item.name}
-                    price={(props.item.pricePerDay / 100) + '€/day'}/>
+                    price={props.item.pricePerDay}/>
             </Flex>
         </Box>
     }

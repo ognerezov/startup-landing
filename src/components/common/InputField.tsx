@@ -24,17 +24,21 @@ export const InputField : FC<InputFieldProps> = ({id, onChange,value,autoFocus, 
     return <div>
         <FormLabel variant={'medium'} htmlFor={id}>{intl.formatMessage({id :label})}</FormLabel>
         {type ==='number' ?
-            <NumberInput step={step} defaultValue={0} min={0}
+            <NumberInput
+                        variant={'flushed'} size="md" step={step} defaultValue={0} min={0}
                          onChange={(valueAsString, valueAsNumber) => onChange(valueAsNumber)}
             >
-                <NumberInputField color='blue.300'/>
+                <NumberInputField color='blue.300'  fontWeight={'200'}/>
                 <NumberInputStepper color='blue.300'>
                     <NumberIncrementStepper />
                     <NumberDecrementStepper />
                 </NumberInputStepper>
             </NumberInput> :
             <Input
-                variant={'medium'}
+                color='blue.300'
+                fontWeight={'200'}
+                size="md"
+                variant={'flushed'}
                 type = {type}
                 value={value}
                 autoFocus = {autoFocus}

@@ -75,8 +75,8 @@ export const en: Record<string, string> = {
 	'Create.item.description' : 'Item description',
 	'Create.item.location' : 'Your rent location',
 
-	'Create.item.success' : 'You successfully list your item',
-	'Create.item.view' : 'Your items page',
+	'Create.item.success' : 'You have successfully listed your item!',
+	'Create.item.view' : 'View your items page',
 	'Create.item.error' : 'Error listing an item. Please contact support',
 	'Create.item.another' : 'List one more item',
 

@@ -2,7 +2,7 @@ import React, {FC} from 'react';
 import {Center, Flex, HStack, Spacer, Text} from "@chakra-ui/react";
 import RadioButton from "./RadioButton";
 import {useIntl} from "react-intl";
-import {goHome} from "../config/ServerAddress";
+import {goHome, goToCategory} from "../config/ServerAddress";
 import {EditState, ItemContextService} from "../context/context";
 import {TextButton} from "./common/TextButton";
 
@@ -44,6 +44,7 @@ const Header : FC<HeaderProps> = props => {
             <TextButton onClick={()=>{
                 if(props.context.editContext.state !== EditState.NotStarted){
                     props.context.setEditContext({...props.context.editContext, state : EditState.NotStarted})
+                    goToCategory(props.context.editContext.category!)
                 } else {
                     props.context.selectItem(undefined)
                     goHome()

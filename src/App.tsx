@@ -1,6 +1,6 @@
 import React, {FC, useEffect, useState} from 'react';
 import './App.css';
-import {ChakraProvider} from '@chakra-ui/react';
+import {Center, ChakraProvider, Spinner} from '@chakra-ui/react';
 import {defaultTheme} from "./theme/defaultTheme";
 import Header from "./components/Header";
 import NotFound from "./pages/NotFound";
@@ -53,6 +53,7 @@ const App: FC = () => {
     const [category, setCategory] = useState<number|undefined>(undefined)
     const [prevCategory, setPrevCategory] = useState<number|undefined>(undefined)
     const [editContext, setEditContext] = useState<ItemEditContext>(noneItemEditContext(submitItem))
+    const [fetching, setFetching] = useState<boolean>(false)
 
     const context : ItemContextService = {context : data, setContext : setData, selectItem,selectedItem : item?.id, onReport,selectCategory :setCategory, selectedCategory : category, editContext, setEditContext}
 
@@ -76,16 +77,26 @@ const App: FC = () => {
                 //console.log(data.items[params.id])
                 setItem(data.items[params.id])
             } else{
+                setFetching(true)
                 getItemById(params.id)
                     .then(setItems)
-                    .catch(console.log)
+                    .catch(e =>{
+                        setFetching(false)
+                        console.log(e)
+                    })
             }
         } else if(params.scope === 'category' && params.id){
             const num = +params.id
             console.log(num)
+
             if(!isNaN(num)) {
+
+                if(params.query ==='list'){
+                    setEditContext({...editContext, state : EditState.Started, category : num})
+                }
+
                 setPrevCategory(category)
-                setCategory(+params.id)
+                setCategory(num)
             }
         }
         if(params.scope){
@@ -94,6 +105,7 @@ const App: FC = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
     },[params,data])
     function setItems(items : Item[]){
+        setFetching(false)
         setData(expandItems(items))
     }
 
@@ -119,6 +131,14 @@ const App: FC = () => {
         // eslint-disable-next-line react-hooks/exhaustive-deps
     },[])
     function getPage(){
+
+        if(fetching){
+            return <Center w={'100%'}
+                           height='90vh'
+                           position='fixed' top='9vh'>
+                        <Spinner/>
+                    </Center>
+        }
 
         if(item){
             return <ItemView item={item}/>

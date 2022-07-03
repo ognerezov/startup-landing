@@ -28,7 +28,6 @@ export function fetchAddress(point : Point):Promise<Address>{
             })
             .then(data => {
                 if (data.features.length > 0) {
-                    console.log(data.features[0])
                     const address = extractAddress(data.features[0]);
                     resolve(address)
                 } else {

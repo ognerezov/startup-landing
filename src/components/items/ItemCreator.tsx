@@ -2,7 +2,7 @@ import React, {FC, useEffect, useRef, useState} from 'react'
 import {EditState, ItemContextService} from "../../context/context";
 import {
     Box, Button, Center,
-    FormControl, Spinner, Text,
+    FormControl, HStack, Spinner, Text,
     useMediaQuery, VStack
 } from "@chakra-ui/react";
 import {QUERY_SCREEN_SIZE} from "../../pages/About";
@@ -17,6 +17,9 @@ import { Point } from '../../model/geo';
 import {Annotation} from "../common/Anotation";
 import {fetchAddress} from "../../services/MapboxUtil";
 import {FileInput} from "../common/FileInput";
+import {TextButton} from "../common/TextButton";
+import {goToItem} from "../../config/ServerAddress";
+import {isEmail} from "../../services/Validators";
 
 interface ItemCreatorProps{
     context : ItemContextService
@@ -111,17 +114,47 @@ export const ItemCreator : FC<ItemCreatorProps> = ({context}) => {
         return lon +', '+lat
     }
 
+    function isValid() : boolean{
+        return !!item.name &&
+            isEmail(item.email) &&
+            !!item.file &&
+            !!(item.pricePerHour || item.pricePerDay || item.pricePerWeek)
+    }
+
     function getForm(){
-        console.log(context.editContext.state)
         switch (context.editContext.state){
             case EditState.Submitting:
-                return <Center w={'100%'} h={'100%'}>
-                    <Spinner/>
-                </Center>
+                return  <Center w={'100%'} h={'100%'}>
+                            <Spinner/>
+                        </Center>
             case EditState.Submitted:
-                return <div>{context.editContext.id}</div>
+                return <Center w={'100%'} h={'100%'} >
+                    <VStack w={'80%'}>
+                        <Text variant='success' w={'100%'} pb={'8vh'} textAlign={'center'}>
+                            {intl.formatMessage({id: 'Create.item.success'})}
+                        </Text>
+                        <HStack w={'100%'} justifyContent={'center'}>
+                        <TextButton onClick={()=>{
+                            goToItem(context.editContext.id!)
+                        }} id={'Create.item.view'} px={'1.1vmin'} variant = 'medium_solid'/>
+                        <TextButton onClick={()=>{
+                            setItem({...item, file : undefined})
+                            context.setEditContext({...context.editContext, state : EditState.Started})
+                        }} id={'Create.item.another'} px={'1.1vmin'} variant = 'medium_solid'/>
+                        </HStack>
+                    </VStack>
+                </Center>
             case EditState.Error:
-                return <div>Error</div>
+                return  <Center w={'100%'} h={'100%'}>
+                            <VStack w={'80%'}>
+                                <Text variant='error' >
+                                    {intl.formatMessage({id: 'Create.item.error'})}
+                                </Text>
+                                <TextButton onClick={()=>{
+                                        context.setEditContext({...context.editContext, state : EditState.Started})
+                                }} id={'Back'} px={'1.1vmin'} variant = 'medium'/>
+                            </VStack>
+                        </Center>
             case EditState.Started:
             default:
                 return <FormControl  maxHeight={'200vh'} pb={'5vh'}>
@@ -194,7 +227,9 @@ export const ItemCreator : FC<ItemCreatorProps> = ({context}) => {
                                     setItem({...item,pricePerMonth : +val})
                                 } />
                     <Center>
-                        <Button className='bordered' w='60%' variant='ghost'  onClick={()=>context.editContext.submit(item)} id={'Submit'} >
+                        <Button
+                            disabled={!isValid()}
+                            className='bordered' w='60%' variant='ghost'  onClick={()=>context.editContext.submit(item)} id={'Submit'} >
                             {intl.formatMessage({id :'Submit'})}</Button>
                     </Center>
                 </FormControl>

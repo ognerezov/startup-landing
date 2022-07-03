@@ -37,6 +37,10 @@ export function goToItem(id : string|number){
     goToPath("/item/"+id)
 }
 
+export function goToCategory(id : string|number){
+    goToPath("/category/"+id)
+}
+
 export function getUrl(path : string) : string{
     return getProtocol() + getBaseUrl() + path;
 }

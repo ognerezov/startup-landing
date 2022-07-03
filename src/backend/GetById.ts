@@ -1,7 +1,6 @@
 import {getUrl} from "../config/ServerAddress";
 
 export async function getItemById(id : number|string){
-    console.log('get item by id '+ id);
     const url = getUrl("items/"+id);
     const response = await fetch(url, {
         method: 'GET',

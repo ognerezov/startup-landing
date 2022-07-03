@@ -149,7 +149,7 @@ const components = {
 				fontWeight: '400',
 				fontSize: '1.5vh',
 			},
-		}
+		},
 	},
 	Input: {
 		baseStyle: {
@@ -183,7 +183,7 @@ const components = {
 					py: '0.5vmin',
 					borderRadius: '0.5vmin',
 					fontWeight: '400',
-					fontSize: '1.5vh',
+					fontSize: '1vh',
 				}
 			}
 		},
@@ -246,6 +246,13 @@ const components = {
 				fontWeight : '500',
 				lineHeight : '7.4vmin',
 				letterSpacing : '0.02em'
+			},
+			success: {
+				fontSize : '3vmin',
+				fontWeight : 'bold',
+				lineHeight : '3.5vmin',
+				letterSpacing : '0.02em',
+				color : 'green.300'
 			},
 			caption: {
 				fontFamily : 'Helvetica Neue',
@@ -384,9 +391,12 @@ const components = {
 				},
 			},
 			error: {
-				backgroundColor: 'blue.700',
-				color: 'fuchsia.700',
-				fontSize: '1.5vh',
+				backgroundColor: 'fuchsia.100',
+				color: 'white',
+				fontSize: '2.1vh',
+				fontWeight : '700',
+				width: '100%',
+				padding : '1vmax'
 			},
 			tiny: {
 				color : 'black',

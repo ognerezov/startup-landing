@@ -4,7 +4,7 @@ import {Text, VStack} from "@chakra-ui/react";
 interface PriceProps{
     className ?: string
     title : string
-    price : string
+    price : number
     highLighted ?: boolean
 }
 
@@ -14,7 +14,7 @@ export const Price : FC<PriceProps> = ({className,title,price,highLighted}) => {
             {title}
         </Text>
         <Text variant='emphasis'>
-            {price}
+            {price ? price/100 + '€/day' : '--'}
         </Text>
     </VStack>
 }

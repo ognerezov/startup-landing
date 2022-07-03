@@ -18,7 +18,10 @@ export const FileInput : FC<FileInputProps> = ({id, onChange, label}) => {
         <HStack w={'100%'}>
             <Input
                 w = '50%'
-                variant={'medium'}
+                color='blue.300'
+                fontWeight={'200'}
+                size="md"
+                variant={'flushed'}
                 type={'file'}
                 capture
                 accept={'image/png, image/jpg, image/bmp, image/gif, image/svg+xml, image/tiff'}
