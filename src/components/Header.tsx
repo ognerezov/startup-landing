@@ -44,7 +44,11 @@ const Header : FC<HeaderProps> = props => {
             <TextButton onClick={()=>{
                 if(props.context.editContext.state !== EditState.NotStarted){
                     props.context.setEditContext({...props.context.editContext, state : EditState.NotStarted})
-                    goToCategory(props.context.editContext.category!)
+                    if(props.context.editContext.category) {
+                        goToCategory(props.context.editContext.category!)
+                    } else {
+                        goHome()
+                    }
                 } else {
                     props.context.selectItem(undefined)
                     goHome()
