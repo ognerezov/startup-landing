@@ -67,17 +67,29 @@ export const PriceBlock : FC<PriceBlockProps> = ({
                 className = {` ${className}`}>
                 <HStack w='100%' justifyContent='stretch' alignItems='center' spacing='2%'>
                 <Price
-                    className='small-corners bordered flex-one-third'
+                    className='small-corners bordered flex-one-fours'
                     title={intl.formatMessage({id: 'Price.hour'})}
-                    price={item.pricePerHour}/>
+                    price={item.pricePerHour}
+                    time={intl.formatMessage({id: 'Time.hour'})}
+                />
                 <Price
-                    className='small-corners bordered flex-one-third'
+                    className='small-corners bordered flex-one-fours'
                     title={intl.formatMessage({id: 'Price.day'})}
-                    price={item.pricePerDay}/>
+                    price={item.pricePerDay}
+                    time={intl.formatMessage({id: 'Time.day'})}
+                />
                 <Price
-                    className='small-corners bordered flex-one-third'
+                    className='small-corners bordered flex-one-fours'
                     title={intl.formatMessage({id: 'Price.week'})}
-                    price={item.pricePerWeek}/>
+                    price={item.pricePerWeek}
+                    time={intl.formatMessage({id: 'Time.week'})}
+                />
+                <Price
+                    className='small-corners bordered flex-one-fours'
+                    title={intl.formatMessage({id: 'Price.month'})}
+                    price={item.pricePerMonth}
+                    time={intl.formatMessage({id: 'Time.month'})}
+                />
                 </HStack>
             </VStack>
             <Center flex={1} w='100%' mt='2vw'>

@@ -56,13 +56,18 @@ export const en: Record<string, string> = {
 	'Description' : 'Description',
 	'Location' : 'Location',
 
-	'Price.day' : 'Price per day',
-	'Price.hour' : 'Price per hour',
-	'Price.week' : 'Price per week',
-	'Price.month' : 'Price per month',
+	'Price.day' : 'Daily',
+	'Price.hour' : 'Hourly',
+	'Price.week' : 'Weekly',
+	'Price.month' : 'Monthly',
 	'Price.book' : 'Book this item',
 	'Price.booked' : 'Your successfully applied for this item',
 	'Price.email' : 'Please leave your email or phone and our manage will contact you',
+
+	'Time.day' : 'day',
+	'Time.hour' : 'hour',
+	'Time.week' : 'week',
+	'Time.month' : 'month',
 
 	'Item.owner.name' : 'Owner',
 

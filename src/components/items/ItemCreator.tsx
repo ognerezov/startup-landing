@@ -62,7 +62,13 @@ export const ItemCreator : FC<ItemCreatorProps> = ({context}) => {
                 lon : event.lngLat.lng
             })
         });
-
+        map.current.addControl(
+            new MapboxGeocoder({
+                accessToken: mapboxgl.accessToken,
+                placeholder: 'input location',
+                marker: false,
+            })
+        );
         map.current.addControl(
             new MapboxGeocoder({
                 accessToken: mapboxgl.accessToken,
