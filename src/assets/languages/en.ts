@@ -88,9 +88,11 @@ export const en: Record<string, string> = {
 	'Create.item.another' : 'List one more item',
 
 	'Location.fetching.address' : 'Fetching address...',
-
+	'Otp' : 'Verification code',
 	'Login.email' : 'Login with your email',
+	'Login.input.otp' : 'Input verification code from received email',
 	'Login.otp.wrong.format' : 'Wrong code format',
+	'Login.otp.success' : 'Verification code accepted. Fetching you user details...',
 
-	'Error.default' : 'Operation error please contact support tems'
+	'Error.default' : 'Operation error please contact support team'
 };

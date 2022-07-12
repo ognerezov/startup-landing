@@ -1,9 +1,8 @@
-import {Auth, User} from "../model/user";
+import {Auth} from "../model/user";
 import {createContext} from "react";
 
 export enum AuthState{
     UnAuthorized,
-    WaitingForOtp,
     RequestingAuthorization,
     Authorized,
     AuthorizationForbidden

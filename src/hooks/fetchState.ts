@@ -16,21 +16,32 @@ export function getErrorMessage(errorCode : number){
 }
 
 export function useFetchState<T,R>(path: string, method : string, def :T):[
-    T, FetchState, number, (r :R)=>void
+    T, FetchState, number, (r :R, auth ?: string)=>void
 ]{
     const [state,setState] = useState<FetchState>(FetchState.NotStarted);
     const [result, setResult] = useState<T>(def)
     const [error, setError] = useState<number>(NOT_STARTED)
 
-    function submit(r : R){
-        const body = JSON.stringify(r)
-        const url = getUrl(path);
+    function submit(r : R, auth ?: string){
+        let url = getUrl(path);
+        let body
+        if (typeof  r ==='string'){
+            url += r
+        }else {
+            body = JSON.stringify(r)
+        }
         console.log(url)
         const params : RequestInit = {
             method,
             mode: 'cors',
             cache: 'no-cache',
             redirect: 'follow',
+            headers: auth? {
+                'Authorization' : auth,
+                'Content-Type': 'application/json'
+            } : {
+                'Content-Type': 'application/json'
+            },
             body
         }
         setState(FetchState.InProgress);

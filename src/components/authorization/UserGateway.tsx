@@ -9,11 +9,14 @@ interface UserGatewayProps {
 
 export const UserGateway : FC<UserGatewayProps> = ({children, quit}) => {
     return <UserContext.Consumer>{
-        ({auth,setAuth})=>auth.user ? children :<EmailAuthorizer quit={
-            ()=>{
-                setAuth({...auth, state : AuthState.UnAuthorized})
-                quit()
-            }
-        }/>}
+        ({auth,setAuth})=>auth.user ? children :
+            <EmailAuthorizer auth={auth} setAuth={setAuth}
+                 quit={
+                    ()=>{
+                        setAuth({...auth, state : AuthState.UnAuthorized})
+                        quit()
+                    }
+            }/>
+    }
     </UserContext.Consumer>
 }

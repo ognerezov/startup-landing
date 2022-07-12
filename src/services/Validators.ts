@@ -18,6 +18,10 @@ export function validateEmail(str : string|undefined) : StateId {
     return isEmail(str) ? undefined : 'Email.wrong.format'
 }
 
-export function validateOTP(otp : number|undefined) : StateId {
-    return otp && MIN_OTP < otp && otp < MAX_OTP ? undefined : 'Email.wrong.format'
+export function validateOTP(otp : number|string|undefined) : StateId {
+    if (!otp){
+        return 'Login.otp.wrong.format'
+    }
+
+    return MIN_OTP < +otp && +otp < MAX_OTP ? undefined : 'Login.otp.wrong.format'
 }
