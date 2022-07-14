@@ -19,7 +19,6 @@ import {fetchAddress} from "../../services/MapboxUtil";
 import {FileInput} from "../common/FileInput";
 import {TextButton} from "../common/TextButton";
 import {goToItem} from "../../config/ServerAddress";
-import {isEmail} from "../../services/Validators";
 
 interface ItemCreatorProps{
     context : ItemContextService
@@ -32,9 +31,9 @@ export const ItemCreator : FC<ItemCreatorProps> = ({context}) => {
     const intl = useIntl();
     const [item,setItem] = useState<AddItemRequest>({
         name : '',
-        email : '',
-        firstName : '',
-        lastName : '',
+        // email : '',
+        // firstName : '',
+        // lastName : '',
         description : '',
         pricePerHour : 0.0,
         pricePerDay : 0.0,
@@ -122,7 +121,7 @@ export const ItemCreator : FC<ItemCreatorProps> = ({context}) => {
 
     function isValid() : boolean{
         return !!item.name &&
-            isEmail(item.email) &&
+            // isEmail(item.email) &&
             !!item.file &&
             !!(item.pricePerHour || item.pricePerDay || item.pricePerWeek)
     }
@@ -169,25 +168,25 @@ export const ItemCreator : FC<ItemCreatorProps> = ({context}) => {
                                onChange={ file =>
                                    setItem({...item,file})
                                } />
-                    <InputField id={'email'}
-                                value={item.email}
-                                label={'Create.item.email'}
-                                type={'email'}
-                                onChange={ email =>
-                                    setItem({...item,email : email + ''})
-                                } />
-                    <InputField id={'firstName'}
-                                value={item.firstName}
-                                label={'Create.item.firstName'}
-                                onChange={ val =>
-                                    setItem({...item,firstName : val + ''})
-                                } />
-                    <InputField id={'lastName'}
-                                value={item.lastName}
-                                label={'Create.item.lastName'}
-                                onChange={ val =>
-                                    setItem({...item,lastName : val + ''})
-                                } />
+                    {/*<InputField id={'email'}*/}
+                    {/*            value={item.email}*/}
+                    {/*            label={'Create.item.email'}*/}
+                    {/*            type={'email'}*/}
+                    {/*            onChange={ email =>*/}
+                    {/*                setItem({...item,email : email + ''})*/}
+                    {/*            } />*/}
+                    {/*<InputField id={'firstName'}*/}
+                    {/*            value={item.firstName}*/}
+                    {/*            label={'Create.item.firstName'}*/}
+                    {/*            onChange={ val =>*/}
+                    {/*                setItem({...item,firstName : val + ''})*/}
+                    {/*            } />*/}
+                    {/*<InputField id={'lastName'}*/}
+                    {/*            value={item.lastName}*/}
+                    {/*            label={'Create.item.lastName'}*/}
+                    {/*            onChange={ val =>*/}
+                    {/*                setItem({...item,lastName : val + ''})*/}
+                    {/*            } />*/}
                     <InputField id={'name'}
                                 value={item.name}
                                 label={'Create.item.name'}
@@ -244,7 +243,7 @@ export const ItemCreator : FC<ItemCreatorProps> = ({context}) => {
     }
 
     return  <Box w={'100%'} h={'100%'}>
-        <Annotation w={largeScreen ? '17vw' :'50vw'} h={'8vh'} left={'1vw'} top={'6.5vh'} backgroundColor={'white'}>
+        <Annotation w={largeScreen ? '17vw' :'50vw'} h={'8vh'} left={largeScreen ? '10vw' :'0.8vw'} top={'31.2vh'} backgroundColor={'white'}>
             <VStack>
                 <Center>
                     <Text variant ='annotation_caption'>

@@ -40,12 +40,15 @@ export const en: Record<string, string> = {
 	'Email.missing1' : "Unfortunately we have nothing of this. Please let us know if you are willing to rent out at category: ",
 	'Email.missing2' : "Coming soon! Thank you for your interest, please leave your details below if you'd want to rent out some of your stuff",
 	'Email.title' : 'Book A Demo',
+	'Email': 'Email address',
 	'Email.email': 'Email or mobile phone number',
 	'Email.description': 'Please provide a valid contact info.',
 	'Email.text': 'Your message',
 	'Email.progress' : 'Your massage is being sent..........',
 	'Email.sent' : "Your message was sent. Our manager will get back to you as soon as possible.",
 	'Email.error' : 'Error sending the message. Sorry...',
+	'Email.wrong.format' : 'Wrong email format',
+	'Phone.wrong.format' : 'Wrong phone number format',
 	'Back' : 'Back',
 	'Ok' : 'Ok',
 	'Cancel' : 'Cancel',
@@ -85,5 +88,21 @@ export const en: Record<string, string> = {
 	'Create.item.error' : 'Error listing an item. Please contact support',
 	'Create.item.another' : 'List one more item',
 
-	'Location.fetching.address' : 'Fetching address...'
+	'Location.fetching.address' : 'Fetching address...',
+	'Otp' : 'Verification code',
+	'Login.email' : 'Login with your email',
+	'Login.input.otp' : 'Input verification code from received email',
+	'Login.otp.wrong.format' : 'Wrong code format',
+	'Login.otp.success' : 'Verification code accepted. Fetching you user details...',
+
+	'Error.default' : 'Operation error please contact support team',
+
+	'Profile.complete' : 'Please complete your profile',
+	'Profile.email' : 'Email address',
+	'Profile.firstName' : 'Firstname',
+	'Profile.lastName'  : 'Lastname',
+	'Profile.phone' : 'Phone',
+	'Profile.empty.name' : 'Firstname is empty',
+
+	'Hello' : 'Hello'
 };

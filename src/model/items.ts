@@ -40,9 +40,9 @@ export interface Item{
 export interface AddItemRequest{
     file ?: File;
 
-    firstName ?: string;
-    lastName ?: string;
-    email : string;
+    // firstName ?: string;
+    // lastName ?: string;
+    // email : string;
     phone ?: string;
 
     lat : number;
@@ -97,6 +97,5 @@ export function toFormData(item : any) : FormData{
         }
     })
 
-    console.log(data)
     return data;
 }

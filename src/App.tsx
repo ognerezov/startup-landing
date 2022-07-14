@@ -28,6 +28,11 @@ import {getItemById} from "./backend/GetById";
 import '@mapbox/mapbox-gl-geocoder/dist/mapbox-gl-geocoder.css';
 import {ItemCreator} from "./components/items/ItemCreator";
 import {creatItem} from "./backend/CreatItem";
+import {Auth} from "./model/user";
+import {useStorage} from "./hooks/storageHook";
+import {INITIAL_AUTH, UserContext, UserContextService} from "./context/userContext";
+import {STORAGE_AUTH} from "./storage/localStorage";
+import {UserGateway} from "./components/authorization/UserGateway";
 
 interface AppState{
     tab : string
@@ -54,12 +59,13 @@ const App: FC = () => {
     const [prevCategory, setPrevCategory] = useState<number|undefined>(undefined)
     const [editContext, setEditContext] = useState<ItemEditContext>(noneItemEditContext(submitItem))
     const [fetching, setFetching] = useState<boolean>(false)
+    const [auth, setAuth] = useStorage<Auth>(STORAGE_AUTH, INITIAL_AUTH);
 
-    const context : ItemContextService = {context : data, setContext : setData, selectItem,selectedItem : item?.id, onReport,selectCategory :setCategory, selectedCategory : category, editContext, setEditContext}
-
+    const context : ItemContextService = {context : data, setContext : setData, selectItem,selectedItem : item?.id, onReport,selectCategory :setCategory, selectedCategory : category, editContext, setEditContext};
+    const userContext : UserContextService = {auth : auth, setAuth : setAuth}
     function submitItem(item: AddItemRequest) {
         setEditContext({...editContext, state : EditState.Submitting})
-        creatItem(item)
+        creatItem(item,auth.token!)
             .then(data => {
                 onReport('item submitted: ' + data.id)
                 setEditContext({...editContext, state : EditState.Submitted, id : data.id})
@@ -139,7 +145,13 @@ const App: FC = () => {
                         <Spinner/>
                     </Center>
         }
-
+        if (editContext.state !== EditState.NotStarted ){
+            return <UserGateway quit={()=>{
+                setEditContext({...editContext,state : EditState.NotStarted})
+            }}>
+                <ItemCreator context={context} />
+            </UserGateway>
+        }
         if(item){
             return <ItemView item={item}/>
         }
@@ -177,14 +189,15 @@ const App: FC = () => {
       <ChakraProvider theme={defaultTheme}>
           <IntlProvider messages={languages[currentLanguage]} locale={currentLanguage}>
               <ItemContext.Provider value={context}>
-        <Header
-            context={context}
-            selected={state.tab}
-            select={changeTab}
-            buttons={[HOME,ABOUT,CONTACT]}
-        />
-          {editContext.state !== EditState.NotStarted ?
-                       <ItemCreator context={context}/> : getPage()}
+                  <UserContext.Provider value={userContext}>
+                    <Header
+                        context={context}
+                        selected={state.tab}
+                        select={changeTab}
+                        buttons={[HOME,ABOUT,CONTACT]}
+                    />
+                      {getPage()}
+                  </UserContext.Provider>
               </ItemContext.Provider>
           </IntlProvider>
       </ChakraProvider>
