@@ -1,6 +1,7 @@
 import React, {FC} from 'react'
 import {AuthState, UserContext} from "../../context/userContext";
 import {EmailAuthorizer} from "./EmailAuthorizer";
+import {ProfileEditor} from "./ProfileEditor";
 
 interface UserGatewayProps {
     children?: React.ReactNode;
@@ -9,7 +10,10 @@ interface UserGatewayProps {
 
 export const UserGateway : FC<UserGatewayProps> = ({children, quit}) => {
     return <UserContext.Consumer>{
-        ({auth,setAuth})=>auth.user ? children :
+        ({auth,setAuth})=>auth.user ?
+            (auth.user.firstName ? children :
+                <ProfileEditor auth={auth} setAuth={setAuth} quit={quit}/>
+            ) :
             <EmailAuthorizer auth={auth} setAuth={setAuth}
                  quit={
                     ()=>{

@@ -1,12 +1,12 @@
 import React, {FC, ReactNode, useEffect} from 'react';
-import {AuthState, UserContext, UserContextService} from "../../context/userContext";
+import {AuthState, UserContextService} from "../../context/userContext";
 import {InputField} from "../common/InputField";
 import {Button, Center, FormControl, Spinner, Text} from "@chakra-ui/react";
 import {useValidState} from "../../hooks/validState";
 import {validateEmail, validateOTP} from "../../services/Validators";
 import {DialogFrame} from "../../dialogs/DialogFrame";
 import {useIntl} from "react-intl";
-import {FetchState, getErrorMessage, useFetchState} from "../../hooks/fetchState";
+import {bearer, FetchState, getErrorMessage, useFetchState} from "../../hooks/fetchState";
 import {
     BasicResponse,
     EmailRequest,
@@ -14,7 +14,7 @@ import {
     EMPTY_VALUE_RESPONSE,
     ValueResponse
 } from "../../model/api/userRequests";
-import {User} from "../../model/user";
+import {Auth} from "../../model/user";
 
 interface EmailAuthorizerProps extends UserContextService{
     quit : ()=>void
@@ -26,22 +26,26 @@ export const EmailAuthorizer : FC<EmailAuthorizerProps> = ({quit,auth,setAuth}) 
     const [emailLoginResult,emailLoginFetchState,emailLoginError,submitEmail] = useFetchState<BasicResponse,EmailRequest>('user/login','POST',EMPTY_RESPONSE)
     const [otp,otpError, setOtp] = useValidState<number|string>('',validateOTP);
     const [otpResult,otpFetchState,otpSubmitError,submitOtp] = useFetchState<ValueResponse,string>('user/otp/','GET',EMPTY_VALUE_RESPONSE)
-    const [user,userFetchState,tokenSubmitError,submitToken] = useFetchState<User | undefined,string>('customer','GET',undefined)
+    const [authResult,userFetchState,tokenSubmitError,submitToken] = useFetchState<Auth | undefined,string>('customer','GET',undefined)
 
     const intl = useIntl();
     function setEmailValue(val : string|number){
         setEmail(val+'')
     }
     useEffect(()=>{
+        if(!otpResult || !otpResult.value){
+            return
+        }
+        console.log(otpResult)
         setAuth({...auth,token : otpResult.value, state : AuthState.RequestingAuthorization})
-        submitToken("","Bearer " + otpResult.value)
+        submitToken("", bearer(otpResult.value))
         // eslint-disable-next-line react-hooks/exhaustive-deps
     },[otpResult])
 
     useEffect(()=>{
-        setAuth({...auth,user, state : AuthState.Authorized})
+        setAuth({...authResult, state : AuthState.Authorized})
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    },[user])
+    },[authResult])
 
     function getOtpSuccessForm() : ReactNode{
         switch (userFetchState) {
@@ -49,8 +53,8 @@ export const EmailAuthorizer : FC<EmailAuthorizerProps> = ({quit,auth,setAuth}) 
             default:
             case FetchState.InProgress:
                 return <Center w={'100%'} h={'100%'}>
-                    <Spinner/>
-                </Center>
+                        <Spinner/>
+                    </Center>
             case FetchState.Finished:
                 return otpSubmitError === 200 ? null :
                     <Center w={'100%'} h={'100%'}>
@@ -80,7 +84,6 @@ export const EmailAuthorizer : FC<EmailAuthorizerProps> = ({quit,auth,setAuth}) 
                     <InputField id={'otp'}
                                 value={otp}
                                 label={'Otp'}
-                                type={"number"}
                                 onChange={setOtp}/>
                     <Center>
                         {otpError ?
@@ -146,11 +149,9 @@ export const EmailAuthorizer : FC<EmailAuthorizerProps> = ({quit,auth,setAuth}) 
             (otpFetchState !== FetchState.Finished ? 'Login.input.otp' : 'Login.otp.success');
     }
 
-    return <UserContext.Consumer>
-        {({auth,setAuth})=><DialogFrame
+    return <DialogFrame
             title={intl.formatMessage({id: getTitle()})}
             isOpen={true} onClose={quit} w={'54vw'}>
             {getFormControl()}
-        </DialogFrame>}
-    </UserContext.Consumer>
+        </DialogFrame>
 }

@@ -9,10 +9,14 @@ export interface User{
     area ?: number
     email ?: string
     phone ?: string
-    data : any
+    data ?: any
     roles : string[]
 }
 
+export const ANONYMOUS : User ={
+    id : 0,
+    roles : []
+}
 
 export interface Auth{
     state : AuthState

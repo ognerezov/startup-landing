@@ -5,6 +5,7 @@ import {useIntl} from "react-intl";
 import {goHome, goToCategory} from "../config/ServerAddress";
 import {EditState, ItemContextService} from "../context/context";
 import {TextButton} from "./common/TextButton";
+import {UserContext} from "../context/userContext";
 
 interface HeaderProps{
     selected ?: string
@@ -28,6 +29,15 @@ const Header : FC<HeaderProps> = props => {
                         {intl.formatMessage({id: 'Company.name'})}
                     </Text>
                 </Center>
+                <Spacer/>
+        <UserContext.Consumer>{({auth}) => auth.user && auth.user.firstName ?
+            <Center onClick={() => {
+            }} cursor='pointer'>
+                <Text variant='medium' px='1.1vmin'>
+                    {intl.formatMessage({id: 'Hello'}) + ' ' + auth.user.firstName}
+                </Text>
+            </Center> : null
+        }</UserContext.Consumer>
                 <Spacer/>
         {props.context.selectedCategory && props.context.editContext.state === EditState.NotStarted ? <TextButton
             onClick={()=>{

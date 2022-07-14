@@ -65,7 +65,7 @@ const App: FC = () => {
     const userContext : UserContextService = {auth : auth, setAuth : setAuth}
     function submitItem(item: AddItemRequest) {
         setEditContext({...editContext, state : EditState.Submitting})
-        creatItem(item)
+        creatItem(item,auth.token!)
             .then(data => {
                 onReport('item submitted: ' + data.id)
                 setEditContext({...editContext, state : EditState.Submitted, id : data.id})

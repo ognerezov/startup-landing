@@ -401,23 +401,23 @@ const components = {
 			tiny: {
 				color : 'black',
 				fontWeight : '200',
-				fontSize : '1vh',
+				fontSize : '1.1vh',
 			},
 			tiny_caption: {
 				color : 'blue.300',
 				fontWeight : '600',
-				fontSize : '1vh',
+				fontSize : '1.1vh',
 			}
 			,
 			annotation: {
 				color : 'black',
 				fontWeight : '200',
-				fontSize : '1.25vh',
+				fontSize : '1.35vh',
 			},
 			annotation_caption: {
 				color : 'blue.300',
 				fontWeight : '600',
-				fontSize : '1.25vh',
+				fontSize : '1.35vh',
 			}
 		}
 	},

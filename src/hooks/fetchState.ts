@@ -15,6 +15,10 @@ export function getErrorMessage(errorCode : number){
     return 'Error.default';
 }
 
+export function bearer(token : string){
+    return "Bearer " + token;
+}
+
 export function useFetchState<T,R>(path: string, method : string, def :T):[
     T, FetchState, number, (r :R, auth ?: string)=>void
 ]{
@@ -24,6 +28,8 @@ export function useFetchState<T,R>(path: string, method : string, def :T):[
 
     function submit(r : R, auth ?: string){
         let url = getUrl(path);
+        console.log(auth)
+        console.log(url)
         let body
         if (typeof  r ==='string'){
             url += r
@@ -33,17 +39,22 @@ export function useFetchState<T,R>(path: string, method : string, def :T):[
         console.log(url)
         const params : RequestInit = {
             method,
-            mode: 'cors',
+            mode: auth ? undefined : 'cors',
             cache: 'no-cache',
             redirect: 'follow',
-            headers: auth? {
+            credentials : auth ? 'include' : undefined,
+            headers: auth ? {
+                'Access-Control-Allow-Origin': 'http://localhost:8080, https://app.rentsby.com, https://rentsby.com, https://89kkdndqhb.execute-api.eu-west-1.amazonaws.com',
                 'Authorization' : auth,
+                'Access-Control-Allow-Headers': '*',
+                'Access-Control-Allow-Methods' : 'GET, POST, PATCH, PUT, DELETE, OPTIONS',
                 'Content-Type': 'application/json'
             } : {
                 'Content-Type': 'application/json'
             },
             body
         }
+        console.log(params)
         setState(FetchState.InProgress);
         fetch(url,params)
             .then(response =>{

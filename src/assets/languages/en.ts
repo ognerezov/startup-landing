@@ -48,6 +48,7 @@ export const en: Record<string, string> = {
 	'Email.sent' : "Your message was sent. Our manager will get back to you as soon as possible.",
 	'Email.error' : 'Error sending the message. Sorry...',
 	'Email.wrong.format' : 'Wrong email format',
+	'Phone.wrong.format' : 'Wrong phone number format',
 	'Back' : 'Back',
 	'Ok' : 'Ok',
 	'Cancel' : 'Cancel',
@@ -94,5 +95,14 @@ export const en: Record<string, string> = {
 	'Login.otp.wrong.format' : 'Wrong code format',
 	'Login.otp.success' : 'Verification code accepted. Fetching you user details...',
 
-	'Error.default' : 'Operation error please contact support team'
+	'Error.default' : 'Operation error please contact support team',
+
+	'Profile.complete' : 'Please complete your profile',
+	'Profile.email' : 'Email address',
+	'Profile.firstName' : 'Firstname',
+	'Profile.lastName'  : 'Lastname',
+	'Profile.phone' : 'Phone',
+	'Profile.empty.name' : 'Firstname is empty',
+
+	'Hello' : 'Hello'
 };
