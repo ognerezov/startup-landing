@@ -117,7 +117,7 @@ export const MapView :FC<MapViewProps> = ({items,images, className,highLightItem
                         },
                         'properties': {
                             'image-name': id,
-                            'name': (item.pricePerDay / 100) + '€/day',
+                            'name': (item.pricePerHour / 100) + '€/hour',
                             'id': id,
                             'type': 'item',
                             'size': 0.25,

@@ -17,6 +17,15 @@
   margin-top: 1vh;
 }
 
+.basic-margin{
+  margin: 1vh auto;
+}
+
+.img-btn{
+  cursor : pointer;
+  padding: 0.2vh;
+}
+
 .round-corners{
   border-radius: 2vmin;
 }

@@ -5,9 +5,11 @@ const colors = {
 		700 : '#ffffff'
 	},
 	blue: {
-		100: '#6AC0DD',
+		100: '#E7D4FF',
 		200: '#B7D2E2',
-		300 : '#2F75BB',
+		// 300 : '#2F75BB',
+		300 : '#5A35A9',
+		400 : '#7F5AF0',
 		500: '#2A3D5A',
 		700: '#011135',
 	},
@@ -40,7 +42,9 @@ const colors = {
 	},
 	green: {
 		100: '#00a788',
-		300 : '#BBE37F',
+		// 300 : '#00A389',
+		300 : '#FF9C07',
+		// 300 : '#BBE37F',
 		700 : '#00ff00'
 	},
 	card: {
@@ -269,10 +273,10 @@ const components = {
 				letterSpacing : '0.01em'
 			},
 			regular: {
-				color : 'black',
+				color : 'blue.300',
 				fontFamily : 'Helvetica Neue',
 				fontSize : '1.6vh',
-				fontWeight : '300',
+				fontWeight : '400',
 				lineHeight : '1.7vh',
 			},
 			emphasis: {
@@ -333,6 +337,30 @@ const components = {
 					background: 'blue.300',
 				},
 			},
+			medium_phone_solid : {
+				backgroundColor: 'blue.300',
+				color: 'white',
+				py : '0.5vmin',
+				borderRadius : '0.5vmin',
+				fontWeight: '700',
+				fontSize: '1.5vh',
+				_hover: {
+					background: 'green.300',
+					color : 'white'
+				},
+			},
+			medium_phone : {
+				backgroundColor: 'white',
+				color: 'blue.300',
+				py : '0.5vmin',
+				borderRadius : '0.5vmin',
+				fontWeight: '700',
+				fontSize: '1.5vh',
+				_hover: {
+					background: 'blue.300',
+					color : 'white'
+				},
+			},
 		medium : {
 			backgroundColor: 'white',
 			color: 'blue.300',
@@ -345,18 +373,18 @@ const components = {
 				color : 'white'
 			},
 		},
-			medium_solid : {
-				backgroundColor: 'blue.300',
-				color: 'white',
-				py : '0.5vmin',
-				borderRadius : '0.5vmin',
-				fontWeight: '700',
-				fontSize: '2.0vh',
-				_hover: {
-					background: 'green.300',
-					color : 'white'
-				},
+		medium_solid : {
+			backgroundColor: 'blue.300',
+			color: 'white',
+			py : '0.5vmin',
+			borderRadius : '0.5vmin',
+			fontWeight: '700',
+			fontSize: '2.0vh',
+			_hover: {
+				background: 'green.300',
+				color : 'white'
 			},
+		},
 		medium_ghost : {
 			backgroundColor: 'white',
 			color: 'green.300',
@@ -364,6 +392,13 @@ const components = {
 			fontWeight: 'bold',
 			fontSize: '2.0vh'
 		},
+			medium_phone_ghost : {
+				backgroundColor: 'white',
+				color: 'green.300',
+				py : '0.5vmin',
+				fontWeight: 'bold',
+				fontSize: '1.5vh'
+			},
 			header: {
 				fontFamily : 'Helvetica Neue',
 				fontSize : '5vh',

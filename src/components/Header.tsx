@@ -1,11 +1,14 @@
 import React, {FC} from 'react';
-import {Center, Flex, HStack, Spacer, Text} from "@chakra-ui/react";
+import {Center, Flex, HStack, Spacer, Text, useMediaQuery} from "@chakra-ui/react";
 import RadioButton from "./RadioButton";
 import {useIntl} from "react-intl";
 import {goHome, goToCategory} from "../config/ServerAddress";
 import {EditState, ItemContextService} from "../context/context";
 import {TextButton} from "./common/TextButton";
 import {UserContext} from "../context/userContext";
+import {QUERY_SCREEN_SIZE} from "../pages/About";
+import {textVar} from "../services/Style";
+import fav from "../images/favicon_1.png";
 
 interface HeaderProps{
     selected ?: string
@@ -16,6 +19,11 @@ interface HeaderProps{
 
 const Header : FC<HeaderProps> = props => {
     const intl = useIntl();
+    const [largeScreen] = useMediaQuery(QUERY_SCREEN_SIZE)
+
+    function textVariant(){
+        return textVar(largeScreen);
+    }
     return <Flex
                 px = '1vw'
                 backgroundColor='white'
@@ -24,16 +32,12 @@ const Header : FC<HeaderProps> = props => {
                 position='fixed'
                 left='0' top='0' width='100vw' height = '6vh'
                 zIndex={3}>
-                <Center onClick={goHome} cursor='pointer' >
-                    <Text variant='medium' px = '1.1vmin'>
-                        {intl.formatMessage({id: 'Company.name'})}
-                    </Text>
-                </Center>
+                <img onClick={goHome} className={'img-btn'} src={fav} height={'5.6vh'} alt={intl.formatMessage({id: 'Company.name'})}/>
                 <Spacer/>
         <UserContext.Consumer>{({auth}) => auth.user && auth.user.firstName ?
             <Center onClick={() => {
             }} cursor='pointer'>
-                <Text variant='medium' px='1.1vmin'>
+                <Text variant={textVariant()} px='1.1vmin'>
                     {intl.formatMessage({id: 'Hello'}) + ' ' + auth.user.firstName}
                 </Text>
             </Center> : null
@@ -49,7 +53,7 @@ const Header : FC<HeaderProps> = props => {
             }}
             id={'Category.list.items'}
             px={'1.1vmin'}
-            variant = 'medium_solid'/> : null}
+            variant = {textVariant() +'_solid'}/> : null}
         {  props.context.selectedItem || props.context.selectedCategory ?
             <TextButton onClick={()=>{
                 if(props.context.editContext.state !== EditState.NotStarted){
@@ -63,7 +67,7 @@ const Header : FC<HeaderProps> = props => {
                     props.context.selectItem(undefined)
                     goHome()
                 }
-            }} id={'Back'} px={'1.1vmin'} variant = 'medium'/> :
+            }} id={'Back'} px={'1.1vmin'} variant = {textVariant()}/> :
             <HStack spacing='0.5vw'>
                 {props.buttons.map(btn => <RadioButton
                     className={'px'}

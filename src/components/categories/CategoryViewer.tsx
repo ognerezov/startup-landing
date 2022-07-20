@@ -7,12 +7,14 @@ import {QUERY_SCREEN_SIZE} from "../../pages/About";
 import {ItemGrid} from "../items/ItemGrid";
 import {ItemContext, ItemContextService} from "../../context/context";
 import {useIntl} from "react-intl";
+import {Point} from "../../model/geo";
 
 interface CategoryViewerProps {
     id : number
     items ?: Item []
     title : string
     onExit : ()=>void
+    at : Point
 }
 
 export const CategoryViewer : FC<CategoryViewerProps> = props => {
@@ -51,7 +53,7 @@ export const CategoryViewer : FC<CategoryViewerProps> = props => {
                 borderColor={'blue.300'}
                 borderLeftWidth={'1px'}
             >
-                <MapView {...data.context} className='map-container-landscape' selectItem={data.selectItem} highLightItem={highLight}/>
+                <MapView {...data.context} className='map-container-landscape' selectItem={data.selectItem} highLightItem={highLight} point={props.at}/>
             </Box>
         </Box>
     }
@@ -63,7 +65,8 @@ export const CategoryViewer : FC<CategoryViewerProps> = props => {
             position='fixed' top='6vh'
             left='0'
         >
-                <MapView {...data.context} className='map-container-portrait ' selectItem={data.selectItem} highLightItem={highLight}/>
+                <MapView {...data.context} className='map-container-portrait '
+                         selectItem={data.selectItem} highLightItem={highLight} point={props.at}/>
                 <Center position='fixed' top='94vh' zIndex={10} w='100%'>
                     <Text variant='small' onClick={()=>setViewMap(false)}>
                         {intl.formatMessage({id: 'Category.view.list'})}

@@ -32,7 +32,7 @@ export const ItemCard : FC<ItemCardProps> = props => {
                     highLighted = {props.highLighted}
                     className='small-corners margin-top'
                     title={props.item.name}
-                    price={props.item.pricePerDay}/>
+                    price={props.item.pricePerHour}/>
             </Flex>
         </Box>
     }

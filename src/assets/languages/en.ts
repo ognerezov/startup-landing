@@ -104,5 +104,7 @@ export const en: Record<string, string> = {
 	'Profile.phone' : 'Phone',
 	'Profile.empty.name' : 'Firstname is empty',
 
-	'Hello' : 'Hello'
+	'Hello' : 'Hello',
+	'App.hello' : 'Welcome to RentsBy. Rent to and from people near you',
+	'App.hello.business' : 'Build your rental business with us'
 };

@@ -1,8 +1,10 @@
 import {getUrl} from "../config/ServerAddress";
 import {Spot} from "../model/geo";
 
+export const DEFAULT_R = 30000;
+
 export const DEFAULT_SPOT : Spot = {
-    radius : 30000,
+    radius : DEFAULT_R,
     lon : -0.37567,
     lat : 39.46885
 }
