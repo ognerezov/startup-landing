@@ -108,7 +108,7 @@ export const Categories : FC<CategoriesProps> = props => {
                                 px='7vw'
                                 pt={'2vh'}
                                 pb={'5vh'}
-                                templateColumns='repeat(5, 1fr)' gap={6} width='100%' h='100%'>
+                                templateColumns='repeat(5, 1fr)' gap={6} width='100%' >
                                 {getContent()}
                             </Grid> : <VStack
                                 background={props.context.selectedCategory ? 'white' : 'blue.300'}
@@ -116,7 +116,6 @@ export const Categories : FC<CategoriesProps> = props => {
                                 px='5w'
                                 pt='3vh'
                                 pb='6vh'
-                                h='100%'
                             >
                                 {getContent()}
                             </VStack>
