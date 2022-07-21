@@ -77,7 +77,7 @@ export const Categories : FC<CategoriesProps> = props => {
                     onExit={()=>{props.context.selectCategory(undefined)}}/>
     }
     return <Box
-        height='97vh'
+        height={largeScreen ? '97vh' : '95vh'}
         position='fixed'
         top='3vh'
         overflowY={'auto'}
@@ -122,7 +122,7 @@ export const Categories : FC<CategoriesProps> = props => {
 
                 }
                 {props.context.selectedCategory ? null :
-                    <div>
+                    <Box pb={largeScreen ? '0.1vh' : '10vh'}>
                         <Center w={'100%'}>
                             <Text variant={'medium'} px={'2vw'}>
                                 {intl.formatMessage({id: 'App.hello.business'})}
@@ -130,7 +130,7 @@ export const Categories : FC<CategoriesProps> = props => {
                         </Center>
                         <img src={earn} className='basic-margin' width={largeScreen ? '50%' : '90%'}
                              alt={intl.formatMessage({id: 'Company.slogan'})}/>
-                    </div>
+                    </Box>
                 }
             </VStack>
     </Box>

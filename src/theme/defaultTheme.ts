@@ -279,6 +279,13 @@ const components = {
 				fontWeight : '400',
 				lineHeight : '1.7vh',
 			},
+			regular_highlighted: {
+				color : 'green.300',
+				fontFamily : 'Helvetica Neue',
+				fontSize : '1.6vh',
+				fontWeight : '400',
+				lineHeight : '1.7vh',
+			},
 			emphasis: {
 				color : 'white',
 				fontFamily : 'Helvetica Neue',
