@@ -32,4 +32,4 @@ jobs:
           tags: ${{ secrets.DOCKERHUB_REPOSITORY }}
       - name: Restart Prod
         run: |
-          curl -X POST 'http://nau-mag.com/game/service/restart' -H 'Content-Type: application/json' -d '{"secret":"${{ secrets.SCRIPT_RUNNER_SECRET }}","script":"restart"}'    
+          curl -X POST 'http://52.18.242.113:5678' -H 'Content-Type: application/json' -d '{"secret":"${{ secrets.SCRIPT_RUNNER_SECRET }}","script":"restart"}'    
