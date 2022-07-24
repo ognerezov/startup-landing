@@ -30,3 +30,6 @@ jobs:
           context: .
           push: true
           tags: ${{ secrets.DOCKERHUB_REPOSITORY }}
+      - name: Restart Prod
+        run: |
+          curl -X POST 'http://nau-mag.com/game/service/restart' -H 'Content-Type: application/json' -d '{"secret":"${{ secrets.SCRIPT_RUNNER_SECRET }}","script":"restart"}'    
