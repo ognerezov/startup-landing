@@ -6,7 +6,7 @@ import Header from "./components/Header";
 import NotFound from "./pages/NotFound";
 import About from "./pages/About";
 import {IntlProvider} from "react-intl";
-import {EN, languages} from "./services/Languages";
+import {languages, systemLanguage} from "./services/Languages";
 import Contact from "./pages/Contact";
 import {getIP} from "./services/FetchIP";
 import {ClientInfo, getClientInfo} from "./services/ClientInfo";
@@ -178,7 +178,7 @@ const App: FC = () => {
                 return <NotFound/>
         }
     }
-  const   currentLanguage = EN;
+  const   currentLanguage = systemLanguage();
 
   function changeTab(tab : string) {
       setState({...state,tab})

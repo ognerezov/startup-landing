@@ -18,6 +18,10 @@ export const ANONYMOUS : User ={
     roles : []
 }
 
+export const NO_AUTH : Auth = {
+    state : AuthState.UnAuthorized,
+}
+
 export interface Auth{
     state : AuthState
     token ?: string

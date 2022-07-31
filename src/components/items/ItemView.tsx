@@ -50,7 +50,7 @@ export const ItemView : FC<ItemViewProps> = ({item}) => {
                       {intl.formatMessage({id: 'Location'})}
                   </Text>
                 <MapView
-                    className={largeScreen ? 'map-container-mini' : 'map-container-mini-portrait'}
+                    className={ 'map-container-mini-portrait'}
                     {... expandItems([item])}
                     point={{lon : item.lon, lat : item.lat}}
                 />

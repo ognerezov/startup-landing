@@ -1,14 +1,14 @@
 import React, {FC} from 'react';
-import {Center, Flex, HStack, Spacer, Text, useMediaQuery} from "@chakra-ui/react";
+import {Flex, HStack, Spacer, useMediaQuery} from "@chakra-ui/react";
 import RadioButton from "./RadioButton";
 import {useIntl} from "react-intl";
 import {goHome, goToCategory} from "../config/ServerAddress";
 import {EditState, ItemContextService} from "../context/context";
 import {TextButton} from "./common/TextButton";
-import {UserContext} from "../context/userContext";
 import {QUERY_SCREEN_SIZE} from "../pages/About";
 import {textVar} from "../services/Style";
 import fav from "../images/favicon_1.png";
+import {UserHeader} from "./user/UserHeader";
 
 interface HeaderProps{
     selected ?: string
@@ -34,14 +34,7 @@ const Header : FC<HeaderProps> = props => {
                 zIndex={3}>
                 <img onClick={goHome} className={'img-btn'} src={fav} height={'5.6vh'} alt={intl.formatMessage({id: 'Company.name'})}/>
                 <Spacer/>
-        <UserContext.Consumer>{({auth}) => auth.user && auth.user.firstName ?
-            <Center onClick={() => {
-            }} cursor='pointer'>
-                <Text variant={textVariant()} px='1.1vmin'>
-                    {intl.formatMessage({id: 'Hello'}) + ' ' + auth.user.firstName}
-                </Text>
-            </Center> : null
-        }</UserContext.Consumer>
+                <UserHeader textVariant={textVariant()}/>
                 <Spacer/>
         {props.context.selectedCategory && props.context.editContext.state === EditState.NotStarted ? <TextButton
             onClick={()=>{

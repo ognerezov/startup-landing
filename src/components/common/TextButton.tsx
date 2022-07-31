@@ -7,11 +7,12 @@ interface TextButtonProps{
     variant ?: string
     px ?: string
     id : string
+    mx? : string
 }
 
-export const TextButton : FC<TextButtonProps> = ({onClick,variant,px, id}) => {
+export const TextButton : FC<TextButtonProps> = ({onClick,variant,px, mx, id}) => {
     const intl = useIntl();
-    return  <Center onClick={onClick} cursor='pointer' >
+    return  <Center onClick={onClick} cursor='pointer' mx={mx}>
         <Text variant = {variant} px = {px} >
             {intl.formatMessage({id})}
         </Text>

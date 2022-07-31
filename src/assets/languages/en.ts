@@ -2,32 +2,16 @@ export const en: Record<string, string> = {
 	'Company.name' : 'RentsBy',
 	'Company.slogan' : 'Rent & Save your wallet and the Planet',
 
-	'Home.1' : 'ACTIONABLE INSIGHTS',
-	'Home.2' : 'AT YOUR FINGERTIPS',
-
-	'Feature.0': 'AI-powered retail data analytics platform',
-	'Feature.1': 'Store KPI’s',
-	'Feature.2': 'Inventory management',
-	'Feature.3': 'All your data in one place: cameras, sensors, POS, e-commerce',
-	'Feature.4': 'Easy to use',
-	'Feature.5': 'AI based recommendations and alerts',
-	'Feature.6': '3 months for free',
-
 	'About.caption' : 'Our team',
 	'About.1': 'International team based in Valencia, Spain',
 	'About.2': 'Professionals of the industry',
 	'About.3': 'Best software engineers',
 
-	'Solution.1' : 'Various data sources integration in METRIX cloud platform',
-	'Solution.2' : 'Easily cross data and choose preferred dashboard view',
-	'Solution.3' : 'Powerful AI insights and forecasts',
-	'Solution.4' : '',
-
 	'Category.1' : 'Photography',
 	'Category.2' : 'Drones',
 	'Category.3' : 'Sports',
 	'Category.4' : 'Music',
-	'Category.5' : 'Hiking',
+	'Category.5' : 'Other',
 	'Category.6' : 'Tools',
 	'Category.7' : 'Gaming',
 	'Category.8' : 'For kids',
@@ -82,6 +66,7 @@ export const en: Record<string, string> = {
 	'Create.item.name' : 'Item name',
 	'Create.item.description' : 'Item description',
 	'Create.item.location' : 'Your rent location',
+	'Create.item.cost' : 'Your item cost',
 
 	'Create.item.success' : 'You have successfully listed your item!',
 	'Create.item.view' : 'View your items page',
@@ -106,5 +91,8 @@ export const en: Record<string, string> = {
 
 	'Hello' : 'Hello',
 	'App.hello' : 'Welcome to RentsBy. Rent to and from people near you',
-	'App.hello.business' : 'Build your rental business with us'
+	'App.hello.business' : 'Build your rental business with us',
+
+	'Logout' : 'Log out',
+	'Alert.confirm' : 'Confirm your action'
 };

@@ -31,10 +31,8 @@ export const ItemCreator : FC<ItemCreatorProps> = ({context}) => {
     const intl = useIntl();
     const [item,setItem] = useState<AddItemRequest>({
         name : '',
-        // email : '',
-        // firstName : '',
-        // lastName : '',
         description : '',
+        price : 0.0,
         pricePerHour : 0.0,
         pricePerDay : 0.0,
         pricePerWeek : 0.0,
@@ -168,25 +166,6 @@ export const ItemCreator : FC<ItemCreatorProps> = ({context}) => {
                                onChange={ file =>
                                    setItem({...item,file})
                                } />
-                    {/*<InputField id={'email'}*/}
-                    {/*            value={item.email}*/}
-                    {/*            label={'Create.item.email'}*/}
-                    {/*            type={'email'}*/}
-                    {/*            onChange={ email =>*/}
-                    {/*                setItem({...item,email : email + ''})*/}
-                    {/*            } />*/}
-                    {/*<InputField id={'firstName'}*/}
-                    {/*            value={item.firstName}*/}
-                    {/*            label={'Create.item.firstName'}*/}
-                    {/*            onChange={ val =>*/}
-                    {/*                setItem({...item,firstName : val + ''})*/}
-                    {/*            } />*/}
-                    {/*<InputField id={'lastName'}*/}
-                    {/*            value={item.lastName}*/}
-                    {/*            label={'Create.item.lastName'}*/}
-                    {/*            onChange={ val =>*/}
-                    {/*                setItem({...item,lastName : val + ''})*/}
-                    {/*            } />*/}
                     <InputField id={'name'}
                                 value={item.name}
                                 label={'Create.item.name'}
@@ -230,6 +209,14 @@ export const ItemCreator : FC<ItemCreatorProps> = ({context}) => {
                                 step={1.0}
                                 onChange={ val =>
                                     setItem({...item,pricePerMonth : +val})
+                                } />
+                    <InputField id={'cost'}
+                                value={item.price}
+                                label={'Create.item.cost'}
+                                type={'number'}
+                                step={1.0}
+                                onChange={ val =>
+                                    setItem({...item,price : +val})
                                 } />
                     <Center>
                         <Button
