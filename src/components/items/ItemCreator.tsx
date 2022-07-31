@@ -230,7 +230,7 @@ export const ItemCreator : FC<ItemCreatorProps> = ({context}) => {
     }
 
     return  <Box w={'100%'} h={'100%'}>
-        <Annotation w={largeScreen ? '17vw' :'50vw'} h={'8vh'} left={largeScreen ? '10vw' :'0.8vw'} top={'31.2vh'} backgroundColor={'white'}>
+        <Annotation w={largeScreen ? '17vw' :'50vw'} h={'8vh'} left={largeScreen ? '10vw' :'0.8vw'} top={'21.7vh'} backgroundColor={'white'}>
             <VStack>
                 <Center>
                     <Text variant ='annotation_caption'>
