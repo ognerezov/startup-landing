@@ -28,7 +28,7 @@ export const en: Record<string, string> = {
 	'Email.email': 'Email or mobile phone number',
 	'Email.description': 'Please provide a valid contact info.',
 	'Email.text': 'Your message',
-	'Email.progress' : 'Your massage is being sent..........',
+	'Email.progress' : 'Your message is being sent..........',
 	'Email.sent' : "Your message was sent. Our manager will get back to you as soon as possible.",
 	'Email.error' : 'Error sending the message. Sorry...',
 	'Email.wrong.format' : 'Wrong email format',
@@ -66,7 +66,7 @@ export const en: Record<string, string> = {
 	'Create.item.name' : 'Item name',
 	'Create.item.description' : 'Item description',
 	'Create.item.location' : 'Your rent location',
-	'Create.item.cost' : 'Your item cost',
+	'Create.item.cost' : 'Your item value',
 
 	'Create.item.success' : 'You have successfully listed your item!',
 	'Create.item.view' : 'View your items page',
