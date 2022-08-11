@@ -1,14 +1,11 @@
-import React, {FC, useEffect, useState} from 'react'
-import {Box, Grid, useMediaQuery, VStack, Text, Center, Spinner} from "@chakra-ui/react";
+import React, {FC} from 'react'
+import {Box, Grid, useMediaQuery, VStack, Text, Center} from "@chakra-ui/react";
 import {QUERY_SCREEN_SIZE} from "../../pages/About";
 import {ButtonCard} from "../ButtonCard";
 import {CategoryViewer} from "./CategoryViewer";
 import {useIntl} from "react-intl";
-import {DEFAULT_R, DEFAULT_SPOT, findByCategoryNearBy} from "../../backend/GeoSearch";
 import {Item} from "../../model/items";
 import {ItemContextService} from "../../context/context";
-import {getLocation} from "../../services/GeolocationService";
-import {Point, Spot} from "../../model/geo";
 import mainImage from "../../images/main.jpg";
 import earn from "../../images/earn.jpeg";
 
@@ -23,35 +20,12 @@ interface CategoriesProps {
 
 export const Categories : FC<CategoriesProps> = props => {
     const [largeScreen] = useMediaQuery(QUERY_SCREEN_SIZE)
-    const [fetching, setFetching] = useState(false)
-    const [location, setLocation] = useState<Point>(DEFAULT_SPOT)
     const intl = useIntl()
 
-    useEffect(()=>{
-        if(props.context.selectedCategory&& props.context.selectedCategory !== props.previousCategory){
-            onChangeCategory(props.context.selectedCategory).then(()=>{})
-        }
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    },[props.previousCategory, props.context.selectedCategory])
-
-    async function fetchItems(category: number, spot : Spot = DEFAULT_SPOT) {
-        const items: Item[] = await findByCategoryNearBy(category, spot);
-        setFetching(false);
-        props.context.selectCategory(category)
-        props.setItems(items)
-    }
 
     async function onChangeCategory(category : number){
         props.onReport('Category selected: '+ category);
-        setFetching(true);
-        getLocation().then(async point =>{
-              setLocation(point)
-              await  fetchItems(category, {...point, radius : DEFAULT_R})
-
-            })
-            .catch(async e=>{
-                await fetchItems(category);
-            })
+        props.context.selectCategory(category)
     }
 
     function getItems(){
@@ -62,16 +36,12 @@ export const Categories : FC<CategoriesProps> = props => {
     }
 
     function getContent(){
-        if(fetching){
-            return null
-        }
         if(!props.context.selectedCategory){
             return getItems()
         }
         const title = intl.formatMessage({id: 'Email.missing2'})
         return  <CategoryViewer
-                    at = {location}
-                    items={props.context.context.itemList}
+                    setItems={props.setItems}
                     id = {props.context.selectedCategory}
                     title={title}
                     onExit={()=>{props.context.selectCategory(undefined)}}/>
@@ -96,10 +66,7 @@ export const Categories : FC<CategoriesProps> = props => {
                         </Center>
                     </div>
                 }
-                {fetching ?
-                    <Center w={'100%'} h={'100%'}>
-                        <Spinner/>
-                    </Center> :
+                {
                         largeScreen ?
                             <Grid
                                 background={props.context.selectedCategory ? 'white' : 'blue.300'}

@@ -94,5 +94,12 @@ export const en: Record<string, string> = {
 	'App.hello.business' : 'Build your rental business with us',
 
 	'Logout' : 'Log out',
-	'Alert.confirm' : 'Confirm your action'
+	'Alert.confirm' : 'Confirm your action',
+
+/*
+   to translate
+ */
+	'Book.select.date' : 'Select your rent date',
+
+	'Month.0' : ''
 };

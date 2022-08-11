@@ -35,6 +35,7 @@ export interface Item{
     apartment: string;
     room: string;
     floor  : number;
+    ownerAvailability : string;
 }
 
 export interface AddItemRequest{

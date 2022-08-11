@@ -2,9 +2,10 @@ import React, {FC, useState} from 'react'
 import {Button, Center, HStack, Text, VStack} from "@chakra-ui/react";
 import {Item} from "../../model/items";
 import {useIntl} from "react-intl";
-import EmailDialog from "../../dialogs/EmailDialog";
 import {ItemContext, ItemContextService} from "../../context/context";
 import {Price} from "./Price";
+import {DialogFrame} from "../../dialogs/DialogFrame";
+import {IntervalPicker} from "../date/IntervalPicker";
 
 interface PriceBlockProps{
     item : Item
@@ -26,18 +27,24 @@ export const PriceBlock : FC<PriceBlockProps> = ({
     const [success, setSuccess] = useState(false)
 
     function bookingForm(data : ItemContextService){
-       return <EmailDialog
-           subject={`Book item request id: ${item.id} name:${item.name} owner: ${item.email}`}
-           title={intl.formatMessage({id:'Price.email'})}
-           isOpen={showBookingForm}
-           onClose={()=>{
-               data.onReport(`Booking of ${item.name} is canceled. Item id: ${item.id} `)
-               setShowBookingForm(false)
-           }}
-           onSuccess={()=>{
-               data.onReport(`Item ${item.name} was booked. Item id: ${item.id} `)
-               setSuccess(true)
-           }}/>
+        return <DialogFrame
+            w={'80vw'} h={'70vh'}
+            title={intl.formatMessage({"id": 'Book.select.date'})}
+            isOpen={true} onClose={()=>{setShowBookingForm(false)}}>
+            <IntervalPicker/>
+        </DialogFrame>
+       // return <EmailDialog
+       //     subject={`Book item request id: ${item.id} name:${item.name} owner: ${item.email}`}
+       //     title={intl.formatMessage({id:'Price.email'})}
+       //     isOpen={showBookingForm}
+       //     onClose={()=>{
+       //         data.onReport(`Booking of ${item.name} is canceled. Item id: ${item.id} `)
+       //         setShowBookingForm(false)
+       //     }}
+       //     onSuccess={()=>{
+       //         data.onReport(`Item ${item.name} was booked. Item id: ${item.id} `)
+       //         setSuccess(true)
+       //     }}/>
     }
     return showBookingForm ? <ItemContext.Consumer>{bookingForm}</ItemContext.Consumer> :
         <VStack

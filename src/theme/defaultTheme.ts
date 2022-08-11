@@ -380,6 +380,24 @@ const components = {
 				color : 'white'
 			},
 		},
+		medium_disabled : {
+			backgroundColor: 'white',
+			color: 'grey.200',
+			py : '0.5vmin',
+			borderRadius : '0.5vmin',
+			fontWeight: '400',
+			fontSize: '2.0vh',
+			textDecoration: 'line-through',
+		},
+		medium_phone_disabled : {
+			backgroundColor: 'white',
+			color: 'grey.200',
+			py : '0.5vmin',
+			borderRadius : '0.5vmin',
+			fontWeight: '400',
+			fontSize: '1.5vh',
+			textDecoration: 'line-through',
+		},
 		medium_solid : {
 			backgroundColor: 'blue.300',
 			color: 'white',

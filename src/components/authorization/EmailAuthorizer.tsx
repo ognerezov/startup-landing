@@ -36,13 +36,17 @@ export const EmailAuthorizer : FC<EmailAuthorizerProps> = ({quit,auth,setAuth}) 
         if(!otpResult || !otpResult.value){
             return
         }
-        console.log(otpResult)
+        // console.log(otpResult)
         setAuth({...auth,token : otpResult.value, state : AuthState.RequestingAuthorization})
         submitToken("", bearer(otpResult.value))
         // eslint-disable-next-line react-hooks/exhaustive-deps
     },[otpResult])
 
     useEffect(()=>{
+        // console.log(authResult)
+        if(authResult && authResult.user) {
+            authResult.user.timeZone = Intl.DateTimeFormat().resolvedOptions().timeZone
+        }
         setAuth({...authResult, state : AuthState.Authorized})
         // eslint-disable-next-line react-hooks/exhaustive-deps
     },[authResult])

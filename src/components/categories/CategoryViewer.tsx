@@ -1,27 +1,46 @@
-import React, {FC, useState} from 'react'
+import React, {FC, useEffect, useState} from 'react'
 import EmailDialog from "../../dialogs/EmailDialog";
 import {Item} from "../../model/items";
 import {MapView} from "../maps/MapView";
-import {Box, Center, Text, useMediaQuery} from "@chakra-ui/react";
+import {Box, Center, Spinner, Text, useMediaQuery, usePrevious} from "@chakra-ui/react";
 import {QUERY_SCREEN_SIZE} from "../../pages/About";
 import {ItemGrid} from "../items/ItemGrid";
 import {ItemContext, ItemContextService} from "../../context/context";
 import {useIntl} from "react-intl";
 import {Point} from "../../model/geo";
+import {FetchState, useFetchState} from "../../hooks/fetchState";
+import {useGeoLocation} from "../../hooks/location";
 
 interface CategoryViewerProps {
     id : number
-    items ?: Item []
     title : string
     onExit : ()=>void
-    at : Point
+    setItems : (items : Item[]) => void;
 }
 
 export const CategoryViewer : FC<CategoryViewerProps> = props => {
     const [largeScreen] = useMediaQuery(QUERY_SCREEN_SIZE)
     const [viewMap, setViewMap] = useState(true)
-    const  [highLighted,highLight] = useState<number|undefined>(undefined);
+    const [highLighted,highLight] = useState<number|undefined>(undefined);
+    const [location, setLocation] = useGeoLocation(undefined);
+    const search = {category: props.id, location}
+    const prevSearch = usePrevious(search);
+    const [items,itemsFetchState,itemFetchError,submitQuery] = useFetchState<Item [] | undefined,Point>("items/category/" + props.id,'POST',undefined)
+
     const intl = useIntl()
+
+    useEffect(()=>{
+        if(!prevSearch ||( search.category !== prevSearch.category && search.location !== prevSearch.location)){
+            submitQuery(location)
+        }
+        console.log(search)
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    },[props.id,location.lon,location.lat])
+
+    useEffect(()=>{
+        items && props.setItems(items)
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    },[items])
 
     function getFullScreenContent(data : ItemContextService){
         return  <Box
@@ -48,12 +67,12 @@ export const CategoryViewer : FC<CategoryViewerProps> = props => {
                 zIndex={2}
                 left='33vw'
                 maxHeight='100%'
-                overflowX='hidden' overflowY='auto'
+                overflowX='auto' overflowY='auto'
                 width='67vw' maxWidth='67vw'
                 borderColor={'blue.300'}
                 borderLeftWidth={'1px'}
             >
-                <MapView {...data.context} className='map-container-landscape' selectItem={data.selectItem} highLightItem={highLight} point={props.at}/>
+                <MapView {...data.context} className='map-container-landscape' selectItem={data.selectItem} highLightItem={highLight} point={location}/>
             </Box>
         </Box>
     }
@@ -66,7 +85,7 @@ export const CategoryViewer : FC<CategoryViewerProps> = props => {
             left='0'
         >
                 <MapView {...data.context} className='map-container-portrait '
-                         selectItem={data.selectItem} highLightItem={highLight} point={props.at}/>
+                         selectItem={data.selectItem} highLightItem={highLight} point={location}/>
                 <Center position='fixed' top='94vh' zIndex={10} w='100%'>
                     <Text variant='small' onClick={()=>setViewMap(false)}>
                         {intl.formatMessage({id: 'Category.view.list'})}
@@ -89,8 +108,12 @@ export const CategoryViewer : FC<CategoryViewerProps> = props => {
             </Box>
 
     }
+    if(itemsFetchState !== FetchState.Finished)
+        return  <Center w={'100%'} h={'100%'}>
+                    <Spinner/>
+                </Center>
 
-    return props.items ?
+    return items ?
         <ItemContext.Consumer>{largeScreen? getFullScreenContent : getMobileContent}
         </ItemContext.Consumer>
             :
