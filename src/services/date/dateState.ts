@@ -9,6 +9,14 @@ export enum DateState{
     SelectionEnd
 }
 
-export interface MonthState{
+export interface MonthState {
     [key : number] : DateState
+}
+
+export interface HoursState{
+    [key : string] : DateState;
+}
+
+export function isDisabled(state : DateState){
+    return state === DateState.Past || state === DateState.Taken
 }

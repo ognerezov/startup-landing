@@ -28,7 +28,7 @@ export const PriceBlock : FC<PriceBlockProps> = ({
 
     function bookingForm(data : ItemContextService){
         return <DialogFrame
-            w={'80vw'} h={'70vh'}
+            w={'90vw'} h={'90vh'}
             title={intl.formatMessage({"id": 'Book.select.date'})}
             isOpen={true} onClose={()=>{setShowBookingForm(false)}}>
             <IntervalPicker/>

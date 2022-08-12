@@ -368,55 +368,103 @@ const components = {
 					color : 'white'
 				},
 			},
-		medium : {
-			backgroundColor: 'white',
-			color: 'blue.300',
-			py : '0.5vmin',
-			borderRadius : '0.5vmin',
-			fontWeight: '700',
-			fontSize: '2.0vh',
-			_hover: {
-				background: 'blue.300',
-				color : 'white'
+			medium : {
+				backgroundColor: 'white',
+				color: 'blue.300',
+				py : '0.5vmin',
+				borderRadius : '0.5vmin',
+				fontWeight: '700',
+				fontSize: '2.0vh',
+				_hover: {
+					background: 'blue.300',
+					color : 'white'
+				},
 			},
-		},
-		medium_disabled : {
-			backgroundColor: 'white',
-			color: 'grey.200',
-			py : '0.5vmin',
-			borderRadius : '0.5vmin',
-			fontWeight: '400',
-			fontSize: '2.0vh',
-			textDecoration: 'line-through',
-		},
-		medium_phone_disabled : {
-			backgroundColor: 'white',
-			color: 'grey.200',
-			py : '0.5vmin',
-			borderRadius : '0.5vmin',
-			fontWeight: '400',
-			fontSize: '1.5vh',
-			textDecoration: 'line-through',
-		},
-		medium_solid : {
-			backgroundColor: 'blue.300',
-			color: 'white',
-			py : '0.5vmin',
-			borderRadius : '0.5vmin',
-			fontWeight: '700',
-			fontSize: '2.0vh',
-			_hover: {
-				background: 'green.300',
-				color : 'white'
+			medium_disabled : {
+				backgroundColor: 'white',
+				color: 'grey.200',
+				py : '0.5vmin',
+				borderRadius : '0.5vmin',
+				fontWeight: '400',
+				fontSize: '2.0vh',
+				textDecoration: 'line-through',
 			},
-		},
-		medium_ghost : {
-			backgroundColor: 'white',
-			color: 'green.300',
-			py : '0.5vmin',
-			fontWeight: 'bold',
-			fontSize: '2.0vh'
-		},
+			medium_phone_disabled : {
+				backgroundColor: 'white',
+				color: 'grey.200',
+				py : '0.5vmin',
+				borderRadius : '0.5vmin',
+				fontWeight: '400',
+				fontSize: '1.5vh',
+				textDecoration: 'line-through',
+			},
+			medium_solid : {
+				backgroundColor: 'blue.300',
+				color: 'white',
+				py : '0.5vmin',
+				borderRadius : '0.5vmin',
+				fontWeight: '700',
+				fontSize: '2.0vh',
+				_hover: {
+					background: 'green.300',
+					color : 'white'
+				},
+			},
+			medium_selected : {
+				backgroundColor: 'green.300',
+				color: 'white',
+				py : '0.5vmin',
+				borderRadius : '0.5vmin',
+				fontWeight: '700',
+				fontSize: '2.0vh',
+				_hover: {
+					background: 'blue.400',
+					color : 'white'
+				},
+			},
+			medium_phone_selected : {
+				backgroundColor: 'gree.300',
+				color: 'white',
+				py : '0.5vmin',
+				borderRadius : '0.5vmin',
+				fontWeight: '700',
+				fontSize: '1.5vh',
+				_hover: {
+					background: 'blue.300',
+					color : 'white'
+				},
+			},
+			medium_phone_semisolid : {
+				backgroundColor: 'blue.400',
+				color: 'white',
+				py : '0.5vmin',
+				borderRadius : '0.5vmin',
+				fontWeight: '500',
+				fontSize: '1.5vh',
+				_hover: {
+					background: 'green.300',
+					color : 'white'
+				},
+			},
+			medium_semisolid : {
+				backgroundColor: 'blue.400',
+				color: 'white',
+				py : '0.5vmin',
+				borderRadius : '0.5vmin',
+				fontWeight: '500',
+				fontSize: '2.0vh',
+				_hover: {
+					background: 'green.300',
+					color : 'white'
+				},
+			},
+			medium_ghost : {
+				backgroundColor: 'white',
+				color: 'green.300',
+				py : '0.5vmin',
+				fontWeight: 'bold',
+				fontSize: '2.0vh'
+			},
 			medium_phone_ghost : {
 				backgroundColor: 'white',
 				color: 'green.300',

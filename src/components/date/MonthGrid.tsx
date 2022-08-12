@@ -16,7 +16,6 @@ interface DatePickerProps{
 
 export const MonthGrid : FC<DatePickerProps> = ({date, prev, next, select, state}) => {
     const month = getMonth(date);
-    console.log(state)
     function getDateState(d : Date) : DateState{
         return isDateBeforeToday(d) ? DateState.Past : DateState.Free;
     }
@@ -54,10 +53,11 @@ export const MonthGrid : FC<DatePickerProps> = ({date, prev, next, select, state
                     p={'5vmin'}
                     templateColumns={`repeat(7, 1fr)`} gap={1}
                 >
-                    {month.map((day,index) => <DateCell w={'5vmin'} h={'5vmin'}
-                                                        onClick={()=>selectDay(day)}
-                                                state={getDayState(day)}
-                                                dayOfMonth={day} key={index}/>)}
+                    {month.map((day,index) =>
+                        <DateCell w={'5vmin'} h={'5vmin'}
+                                  onClick={()=>selectDay(day)}
+                                  state={getDayState(day)}
+                                  dayOfMonth={day} key={index}/>)}
                 </SimpleGrid>
     </VStack>
 }

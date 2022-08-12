@@ -99,7 +99,7 @@ export const en: Record<string, string> = {
 /*
    to translate
  */
-	'Book.select.date' : 'Select your rent date',
-
-	'Month.0' : ''
+	'Book.select.date' : 'Select your rent dates',
+	'Book.select.pickup' : 'Select pickup time',
+	'Book.select.return' : 'Select return time',
 };

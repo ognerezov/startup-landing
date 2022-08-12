@@ -15,6 +15,7 @@ import {
     ValueResponse
 } from "../../model/api/userRequests";
 import {Auth} from "../../model/user";
+import {getTimeZone} from "../../services/date/DateUtils";
 
 interface EmailAuthorizerProps extends UserContextService{
     quit : ()=>void
@@ -45,7 +46,7 @@ export const EmailAuthorizer : FC<EmailAuthorizerProps> = ({quit,auth,setAuth}) 
     useEffect(()=>{
         // console.log(authResult)
         if(authResult && authResult.user) {
-            authResult.user.timeZone = Intl.DateTimeFormat().resolvedOptions().timeZone
+            authResult.user.timeZone = getTimeZone()
         }
         setAuth({...authResult, state : AuthState.Authorized})
         // eslint-disable-next-line react-hooks/exhaustive-deps

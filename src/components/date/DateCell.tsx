@@ -1,7 +1,7 @@
 import React, {FC} from 'react';
 import {Center} from "@chakra-ui/react";
 import {TextButton} from "../common/TextButton";
-import {DateState} from "../../services/date/dateState";
+import {DateState, isDisabled} from "../../services/date/dateState";
 
 interface DateCellProps{
     dayOfMonth : number
@@ -18,21 +18,27 @@ export const DateCell : FC<DateCellProps> = ({dayOfMonth, w, h, state,onClick}) 
             default:
             case DateState.Free:
                 return 'medium'
+            case DateState.SelectionStart:
+            case DateState.SelectionEnd:
+                return 'medium_solid'
             case DateState.Past:
+            case DateState.Taken:
                 return 'medium_disabled'
+            case DateState.Selected:
+                return 'medium_semisolid'
         }
     }
 
     function disabled(){
-        return state === DateState.Past
+        return isDisabled(state)
     }
 
     function getBackground(){
-        return state === DateState.Selected ? 'green.100'
-            : (state === DateState.SelectionEnd || state ===  DateState.SelectionStart ? 'green.300' :undefined)
+        return state === DateState.Selected ? 'blue.400'
+            : (state === DateState.SelectionEnd || state ===  DateState.SelectionStart ? 'blue.300' :undefined)
     }
 
-    return  <Center w={w} h={h} backgroundColor={ getBackground()}>
+    return  <Center w={w} h={h} backgroundColor={ getBackground()} >
         {dayOfMonth ?
         <TextButton
             onClick={onClick}

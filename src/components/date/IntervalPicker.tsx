@@ -1,17 +1,14 @@
 import React, {FC, useEffect, useState} from 'react';
-import {HStack} from "@chakra-ui/react";
+import {HStack, VStack} from "@chakra-ui/react";
 import {MonthGrid} from "./MonthGrid";
-import {DateState, MonthState} from "../../services/date/dateState";
-import {daysInAMonth, isSameDay} from "../../services/date/DateUtils";
+import {DateState, HoursState, MonthState} from "../../services/date/dateState";
+import {daysInAMonth, getDateTimeSlots, getDateWithDayOfMonth, isSameDay} from "../../services/date/DateUtils";
+import {DEFAULT_AVAILABLE_TIME} from "../../model/dateTime/Appointment";
+import {SelectionMode, TimeSlotSelector} from "./TimeSlotSelector";
 
 interface IntervalPickerProps{
 
 }
-
-function getDateWithDayOfMonth(month: Date, day: number) {
-    return new Date(month.getFullYear(), month.getMonth(), day);
-}
-
 
 export const IntervalPicker : FC<IntervalPickerProps> = props => {
     const [date, setDate] = useState<Date>(new Date());
@@ -19,8 +16,12 @@ export const IntervalPicker : FC<IntervalPickerProps> = props => {
     const [selectionEnd, setSelectionEnd] = useState<Date|undefined>();
     const [currentMonthState, setCurrentMonthState] = useState<MonthState>({})
     const [nextMonthState, setNextMonthState] = useState<MonthState>({})
+    const [timeSlots, setTimeslots] = useState<string[]>([])
     const nextMonth = new Date(date.getFullYear(), date.getMonth()+1,date.getDate());
-
+    const [pickupSlot, setPickupSlot] = useState<string>('');
+    const [returnSlot, setReturnSlot] = useState<string>('');
+    const [hourlySelection, setHourlySelection] = useState<HoursState>({})
+    const [slotMode, setSlotMode] = useState<SelectionMode>(SelectionMode.Start)
 
     useEffect(()=>{
         if(!selectionStart){
@@ -89,7 +90,81 @@ export const IntervalPicker : FC<IntervalPickerProps> = props => {
         }
         setCurrentMonthState(cs)
         setNextMonthState(ns)
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     },[date])
+
+    useEffect(()=>{
+        if(!selectionStart) return
+        setTimeslots(getTimeSlots(selectionStart))
+        setSlotMode(selectionEnd ? SelectionMode.Start : SelectionMode.Both)
+        singleSelection(pickupSlot)
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    },[selectionStart])
+
+    useEffect(()=>{
+        if(!selectionEnd) return;
+        setTimeslots(getTimeSlots(selectionEnd));
+        setSlotMode(SelectionMode.End);
+        singleSelection(returnSlot)
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    },[selectionEnd])
+
+    useEffect(()=>{
+        if(slotMode === SelectionMode.Both && returnSlot){
+            rangeSelection(pickupSlot,returnSlot);
+            return;
+        }
+        singleSelection(pickupSlot)
+
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    },[pickupSlot])
+
+    useEffect(()=>{
+        if(slotMode === SelectionMode.Both){
+            if(pickupSlot === returnSlot){
+                setHourlySelection({})
+                return;
+            }
+            rangeSelection(pickupSlot,returnSlot);
+            return;
+        }
+        singleSelection(returnSlot)
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    },[returnSlot])
+
+    function singleSelection(slot : string){
+        if(!slot){
+            return;
+        }
+        const hs  :HoursState = {}
+        hs[slot] = DateState.SelectionStart
+        setHourlySelection(hs)
+    }
+
+    function rangeSelection(start : string, end : string){
+        const hs  :HoursState = {}
+        hs[start] = DateState.SelectionStart
+        hs[end] = DateState.SelectionEnd
+        let started : boolean = false;
+        for(let i=0; i<timeSlots.length; i++){
+            if(timeSlots[i] === start){
+                started = true;
+                continue;
+            }
+            if(!started){
+                continue;
+            }
+            if(timeSlots[i] === end){
+                break;
+            }
+            hs[timeSlots[i]] = DateState.Selected
+        }
+        setHourlySelection(hs)
+    }
+
+    function getTimeSlots(date : Date){
+        return getDateTimeSlots(date,DEFAULT_AVAILABLE_TIME);
+    }
 
     function select(day : number, month : Date){
         const d = getDateWithDayOfMonth(month, day);
@@ -103,8 +178,6 @@ export const IntervalPicker : FC<IntervalPickerProps> = props => {
                 setNextMonthState({...nextMonthState})
             }
             setSelectionStart(d)
-            console.log(currentMonthState)
-            console.log(nextMonthState)
             return;
         }
 
@@ -144,8 +217,6 @@ export const IntervalPicker : FC<IntervalPickerProps> = props => {
                 setNextMonthState({...nextMonthState})
             }
             setSelectionEnd(d);
-            console.log(currentMonthState)
-            console.log(nextMonthState)
             return;
         }
         setSelectionStart(d)
@@ -172,8 +243,6 @@ export const IntervalPicker : FC<IntervalPickerProps> = props => {
             setNextMonthState({...nextMonthState})
         }
 
-        console.log(currentMonthState)
-        console.log(nextMonthState)
     }
 
     function prev(){
@@ -184,8 +253,17 @@ export const IntervalPicker : FC<IntervalPickerProps> = props => {
         setDate(new Date(date.getFullYear(), date.getMonth()+1,date.getDate()))
     }
 
-    return <HStack spacing={'1vw'} className={'bordered-blue'} alignItems={'start'} p={'2vmin'}>
-        <MonthGrid select={day => {select(day,date)}} date={date} prev={prev} key ={1} state={currentMonthState}/>
-        <MonthGrid date={nextMonth} next={next} key ={2} select={day => {select(day,nextMonth)}} state={nextMonthState}/>
-    </HStack>
+    return  <VStack>
+                <HStack spacing={'1vw'} className={'bordered-blue'} alignItems={'start'} p={'2vmin'}>
+                    <MonthGrid select={day => {select(day,date)}} date={date} prev={prev} key ={1} state={currentMonthState}/>
+                    <MonthGrid date={nextMonth} next={next} key ={2} select={day => {select(day,nextMonth)}} state={nextMonthState}/>
+               </HStack>
+                <TimeSlotSelector
+                    mode={slotMode}
+                    slots={timeSlots}
+                    selection={hourlySelection}
+                    onSelectStart={setPickupSlot }
+                    onSelectEnd={setReturnSlot}
+                />
+            </VStack>
 }
