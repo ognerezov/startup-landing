@@ -102,4 +102,7 @@ export const en: Record<string, string> = {
 	'Book.select.date' : 'Select your rent dates',
 	'Book.select.pickup' : 'Select pickup time',
 	'Book.select.return' : 'Select return time',
+	'Book.pickup' : 'Pickup at:',
+	'Book.return' : 'Return at:',
+	'Book.clear.date' : 'Clear dates'
 };

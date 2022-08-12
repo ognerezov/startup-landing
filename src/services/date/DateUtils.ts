@@ -40,7 +40,6 @@ export function getDateTimeSlots(date: Date, availableTime : AvailableTime) : st
 
     const startTime = getTimeAtDate(date,availableTime.start);
     const endTime = getTimeAtDate(date,availableTime.end);
-    console.log(startTime)
 
     let time = startTime;
 
@@ -56,6 +55,16 @@ export function getTimeAtDate(date : Date, time : string){
     const dateStr = date.toISOString().split('T')[0];
     const newDateStr = dateStr + 'T' + time+':00'
     return convertTZ(new Date(newDateStr), getTimeZone());
+}
+
+export function getDisplayTimeAtDate(date : Date, time : string) : string{
+    return getTimeAtDate(date,time).toLocaleString('default', {
+        day : "numeric",
+        month : "long",
+        year : "numeric",
+        hour : "numeric",
+        minute : "numeric"
+    })
 }
 
 const TIME_SEPARATOR = ":";

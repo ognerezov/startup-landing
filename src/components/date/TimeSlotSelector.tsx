@@ -68,13 +68,13 @@ export const TimeSlotSelector : FC<TimeSlotSelectorProps> =
         }
     }
 
-    return  <VStack p={'1vmin'} className={'bordered-blue'}>
+    if(slots.length ===0) return null;
+
+    return  <VStack p={'1vmin'} className={'bordered-blue'} w = {w} h = {h}>
                 <Text variant={'medium'}>
                     {getTitle()}
                 </Text>
                 <SimpleGrid
-                        w = {w}
-                        h = {h}
                         alignItems='start'
                         justifyItems='center'
                         spacingY={'0.5vh'}

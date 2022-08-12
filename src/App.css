@@ -44,6 +44,11 @@
   border-width: 1px;
 }
 
+.bordered-blue-left{
+  border-left-color: #5A35A9;
+  border-left-width: 1px;
+}
+
 .vertical-margin{
   margin-bottom: 20%;
   margin-top: 20%;

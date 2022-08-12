@@ -5,6 +5,7 @@ import {DateState, HoursState, MonthState} from "../../services/date/dateState";
 import {daysInAMonth, getDateTimeSlots, getDateWithDayOfMonth, isSameDay} from "../../services/date/DateUtils";
 import {DEFAULT_AVAILABLE_TIME} from "../../model/dateTime/Appointment";
 import {SelectionMode, TimeSlotSelector} from "./TimeSlotSelector";
+import {InrervalSummury} from "./InrervalSummury";
 
 interface IntervalPickerProps{
 
@@ -254,11 +255,16 @@ export const IntervalPicker : FC<IntervalPickerProps> = props => {
     }
 
     return  <VStack>
-                <HStack spacing={'1vw'} className={'bordered-blue'} alignItems={'start'} p={'2vmin'}>
+                <HStack w={'100%'} spacing={'1vw'} className={'bordered-blue'} alignItems={'start'} p={'2vmin'} alignContent={'space-between'}>
                     <MonthGrid select={day => {select(day,date)}} date={date} prev={prev} key ={1} state={currentMonthState}/>
                     <MonthGrid date={nextMonth} next={next} key ={2} select={day => {select(day,nextMonth)}} state={nextMonthState}/>
-               </HStack>
+                    <InrervalSummury
+                        pickupSlot={pickupSlot} pickupDate={selectionStart}
+                        returnSlot={returnSlot} returnDate={selectionEnd}
+                        clear={()=>{}}  />
+                </HStack>
                 <TimeSlotSelector
+                    w={'100%'}
                     mode={slotMode}
                     slots={timeSlots}
                     selection={hourlySelection}
