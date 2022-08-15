@@ -18,10 +18,11 @@ interface TimeSlotSelectorProps{
     mode : SelectionMode
     onSelectStart ?: (slot : string) => void
     onSelectEnd ?: (slot : string) => void
+    columns : number
 }
 
 export const TimeSlotSelector : FC<TimeSlotSelectorProps> =
-    ({slots, w, h,onSelectStart,onSelectEnd, mode,selection}) => {
+    ({slots, w, h,onSelectStart,onSelectEnd, mode,selection, columns}) => {
 
     const intl = useIntl();
 
@@ -79,7 +80,7 @@ export const TimeSlotSelector : FC<TimeSlotSelectorProps> =
                         justifyItems='center'
                         spacingY={'0.5vh'}
                         p={'1vmin'}
-                        templateColumns={`repeat(8, 1fr)`} gap={1}>
+                        templateColumns={`repeat(${columns}, 1fr)`} gap={1}>
                 {slots.map(slot =>
                     <TextButton onClick={()=>{onSelect(slot)}}
                         text={slot} key={slot} variant={getSlotVariant(slot)} mx ={'2vw'} px ={'1vw'}/>)}

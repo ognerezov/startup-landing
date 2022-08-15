@@ -1,4 +1,4 @@
-import React, {FC} from 'react'
+import React, {FC, Fragment} from 'react'
 import {Box, Grid, useMediaQuery, VStack, Text, Center} from "@chakra-ui/react";
 import {QUERY_SCREEN_SIZE} from "../../pages/About";
 import {ButtonCard} from "../ButtonCard";
@@ -56,7 +56,7 @@ export const Categories : FC<CategoriesProps> = props => {
     >
             <VStack  maxHeight= {'290vh'}   left ={largeScreen ? '6vw' : '1vw'}>
                 {props.context.selectedCategory ? null :
-                    <div>
+                    <Fragment>
                         <img src={mainImage} className='basic-margin' width={largeScreen ? '50%' : '90%'}
                              alt={intl.formatMessage({id: 'Company.slogan'})}/>
                         <Center w={'100%'} >
@@ -64,7 +64,7 @@ export const Categories : FC<CategoriesProps> = props => {
                     {intl.formatMessage({id: 'App.hello'})}
                         </Text>
                         </Center>
-                    </div>
+                    </Fragment>
                 }
                 {
                         largeScreen ?

@@ -1,4 +1,12 @@
 import {AvailableTime} from "../../model/dateTime/Appointment";
+import {Item} from "../../model/items";
+
+export interface Interval {
+    pickupDate ?: Date
+    returnDate ?: Date
+    pickupSlot : string
+    returnSlot : string
+}
 
 export function getMonth(date : Date){
     const dayOfMonth = date.getDate();
@@ -51,7 +59,7 @@ export function getDateTimeSlots(date: Date, availableTime : AvailableTime) : st
     return res;
 }
 
-export function getTimeAtDate(date : Date, time : string){
+export function getTimeAtDate(date : Date, time : string) : Date{
     const dateStr = date.toISOString().split('T')[0];
     const newDateStr = dateStr + 'T' + time+':00'
     return convertTZ(new Date(newDateStr), getTimeZone());
@@ -69,11 +77,51 @@ export function getDisplayTimeAtDate(date : Date, time : string) : string{
 
 const TIME_SEPARATOR = ":";
 
-function convertTZ(date : Date, tzString : string) {
+function convertTZ(date : Date, tzString : string) : Date{
     return new Date(date.toLocaleString("en-US", {timeZone: tzString}));
 }
 
 export function getTimeString(date : Date): string{
     const time  = date.toTimeString().split(" ")[0].split(TIME_SEPARATOR);
     return time[0]  + TIME_SEPARATOR + time[1];
+}
+
+export function durationOf(interval : Interval){
+    const date = new Date()
+    const i : Interval = interval.pickupDate && interval.returnDate ? interval :
+    {
+        pickupDate : date,
+            returnDate : date,
+        pickupSlot : interval.pickupSlot,
+        returnSlot : interval.returnSlot,
+    }
+
+    return (getTimeAtDate(i.returnDate!,i.returnSlot).getTime() -
+        getTimeAtDate(i.pickupDate!, i.pickupSlot).getTime()) /3600000
+}
+
+export function costOf(item : Item, interval : Interval){
+    const hours = durationOf(interval);
+
+    console.log(hours)
+
+    const daysInMonth = interval.pickupDate ? daysInAMonth(interval.pickupDate) : 30;
+
+    const hoursInMonth = 24 * daysInMonth;
+
+    if(hours >= hoursInMonth && item.pricePerMonth){
+        return hours * item.pricePerMonth / hoursInMonth;
+    }
+
+    const hoursInWeek = 168;
+
+    if (hours >= hoursInWeek && item.pricePerWeek){
+        return hours * item.pricePerWeek /hoursInWeek;
+    }
+
+    if(hours >= 24 && item.pricePerDay){
+        return hours * item.pricePerDay / 24;
+    }
+
+    return hours * item.pricePerHour;
 }

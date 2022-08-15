@@ -31,7 +31,7 @@ export const PriceBlock : FC<PriceBlockProps> = ({
             w={'90vw'} h={'90vh'}
             title={intl.formatMessage({"id": 'Book.select.date'})}
             isOpen={true} onClose={()=>{setShowBookingForm(false)}}>
-            <IntervalPicker/>
+            <IntervalPicker item={item}/>
         </DialogFrame>
        // return <EmailDialog
        //     subject={`Book item request id: ${item.id} name:${item.name} owner: ${item.email}`}

@@ -12,9 +12,11 @@ interface DatePickerProps{
     prev ?: ()=>void
     select : (day: number) =>void
     state : MonthState
+    flex ?: string
+    w ?: string
 }
 
-export const MonthGrid : FC<DatePickerProps> = ({date, prev, next, select, state}) => {
+export const MonthGrid : FC<DatePickerProps> = ({date, prev, next, select, state, flex, w}) => {
     const month = getMonth(date);
     function getDateState(d : Date) : DateState{
         return isDateBeforeToday(d) ? DateState.Past : DateState.Free;
@@ -34,7 +36,7 @@ export const MonthGrid : FC<DatePickerProps> = ({date, prev, next, select, state
     }
 
 
-    return <VStack>
+    return <VStack flex={flex} w ={w}>
                 <HStack>
                     {prev ?
                         <TextButton onClick={prev} text={'<'} variant={'medium'}/> : null

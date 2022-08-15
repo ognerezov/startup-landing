@@ -1,17 +1,21 @@
 import React, {FC, useEffect, useState} from 'react';
-import {HStack, VStack} from "@chakra-ui/react";
+import {Flex, HStack, useMediaQuery, VStack} from "@chakra-ui/react";
 import {MonthGrid} from "./MonthGrid";
 import {DateState, HoursState, MonthState} from "../../services/date/dateState";
 import {daysInAMonth, getDateTimeSlots, getDateWithDayOfMonth, isSameDay} from "../../services/date/DateUtils";
 import {DEFAULT_AVAILABLE_TIME} from "../../model/dateTime/Appointment";
 import {SelectionMode, TimeSlotSelector} from "./TimeSlotSelector";
-import {InrervalSummury} from "./InrervalSummury";
+import {IntervalSummary} from "./IntervalSummary";
+import {Item} from "../../model/items";
+import {QUERY_SCREEN_SIZE} from "../../pages/About";
+import {MediaDependent} from "../common/MediaDependent";
 
 interface IntervalPickerProps{
-
+    item : Item
 }
 
-export const IntervalPicker : FC<IntervalPickerProps> = props => {
+export const IntervalPicker : FC<IntervalPickerProps> = ({item}) => {
+    const [largeScreen] = useMediaQuery(QUERY_SCREEN_SIZE)
     const [date, setDate] = useState<Date>(new Date());
     const [selectionStart, setSelectionStart] = useState<Date|undefined>();
     const [selectionEnd, setSelectionEnd] = useState<Date|undefined>();
@@ -106,11 +110,18 @@ export const IntervalPicker : FC<IntervalPickerProps> = props => {
         if(!selectionEnd) return;
         setTimeslots(getTimeSlots(selectionEnd));
         setSlotMode(SelectionMode.End);
-        singleSelection(returnSlot)
+        if (returnSlot) {
+            singleSelection(returnSlot)
+        } else {
+            setReturnSlot(pickupSlot)
+        }
         // eslint-disable-next-line react-hooks/exhaustive-deps
     },[selectionEnd])
 
     useEffect(()=>{
+        if(!returnSlot && selectionEnd){
+            setReturnSlot(pickupSlot)
+        }
         if(slotMode === SelectionMode.Both && returnSlot){
             rangeSelection(pickupSlot,returnSlot);
             return;
@@ -121,6 +132,9 @@ export const IntervalPicker : FC<IntervalPickerProps> = props => {
     },[pickupSlot])
 
     useEffect(()=>{
+        if(!pickupSlot){
+            setPickupSlot(returnSlot)
+        }
         if(slotMode === SelectionMode.Both){
             if(pickupSlot === returnSlot){
                 setHourlySelection({})
@@ -161,6 +175,16 @@ export const IntervalPicker : FC<IntervalPickerProps> = props => {
             hs[timeSlots[i]] = DateState.Selected
         }
         setHourlySelection(hs)
+    }
+
+    function clear(){
+        setSelectionStart(undefined)
+        setSelectionEnd(undefined)
+        setPickupSlot('')
+        setReturnSlot('')
+        setHourlySelection({})
+        setCurrentMonthState({})
+        setNextMonthState({})
     }
 
     function getTimeSlots(date : Date){
@@ -243,7 +267,6 @@ export const IntervalPicker : FC<IntervalPickerProps> = props => {
             setCurrentMonthState({})
             setNextMonthState({...nextMonthState})
         }
-
     }
 
     function prev(){
@@ -254,16 +277,38 @@ export const IntervalPicker : FC<IntervalPickerProps> = props => {
         setDate(new Date(date.getFullYear(), date.getMonth()+1,date.getDate()))
     }
 
-    return  <VStack>
-                <HStack w={'100%'} spacing={'1vw'} className={'bordered-blue'} alignItems={'start'} p={'2vmin'} alignContent={'space-between'}>
+    const desktop  = ()=>{
+        return   <Flex w={'100%'} flexFlow={'row' } className={'bordered-blue'} alignItems={'start'} p={'2vmin'} >
                     <MonthGrid select={day => {select(day,date)}} date={date} prev={prev} key ={1} state={currentMonthState}/>
                     <MonthGrid date={nextMonth} next={next} key ={2} select={day => {select(day,nextMonth)}} state={nextMonthState}/>
-                    <InrervalSummury
+                    <IntervalSummary
+                        item={item}
                         pickupSlot={pickupSlot} pickupDate={selectionStart}
                         returnSlot={returnSlot} returnDate={selectionEnd}
-                        clear={()=>{}}  />
-                </HStack>
+                        clear={clear}
+                        className={'bordered-blue-left'}
+                    />
+                </Flex>
+    }
+
+    const mobile  = ()=>{
+        return   <HStack>
+            <Flex w={'100%'} flexFlow={'column'} className={'bordered-blue'} alignItems={'start'} p={'2vmin'} >
+                <MonthGrid w={'100%'} select={day => {select(day,date)}} date={date} prev={prev} key ={1} state={currentMonthState}/>
+                <MonthGrid w={'100%'}  date={nextMonth} next={next} key ={2} select={day => {select(day,nextMonth)}} state={nextMonthState}/>
+            </Flex>
+            <IntervalSummary
+                item={item}
+                pickupSlot={pickupSlot} pickupDate={selectionStart}
+                returnSlot={returnSlot} returnDate={selectionEnd}
+                clear={clear}  />
+        </HStack>
+    }
+
+    return  <VStack w={largeScreen ? '100%' : '98%'} >
+                <MediaDependent desktop={desktop()} mobile={mobile()}/>
                 <TimeSlotSelector
+                    columns={largeScreen ? 8 : 4}
                     w={'100%'}
                     mode={slotMode}
                     slots={timeSlots}

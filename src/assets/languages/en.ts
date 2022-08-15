@@ -104,5 +104,9 @@ export const en: Record<string, string> = {
 	'Book.select.return' : 'Select return time',
 	'Book.pickup' : 'Pickup at:',
 	'Book.return' : 'Return at:',
-	'Book.clear.date' : 'Clear dates'
+	'Book.clear.date' : 'Clear dates',
+	'Book.total' : 'Total: ',
+
+	'Continue' : 'Continue',
+ 	'Euro' : '€'
 };
