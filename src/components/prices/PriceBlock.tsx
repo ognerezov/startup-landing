@@ -24,7 +24,7 @@ export const PriceBlock : FC<PriceBlockProps> = ({
                                                      w,h, left, top}) => {
     const intl = useIntl();
     const [showBookingForm, setShowBookingForm] = useState(false)
-    const [success, setSuccess] = useState(false)
+    const [success] = useState(false)
 
     function bookingForm(data : ItemContextService){
         return <DialogFrame

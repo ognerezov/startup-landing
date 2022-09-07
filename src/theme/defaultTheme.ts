@@ -241,7 +241,14 @@ const components = {
 			color: 'white.700',
 			fontSize: '2vh',
 		},
-		sizes: {},
+		sizes: {
+			desktop :{
+				fontSize : '2vh'
+			},
+			mobile :{
+				fontSize : '1.5vh'
+			}
+		},
 		defaultProps: {},
 		variants: {
 			max: {
@@ -278,6 +285,13 @@ const components = {
 				fontSize : '1.6vh',
 				fontWeight : '400',
 				lineHeight : '1.7vh',
+			},
+			regular_phone: {
+				color : 'blue.300',
+				fontFamily : 'Helvetica Neue',
+				fontSize : '1.3vh',
+				fontWeight : '400',
+				lineHeight : '1.5vh',
 			},
 			regular_highlighted: {
 				color : 'green.300',
@@ -423,7 +437,7 @@ const components = {
 				},
 			},
 			medium_phone_selected : {
-				backgroundColor: 'gree.300',
+				backgroundColor: 'green.300',
 				color: 'white',
 				py : '0.5vmin',
 				borderRadius : '0.5vmin',

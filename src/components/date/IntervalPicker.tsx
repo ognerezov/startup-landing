@@ -156,6 +156,10 @@ export const IntervalPicker : FC<IntervalPickerProps> = ({item}) => {
         setHourlySelection(hs)
     }
 
+    function confirm(){
+        console.log("confirmed")
+    }
+
     function rangeSelection(start : string, end : string){
         const hs  :HoursState = {}
         hs[start] = DateState.SelectionStart
@@ -278,17 +282,18 @@ export const IntervalPicker : FC<IntervalPickerProps> = ({item}) => {
     }
 
     const desktop  = ()=>{
-        return   <Flex w={'100%'} flexFlow={'row' } className={'bordered-blue'} alignItems={'start'} p={'2vmin'} >
+        return   <HStack w={'100%'} className={'bordered-blue'} p={'2vmin'} justifyContent={'center'} >
                     <MonthGrid select={day => {select(day,date)}} date={date} prev={prev} key ={1} state={currentMonthState}/>
                     <MonthGrid date={nextMonth} next={next} key ={2} select={day => {select(day,nextMonth)}} state={nextMonthState}/>
                     <IntervalSummary
+                        confirm={confirm}
                         item={item}
                         pickupSlot={pickupSlot} pickupDate={selectionStart}
                         returnSlot={returnSlot} returnDate={selectionEnd}
                         clear={clear}
                         className={'bordered-blue-left'}
                     />
-                </Flex>
+                </HStack>
     }
 
     const mobile  = ()=>{
@@ -298,6 +303,7 @@ export const IntervalPicker : FC<IntervalPickerProps> = ({item}) => {
                 <MonthGrid w={'100%'}  date={nextMonth} next={next} key ={2} select={day => {select(day,nextMonth)}} state={nextMonthState}/>
             </Flex>
             <IntervalSummary
+                confirm={confirm}
                 item={item}
                 pickupSlot={pickupSlot} pickupDate={selectionStart}
                 returnSlot={returnSlot} returnDate={selectionEnd}

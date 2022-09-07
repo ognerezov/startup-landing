@@ -1,4 +1,4 @@
-import React, {FC, useEffect, useRef, useState} from 'react'
+import React, {FC, useEffect, useMemo, useRef, useState} from 'react'
 import mapboxgl, {GeoJSONSource, MapboxGeoJSONFeature} from 'mapbox-gl';
 import MapboxGeocoder from '@mapbox/mapbox-gl-geocoder';
 import {DEFAULT_SPOT} from "../../backend/GeoSearch";
@@ -25,17 +25,24 @@ export const MapView :FC<MapViewProps> = ({items,images, className,highLightItem
     const [lat, setLat] = useState<number>(point ? point.lat : DEFAULT_SPOT.lat);
     const [zoom, setZoom] = useState<number>(13);
     const [areImagesLoading, setImagesLoading] = useState<boolean>(false);
-    const [mapWasLoaded, setMapWasloaded] = useState<boolean>(false);
+    const [mapWasLoaded, setMapWasLoaded] = useState<boolean>(false);
 
-    function onSelectFeatures(features : MapboxGeoJSONFeature[]){
+    const onSelectFeatures =useMemo(()=>( function (features : MapboxGeoJSONFeature[]){
         for(const feature of features){
             if(feature.properties && feature.properties['type'] === 'item'){
                 feature.properties['id'] && goToItem(feature.properties['id'])
             }
         }
-    }
+    }),[])
 
-    function onImagesLoaded(loaded: Images) {
+    const updateItemLayer =useMemo(()=>( function (map: mapboxgl.Map,features: GeoJSON.Feature<GeoJSON.Geometry>[] ){
+        (map.getSource('points') as GeoJSONSource).setData({
+            'type': 'FeatureCollection',
+            features
+        })
+    }),[])
+
+    const onImagesLoaded = useMemo(()=>(function (loaded: Images) {
         const features: GeoJSON.Feature<GeoJSON.Geometry>[] = [];
         console.log('setting images')
         for (const key in loaded) {
@@ -66,13 +73,12 @@ export const MapView :FC<MapViewProps> = ({items,images, className,highLightItem
         console.log(features.length)
         setImagesLoading(false)
         updateItemLayer(map.current!, features)
-    }
+    }),[items, updateItemLayer])
 
     useEffect(()=>{
         if(areImagesLoading || !items || !images || !map.current || Object.keys(items).length === 0 || Object.keys(images).length === 0){
             return
         }
-        console.log(items)
         setImagesLoading(true)
         loadImages(map.current, images, loaded => {
             if(mapWasLoaded){
@@ -87,23 +93,30 @@ export const MapView :FC<MapViewProps> = ({items,images, className,highLightItem
         // eslint-disable-next-line react-hooks/exhaustive-deps
     },[items, map.current])
 
+    const updateTextLayer = useMemo(()=>(
+            function updateTextLayer(map: mapboxgl.Map,features: GeoJSON.Feature<GeoJSON.Geometry>[] ){
+                //console.log("update layers with features");
+                (map.getSource('texts') as GeoJSONSource).setData({
+                    'type': 'FeatureCollection',
+                    features
+                })
+            }),
+        [])
 
-    function updateItemLayer(map: mapboxgl.Map,features: GeoJSON.Feature<GeoJSON.Geometry>[] ){
-        console.log("update item layers");
-        // console.log(items)
-        // console.log(features);
-        (map.getSource('points') as GeoJSONSource).setData({
-            'type': 'FeatureCollection',
-            features
-        })
-    }
-
-    function onItemMouseLeave(){
+    const onItemMouseLeave = useMemo(()=>(function (){
         highLightItem && highLightItem(undefined);
         updateTextLayer(map.current!,[]);
-    }
+    }),[highLightItem, updateTextLayer])
 
-    function onItemMouseOver(features : MapboxGeoJSONFeature[]){
+    const onItemMouseOver = useMemo(()=>{
+        console.log("set on mouse over")
+        console.log(items)
+        return function (features : MapboxGeoJSONFeature[]){
+        console.log("on mouse over")
+        if(!items){
+            console.log('no items found')
+            return;
+        }
         for(const feature of features){
             if(feature.properties && feature.properties['type'] === 'item' && feature.properties['id']){
                 const id : number = +feature.properties['id'];
@@ -130,61 +143,84 @@ export const MapView :FC<MapViewProps> = ({items,images, className,highLightItem
                 return;
             }
         }
-    }
+    }},[highLightItem, items, updateTextLayer])
 
-    function updateTextLayer(map: mapboxgl.Map,features: GeoJSON.Feature<GeoJSON.Geometry>[] ){
-        //console.log("update layers with features");
-        (map.getSource('texts') as GeoJSONSource).setData({
-            'type': 'FeatureCollection',
-            features
-        })
-    }
-
-    function initDataLayers(map: mapboxgl.Map){
-        map.addSource('points', {
-            'type': 'geojson',
-            'data': {
-                'type': 'FeatureCollection',
-                features : []
-            }
+    useEffect(()=>{
+        if(!map.current || !items){
+            return
+        }
+        map.current.on('click', (event) => {
+            const data : MapboxGeoJSONFeature[] = map.current!.queryRenderedFeatures(event.point, {
+                layers: ['items']
+            });
+            onSelectFeatures(data)
         });
 
-        map.addSource('texts', {
-            'type': 'geojson',
-            'data': {
-                'type': 'FeatureCollection',
-                features : []
-            }
+        map.current.on('mouseenter', 'items', (event) => {
+            const data : MapboxGeoJSONFeature[] = map.current!.queryRenderedFeatures(event.point, {
+                layers: ['items']
+            });
+            onItemMouseOver(data);
         });
 
-        map.addLayer({
-            'id': 'items',
-            'type': 'symbol',
-            'source': 'points',
-            'layout': {
-                'icon-image': ['get', 'image-name'],
-                'icon-size': ['get', 'size'],
-                'icon-allow-overlap': true,
-                'text-allow-overlap': true
+        map.current.on('mouseleave', 'items', (event) => {
+            const data : MapboxGeoJSONFeature[] = map.current!.queryRenderedFeatures(event.point, {
+                layers: ['items']
+            });
+            if(data.length === 0) {
+                onItemMouseLeave();
+            } else {
+                onItemMouseOver(data);
             }
         });
+    }, [items, map, onItemMouseLeave, onItemMouseOver, onSelectFeatures])
 
-        map.addLayer({
-            'id': 'items_text',
-            'type': 'symbol',
-            'source': 'texts',
-            'layout': {
-                'text-field': ['get', 'name'],
-                'text-anchor': 'bottom',
-                'text-offset': [0, 2.5],
-                'icon-text-fit': 'both',
-                // 'icon-image': ['get', 'image-name'],
-                // 'icon-size': ['get', 'size'],
-                // 'icon-allow-overlap': true,
-                'text-allow-overlap': true
-            }
-        });
-    }
+    const initDataLayers = useMemo(()=>(
+        function (map: mapboxgl.Map){
+            map.addSource('points', {
+                'type': 'geojson',
+                'data': {
+                    'type': 'FeatureCollection',
+                    features : []
+                }
+            });
+
+            map.addSource('texts', {
+                'type': 'geojson',
+                'data': {
+                    'type': 'FeatureCollection',
+                    features : []
+                }
+            });
+
+            map.addLayer({
+                'id': 'items',
+                'type': 'symbol',
+                'source': 'points',
+                'layout': {
+                    'icon-image': ['get', 'image-name'],
+                    'icon-size': ['get', 'size'],
+                    'icon-allow-overlap': true,
+                    'text-allow-overlap': true
+                }
+            });
+
+            map.addLayer({
+                'id': 'items_text',
+                'type': 'symbol',
+                'source': 'texts',
+                'layout': {
+                    'text-field': ['get', 'name'],
+                    'text-anchor': 'bottom',
+                    'text-offset': [0, 2.5],
+                    'icon-text-fit': 'both',
+                    // 'icon-image': ['get', 'image-name'],
+                    // 'icon-size': ['get', 'size'],
+                    // 'icon-allow-overlap': true,
+                    'text-allow-overlap': true
+                }
+            });
+        }),[])
 
     useEffect(() => {
         if (map.current) {
@@ -199,7 +235,7 @@ export const MapView :FC<MapViewProps> = ({items,images, className,highLightItem
 
         map.current.on('load',()=>{
             console.log('map init data layers')
-            setMapWasloaded(true)
+            setMapWasLoaded(true)
             initDataLayers(map.current!);
         })
 
@@ -252,7 +288,6 @@ export const MapView :FC<MapViewProps> = ({items,images, className,highLightItem
         map.current.addControl(new mapboxgl.FullscreenControl());
         map.current.addControl(new mapboxgl.NavigationControl());
 
-    });
-    //console.log('render map')
+    },[initDataLayers, items, lat, lng, onItemMouseLeave, onItemMouseOver, onSelectFeatures, zoom]);
     return <div><div ref={mapContainer as React.RefObject<HTMLDivElement>} className={className} /></div>
 }

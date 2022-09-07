@@ -107,6 +107,6 @@ export const en: Record<string, string> = {
 	'Book.clear.date' : 'Clear dates',
 	'Book.total' : 'Total: ',
 
-	'Continue' : 'Continue',
+	'Continue' : 'Confirm',
  	'Euro' : '€'
 };

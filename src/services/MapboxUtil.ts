@@ -50,7 +50,7 @@ export function loadImages(map : Map, urls : Dict, callback : (urls : Images)=>v
         return (err : Error | undefined, image : ImageResponse) => {
             results[name] = err ? null : image;
             if (Object.keys(results).length === Object.keys(urls).length) {
-                console.log(results)
+                // console.log(results)
                 callback(results);
             }
         };

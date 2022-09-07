@@ -1,4 +1,4 @@
-import React, {FC, Fragment} from 'react'
+import React, {FC, Fragment, useMemo} from 'react'
 import {Box, Grid, useMediaQuery, VStack, Text, Center} from "@chakra-ui/react";
 import {QUERY_SCREEN_SIZE} from "../../pages/About";
 import {ButtonCard} from "../ButtonCard";
@@ -22,30 +22,33 @@ export const Categories : FC<CategoriesProps> = props => {
     const [largeScreen] = useMediaQuery(QUERY_SCREEN_SIZE)
     const intl = useIntl()
 
-
-    async function onChangeCategory(category : number){
+    const onChangeCategory = useMemo(()=>(async function (category : number){
         props.onReport('Category selected: '+ category);
         props.context.selectCategory(category)
-    }
+    }),[props])
 
-    function getItems(){
-        return props.categories.map(id=>(
+    const items = useMemo(()=>{
+        return <Fragment>{props.categories.map(id=>(
             <ButtonCard id={id} key={id}
                         onSelect={onChangeCategory} size={largeScreen ? '15vw' : '90vw'}/>
-        ))
-    }
+        ))}</Fragment>
+    },[largeScreen, onChangeCategory, props.categories]);
 
-    function getContent(){
-        if(!props.context.selectedCategory){
-            return getItems()
+    const content = useMemo<React.ReactNode>(()=> {
+        if (!props.context.selectedCategory) {
+            return items
         }
         const title = intl.formatMessage({id: 'Email.missing2'})
-        return  <CategoryViewer
-                    setItems={props.setItems}
-                    id = {props.context.selectedCategory}
-                    title={title}
-                    onExit={()=>{props.context.selectCategory(undefined)}}/>
-    }
+        return <CategoryViewer
+            setItems={props.setItems}
+            id={props.context.selectedCategory}
+            title={title}
+            onExit={() => {
+                props.context.selectCategory(undefined)
+            }}/>
+
+    },[intl, items, props.context, props.setItems]);
+    console.log("render categories")
     return <Box
         height={largeScreen ? '97vh' : '95vh'}
         position='fixed'
@@ -76,7 +79,7 @@ export const Categories : FC<CategoriesProps> = props => {
                                 pt={'2vh'}
                                 pb={'5vh'}
                                 templateColumns='repeat(5, 1fr)' gap={6} width='100%' >
-                                {getContent()}
+                                {content}
                             </Grid> : <VStack
                                 background={props.context.selectedCategory ? 'white' : 'blue.300'}
                                 w='100%'
@@ -84,7 +87,7 @@ export const Categories : FC<CategoriesProps> = props => {
                                 pt='3vh'
                                 pb='6vh'
                             >
-                                {getContent()}
+                                {content}
                             </VStack>
 
                 }

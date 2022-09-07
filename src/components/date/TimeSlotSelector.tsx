@@ -1,8 +1,9 @@
 import React, {FC} from 'react';
-import {SimpleGrid, Text, VStack} from "@chakra-ui/react";
+import {SimpleGrid, Text, useMediaQuery, VStack} from "@chakra-ui/react";
 import {TextButton} from "../common/TextButton";
 import {useIntl} from "react-intl";
 import {DateState, HoursState} from "../../services/date/dateState";
+import {QUERY_SCREEN_SIZE} from "../../pages/About";
 
 export enum SelectionMode{
     Start,
@@ -23,7 +24,7 @@ interface TimeSlotSelectorProps{
 
 export const TimeSlotSelector : FC<TimeSlotSelectorProps> =
     ({slots, w, h,onSelectStart,onSelectEnd, mode,selection, columns}) => {
-
+    const [largeScreen] = useMediaQuery(QUERY_SCREEN_SIZE)
     const intl = useIntl();
 
     function getTitle(){
@@ -55,17 +56,18 @@ export const TimeSlotSelector : FC<TimeSlotSelectorProps> =
     }
 
     function getVariant(state : DateState){
+        const base = largeScreen ? 'medium_' : 'medium_phone_'
         switch (state) {
             default:
             case DateState.Free:
-                return 'medium_solid'
+                return  base + 'solid'
             case DateState.SelectionStart:
             case DateState.SelectionEnd:
-                return 'medium_selected'
+                return base +'selected'
             case DateState.Past:
-                return 'medium_disabled'
+                return base +'disabled'
             case DateState.Selected:
-                return 'medium_semisolid'
+                return base +'semisolid'
         }
     }
 
@@ -82,7 +84,9 @@ export const TimeSlotSelector : FC<TimeSlotSelectorProps> =
                         p={'1vmin'}
                         templateColumns={`repeat(${columns}, 1fr)`} gap={1}>
                 {slots.map(slot =>
-                    <TextButton onClick={()=>{onSelect(slot)}}
+                    <TextButton
+                        onClick={()=>{onSelect(slot)}}
+                        size={largeScreen ? 'desktop' : 'mobile'}
                         text={slot} key={slot} variant={getSlotVariant(slot)} mx ={'2vw'} px ={'1vw'}/>)}
             </SimpleGrid>
     </VStack>

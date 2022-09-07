@@ -40,10 +40,6 @@ export interface Item{
 
 export interface AddItemRequest{
     file ?: File;
-
-    // firstName ?: string;
-    // lastName ?: string;
-    // email : string;
     phone ?: string;
 
     lat : number;

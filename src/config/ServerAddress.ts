@@ -1,4 +1,5 @@
 export const DEVELOPMENT_URL : string = 'localhost:8080/v1/';
+//export const DEVELOPMENT_URL : string = '192.168.1.80:8080/v1/';
 // export const PRODUCTION_URL : string = '89kkdndqhb.execute-api.eu-west-1.amazonaws.com/v1/';
 export const PRODUCTION_URL : string = 'app.rentsby.com/v1/';
 

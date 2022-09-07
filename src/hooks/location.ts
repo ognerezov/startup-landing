@@ -12,9 +12,7 @@ export function useGeoLocation(initial : Point | undefined):
         getLocation()
             .then(setState)
     }
-
     fetchLocation()
-
     function set(point : Point | undefined){
         if(point){
             setState(point)
