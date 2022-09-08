@@ -1,7 +1,7 @@
 import React, {FC, useEffect, useMemo, useState} from 'react'
 import {Item} from "../../model/items";
 import {MapView} from "../maps/MapView";
-import {Box, Center, Spinner, Text, useMediaQuery} from "@chakra-ui/react";
+import {AbsoluteCenter, Box, Center, Spinner, Text, useMediaQuery} from "@chakra-ui/react";
 import {QUERY_SCREEN_SIZE} from "../../pages/About";
 import {ItemGrid} from "../items/ItemGrid";
 import {ItemContext, ItemContextService} from "../../context/context";
@@ -113,11 +113,10 @@ export const CategoryViewer : FC<CategoryViewerProps> = props => {
 
     },[largeScreen, highLighted, location, viewMap, intl])
 
-    console.log("render viewer")
     if(itemsFetchState !== FetchState.Finished)
-        return  <Center w={'100%'} h={'100%'}>
+        return  <AbsoluteCenter>
                     <Spinner/>
-                </Center>
+                </AbsoluteCenter>
 
     return items ?
         <ItemContext.Consumer>{content}

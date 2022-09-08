@@ -9,15 +9,18 @@ export interface StatusCodeHolder {
     statusCode : number
 }
 
-export function sendEmail(from : string, subject: string, body : string){
+export interface EmailParams{
+    from : string
+    subject : string
+    body : string
+}
+
+export function sendEmail(data : EmailParams){
     const params = {
         FunctionName: 'emailMe',
         InvocationType: 'RequestResponse',
         LogType: 'Tail',
-        Payload: JSON.stringify({
-            from, subject, body
-            }
-        )
+        Payload: JSON.stringify(data)
     };
     // console.log('invoke lambda with params: ' + JSON.stringify(params));
     return new Promise((resolve, reject) => {

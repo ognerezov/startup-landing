@@ -1,4 +1,4 @@
-import React, {FC, useEffect, useState} from 'react';
+import React, {FC, useCallback, useEffect, useMemo, useState} from 'react';
 import {Flex, HStack, useMediaQuery, VStack} from "@chakra-ui/react";
 import {MonthGrid} from "./MonthGrid";
 import {DateState, HoursState, MonthState} from "../../services/date/dateState";
@@ -9,6 +9,7 @@ import {IntervalSummary} from "./IntervalSummary";
 import {Item} from "../../model/items";
 import {QUERY_SCREEN_SIZE} from "../../pages/About";
 import {MediaDependent} from "../common/MediaDependent";
+import {ItemContext, PurchasePhase} from "../../context/context";
 
 interface IntervalPickerProps{
     item : Item
@@ -17,28 +18,29 @@ interface IntervalPickerProps{
 export const IntervalPicker : FC<IntervalPickerProps> = ({item}) => {
     const [largeScreen] = useMediaQuery(QUERY_SCREEN_SIZE)
     const [date, setDate] = useState<Date>(new Date());
-    const [selectionStart, setSelectionStart] = useState<Date|undefined>();
-    const [selectionEnd, setSelectionEnd] = useState<Date|undefined>();
+    const [pickupDate, setPickupDate] = useState<Date|undefined>();
+    const [returnDate, setReturnDate] = useState<Date|undefined>();
     const [currentMonthState, setCurrentMonthState] = useState<MonthState>({})
     const [nextMonthState, setNextMonthState] = useState<MonthState>({})
     const [timeSlots, setTimeslots] = useState<string[]>([])
-    const nextMonth = new Date(date.getFullYear(), date.getMonth()+1,date.getDate());
+    const nextMonth = useMemo(()=> new Date(date.getFullYear(), date.getMonth()+1,date.getDate())
+        ,[date]);
     const [pickupSlot, setPickupSlot] = useState<string>('');
     const [returnSlot, setReturnSlot] = useState<string>('');
     const [hourlySelection, setHourlySelection] = useState<HoursState>({})
     const [slotMode, setSlotMode] = useState<SelectionMode>(SelectionMode.Start)
 
     useEffect(()=>{
-        if(!selectionStart){
+        if(!pickupDate){
             setCurrentMonthState({})
             setNextMonthState({})
             return
         }
         const cs : MonthState ={}
         const ns : MonthState ={}
-        if(!selectionEnd){
+        if(!returnDate){
             for(let i=1; i<=daysInAMonth(date);i++){
-                if(isSameDay(selectionStart,date,i)){
+                if(isSameDay(pickupDate,date,i)){
                     cs[i] = DateState.SelectionStart
                     setCurrentMonthState(cs)
                     setNextMonthState(ns)
@@ -46,7 +48,7 @@ export const IntervalPicker : FC<IntervalPickerProps> = ({item}) => {
                 }
             }
             for(let i=1; i<=daysInAMonth(nextMonth);i++){
-                if(isSameDay(selectionStart,nextMonth,i)){
+                if(isSameDay(pickupDate,nextMonth,i)){
                     ns[i] = DateState.SelectionStart
                     setCurrentMonthState(cs)
                     setNextMonthState(ns)
@@ -57,17 +59,17 @@ export const IntervalPicker : FC<IntervalPickerProps> = ({item}) => {
 
         for(let i=1; i<=daysInAMonth(date); i++){
             const day = getDateWithDayOfMonth(date,i);
-            if(day < selectionStart)
+            if(day < pickupDate)
                 continue;
-            if(day > selectionEnd!){
+            if(day > returnDate!){
                 setCurrentMonthState(cs)
                 setNextMonthState(ns)
                 return;
             }
-            if(isSameDay(selectionStart,date,i)){
+            if(isSameDay(pickupDate,date,i)){
                 cs[i] = DateState.SelectionStart
             } else
-            if(isSameDay(selectionEnd!,date,i)){
+            if(isSameDay(returnDate!,date,i)){
                 cs[i] = DateState.SelectionEnd
             } else {
                 cs[i] = DateState.Selected
@@ -76,17 +78,17 @@ export const IntervalPicker : FC<IntervalPickerProps> = ({item}) => {
 
         for(let i=1; i<=daysInAMonth(nextMonth); i++){
             const day = getDateWithDayOfMonth(nextMonth,i);
-            if(day < selectionStart)
+            if(day < pickupDate)
                 continue;
-            if(day> selectionEnd!){
+            if(day> returnDate!){
                 setCurrentMonthState(cs)
                 setNextMonthState(ns)
                 return;
             }
-            if(isSameDay(selectionStart,nextMonth,i)){
+            if(isSameDay(pickupDate,nextMonth,i)){
                 ns[i] = DateState.SelectionStart
             } else
-            if(isSameDay(selectionEnd!,nextMonth,i)){
+            if(isSameDay(returnDate!,nextMonth,i)){
                 ns[i] = DateState.SelectionEnd
             } else{
                 ns[i] = DateState.Selected
@@ -99,16 +101,16 @@ export const IntervalPicker : FC<IntervalPickerProps> = ({item}) => {
     },[date])
 
     useEffect(()=>{
-        if(!selectionStart) return
-        setTimeslots(getTimeSlots(selectionStart))
-        setSlotMode(selectionEnd ? SelectionMode.Start : SelectionMode.Both)
+        if(!pickupDate) return
+        setTimeslots(getTimeSlots(pickupDate))
+        setSlotMode(returnDate ? SelectionMode.Start : SelectionMode.Both)
         singleSelection(pickupSlot)
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    },[selectionStart])
+    },[pickupDate])
 
     useEffect(()=>{
-        if(!selectionEnd) return;
-        setTimeslots(getTimeSlots(selectionEnd));
+        if(!returnDate) return;
+        setTimeslots(getTimeSlots(returnDate));
         setSlotMode(SelectionMode.End);
         if (returnSlot) {
             singleSelection(returnSlot)
@@ -116,10 +118,10 @@ export const IntervalPicker : FC<IntervalPickerProps> = ({item}) => {
             setReturnSlot(pickupSlot)
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    },[selectionEnd])
+    },[returnDate])
 
     useEffect(()=>{
-        if(!returnSlot && selectionEnd){
+        if(!returnSlot && returnDate){
             setReturnSlot(pickupSlot)
         }
         if(slotMode === SelectionMode.Both && returnSlot){
@@ -156,10 +158,6 @@ export const IntervalPicker : FC<IntervalPickerProps> = ({item}) => {
         setHourlySelection(hs)
     }
 
-    function confirm(){
-        console.log("confirmed")
-    }
-
     function rangeSelection(start : string, end : string){
         const hs  :HoursState = {}
         hs[start] = DateState.SelectionStart
@@ -182,8 +180,8 @@ export const IntervalPicker : FC<IntervalPickerProps> = ({item}) => {
     }
 
     function clear(){
-        setSelectionStart(undefined)
-        setSelectionEnd(undefined)
+        setPickupDate(undefined)
+        setReturnDate(undefined)
         setPickupSlot('')
         setReturnSlot('')
         setHourlySelection({})
@@ -195,10 +193,10 @@ export const IntervalPicker : FC<IntervalPickerProps> = ({item}) => {
         return getDateTimeSlots(date,DEFAULT_AVAILABLE_TIME);
     }
 
-    function select(day : number, month : Date){
+    const select = useCallback((day : number, month : Date)=>{
         const d = getDateWithDayOfMonth(month, day);
 
-        if(!selectionStart ){
+        if(!pickupDate ){
             if(month === date){
                 currentMonthState[day] = DateState.SelectionStart
                 setCurrentMonthState({...currentMonthState})
@@ -206,15 +204,15 @@ export const IntervalPicker : FC<IntervalPickerProps> = ({item}) => {
                 nextMonthState[day] = DateState.SelectionStart
                 setNextMonthState({...nextMonthState})
             }
-            setSelectionStart(d)
+            setPickupDate(d)
             return;
         }
 
-        if(!selectionEnd || selectionStart! < d){
+        if(!returnDate || pickupDate! < d){
             if(month === date){
                 currentMonthState[day] = DateState.SelectionEnd
                 for(let i=1; i<day; i++){
-                    if(getDateWithDayOfMonth(date,i) <= selectionStart!){
+                    if(getDateWithDayOfMonth(date,i) <= pickupDate!){
                         continue
                     }
                     currentMonthState[i] = DateState.Selected
@@ -226,14 +224,14 @@ export const IntervalPicker : FC<IntervalPickerProps> = ({item}) => {
                 setNextMonthState({})
             }else {
                 for(let i=1; i<= daysInAMonth(date); i++){
-                    if(getDateWithDayOfMonth(date,i) <= selectionStart!){
+                    if(getDateWithDayOfMonth(date,i) <= pickupDate!){
                         continue
                     }
                     currentMonthState[i] = DateState.Selected
 
                 }
                 for(let i=1; i<day; i++){
-                    if(getDateWithDayOfMonth(nextMonth,i) <= selectionStart!){
+                    if(getDateWithDayOfMonth(nextMonth,i) <= pickupDate!){
                         continue
                     }
                     nextMonthState[i] = DateState.Selected
@@ -245,15 +243,15 @@ export const IntervalPicker : FC<IntervalPickerProps> = ({item}) => {
                 setCurrentMonthState({...currentMonthState})
                 setNextMonthState({...nextMonthState})
             }
-            setSelectionEnd(d);
+            setReturnDate(d);
             return;
         }
-        setSelectionStart(d)
+        setPickupDate(d)
         if(month === date){
             currentMonthState[day] = DateState.SelectionStart
 
             for (let i = day + 1; i < daysInAMonth(date); i++) {
-                if (getDateWithDayOfMonth(date, i) >= selectionEnd!) {
+                if (getDateWithDayOfMonth(date, i) >= returnDate!) {
                     break
                 }
                 currentMonthState[i] = DateState.Selected
@@ -263,7 +261,7 @@ export const IntervalPicker : FC<IntervalPickerProps> = ({item}) => {
         }else {
             nextMonthState[day] = DateState.SelectionStart
             for(let i=day + 1; i<daysInAMonth(nextMonth); i++){
-                if(getDateWithDayOfMonth(nextMonth,i) >= selectionEnd!){
+                if(getDateWithDayOfMonth(nextMonth,i) >= returnDate!){
                     break
                 }
                 nextMonthState[i] = DateState.Selected
@@ -271,48 +269,68 @@ export const IntervalPicker : FC<IntervalPickerProps> = ({item}) => {
             setCurrentMonthState({})
             setNextMonthState({...nextMonthState})
         }
-    }
+    },[currentMonthState, date, nextMonth, nextMonthState, returnDate, pickupDate])
 
-    function prev(){
+    const prev = useCallback(()=>{
         setDate(new Date(date.getFullYear(), date.getMonth()-1,date.getDate()))
-    }
+    },[date])
 
-    function next(){
+    const next = useCallback(()=>{
         setDate(new Date(date.getFullYear(), date.getMonth()+1,date.getDate()))
-    }
+    },[date])
 
-    const desktop  = ()=>{
+    const desktop  = useMemo( ()=>{
         return   <HStack w={'100%'} className={'bordered-blue'} p={'2vmin'} justifyContent={'center'} >
                     <MonthGrid select={day => {select(day,date)}} date={date} prev={prev} key ={1} state={currentMonthState}/>
                     <MonthGrid date={nextMonth} next={next} key ={2} select={day => {select(day,nextMonth)}} state={nextMonthState}/>
-                    <IntervalSummary
-                        confirm={confirm}
-                        item={item}
-                        pickupSlot={pickupSlot} pickupDate={selectionStart}
-                        returnSlot={returnSlot} returnDate={selectionEnd}
-                        clear={clear}
-                        className={'bordered-blue-left'}
-                    />
+                    <ItemContext.Consumer>{ context =>(
+                        <IntervalSummary
+                                    confirm={()=>{
+                                        context.setPurchasePhase(PurchasePhase.Started)
+                                        context.setRentalPeriod({
+                                                pickupDate : pickupDate!,
+                                                pickupSlot,
+                                                returnDate : returnDate!,
+                                                returnSlot
+                                        })
+                                    }}
+                                    item={item}
+                                    pickupSlot={pickupSlot} pickupDate={pickupDate}
+                                    returnSlot={returnSlot} returnDate={returnDate}
+                                    clear={clear}
+                                    className={'bordered-blue-left'}
+                        /> )}
+                    </ItemContext.Consumer>
                 </HStack>
-    }
+    },[currentMonthState, date, item, next, nextMonth, nextMonthState, pickupSlot, prev, returnSlot, select, returnDate, pickupDate])
 
-    const mobile  = ()=>{
+    const mobile  = useMemo( ()=>{
         return   <HStack>
             <Flex w={'100%'} flexFlow={'column'} className={'bordered-blue'} alignItems={'start'} p={'2vmin'} >
                 <MonthGrid w={'100%'} select={day => {select(day,date)}} date={date} prev={prev} key ={1} state={currentMonthState}/>
                 <MonthGrid w={'100%'}  date={nextMonth} next={next} key ={2} select={day => {select(day,nextMonth)}} state={nextMonthState}/>
             </Flex>
-            <IntervalSummary
-                confirm={confirm}
-                item={item}
-                pickupSlot={pickupSlot} pickupDate={selectionStart}
-                returnSlot={returnSlot} returnDate={selectionEnd}
-                clear={clear}  />
+            <ItemContext.Consumer>{ context =>(
+                <IntervalSummary
+                    confirm={()=>{
+                        context.setPurchasePhase(PurchasePhase.Started)
+                        context.setRentalPeriod({
+                            pickupDate : pickupDate!,
+                            pickupSlot,
+                            returnDate : returnDate!,
+                            returnSlot
+                        })
+                    }}
+                    item={item}
+                    pickupSlot={pickupSlot} pickupDate={pickupDate}
+                    returnSlot={returnSlot} returnDate={returnDate}
+                    clear={clear}  />)}
+            </ItemContext.Consumer>
         </HStack>
-    }
+    },[currentMonthState, date, item, next, nextMonth, nextMonthState, pickupSlot, prev, returnSlot, select, returnDate, pickupDate])
 
     return  <VStack w={largeScreen ? '100%' : '98%'} >
-                <MediaDependent desktop={desktop()} mobile={mobile()}/>
+                <MediaDependent desktop={desktop} mobile={mobile}/>
                 <TimeSlotSelector
                     columns={largeScreen ? 8 : 4}
                     w={'100%'}

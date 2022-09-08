@@ -1,7 +1,7 @@
-import React, {FC} from 'react'
+import React, {FC, useMemo} from 'react'
 import {Center, Flex, Spacer, Text, useMediaQuery, VStack} from "@chakra-ui/react";
 import {useIntl} from "react-intl";
-import {costOf, getDisplayTimeAtDate, Interval} from "../../services/date/DateUtils";
+import {formattedCostOf, getDisplayTimeAtDate, Interval} from "../../services/date/DateUtils";
 import {Item} from "../../model/items";
 import {TextButton} from "../common/TextButton";
 import {QUERY_SCREEN_SIZE} from "../../pages/About";
@@ -17,8 +17,12 @@ export const IntervalSummary : FC<IntervalSummaryProps> = ({
                    pickupDate,returnDate, pickupSlot,returnSlot,clear,item,className, confirm}) => {
     const intl = useIntl()
     const [largeScreen] = useMediaQuery(QUERY_SCREEN_SIZE)
-    const labelVariant = largeScreen ? 'medium' : 'medium_phone';
-    const textVariant = largeScreen ? 'regular' : 'regular_phone';
+    const labelVariant = useMemo(()=> (largeScreen ? 'medium' : 'medium_phone'),[largeScreen])
+    const textVariant = useMemo(()=> (largeScreen ? 'regular' : 'regular_phone'),[largeScreen])
+
+    const readyForSubmit = useMemo<boolean>(()=>(!!(pickupDate && returnDate && pickupSlot && returnSlot)),[pickupDate, pickupSlot, returnDate, returnSlot])
+
+
     return <Flex flexFlow={'column'} p={'1vmin'} h={'100%'}  alignItems={'start'} justifyContent={'space-between'} className={className}>
                 <VStack alignItems={'start'} justifyContent={'start'}>
                     <Text variant = {labelVariant}>
@@ -37,18 +41,18 @@ export const IntervalSummary : FC<IntervalSummaryProps> = ({
                         {intl.formatMessage({id: 'Book.total'})}
                     </Text>
                     <Text variant={textVariant}>
-                        {returnDate && returnSlot ? (costOf(item,{
+                        {returnDate && returnSlot ? formattedCostOf(item,{
                             pickupDate,
                             returnDate,
                             pickupSlot,
                             returnSlot
-                        })/100).toFixed(2) + intl.formatMessage({'id' :'Euro'}) :"-" }
+                        }) + intl.formatMessage({'id' :'Euro'}) :"-" }
                     </Text>
                 </VStack>
                 <Spacer/>
                 <VStack alignItems={'center'} justifyContent={'end'} >
                     <Center w={'100%'} pt={'4vh'}>
-                        <TextButton onClick={confirm} id={'Continue'} variant={labelVariant +'_selected'} px ={'2vw'}/>
+                        <TextButton disabled={!readyForSubmit} onClick={confirm} id={'Continue'} variant={labelVariant +'_selected'} px ={'2vw'}/>
                     </Center>
                     <Center w={'100%'} pt={'1vh'}>
                         <TextButton onClick={clear} id={'Book.clear.date'} variant={labelVariant} px ={'2vw'}/>

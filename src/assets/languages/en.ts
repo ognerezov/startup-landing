@@ -106,6 +106,7 @@ export const en: Record<string, string> = {
 	'Book.return' : 'Return at:',
 	'Book.clear.date' : 'Clear dates',
 	'Book.total' : 'Total: ',
+	'Book.success' : 'You successfully booked your item. Please wait for owners confirmation',
 
 	'Continue' : 'Confirm',
  	'Euro' : '€'

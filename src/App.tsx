@@ -1,4 +1,4 @@
-import React, {FC, useEffect, useState} from 'react';
+import React, {FC, useCallback, useEffect, useMemo, useState} from 'react';
 import './App.css';
 import {Center, ChakraProvider, Spinner} from '@chakra-ui/react';
 import {defaultTheme} from "./theme/defaultTheme";
@@ -19,7 +19,8 @@ import {
     ItemContext,
     ItemContextService,
     ItemEditContext,
-    noneItemEditContext
+    noneItemEditContext,
+    PurchasePhase
 } from "./context/context";
 import {AddItemRequest, Item} from "./model/items";
 import {ItemView} from "./components/items/ItemView";
@@ -33,6 +34,8 @@ import {useStorage} from "./hooks/storageHook";
 import {INITIAL_AUTH, UserContext, UserContextService} from "./context/userContext";
 import {STORAGE_AUTH} from "./storage/localStorage";
 import {UserGateway} from "./components/authorization/UserGateway";
+import {PaymentController} from "./components/payment/PaymentController";
+import {Interval} from "./services/date/DateUtils";
 
 interface AppState{
     tab : string
@@ -59,10 +62,34 @@ const App: FC = () => {
     const [prevCategory, setPrevCategory] = useState<number|undefined>(undefined)
     const [editContext, setEditContext] = useState<ItemEditContext>(noneItemEditContext(submitItem))
     const [fetching, setFetching] = useState<boolean>(false)
-    const [auth, setAuth] = useStorage<Auth>(STORAGE_AUTH, INITIAL_AUTH);
+    const [auth, setAuth] = useStorage<Auth>(STORAGE_AUTH, INITIAL_AUTH)
+    const [purchasePhase, setPurchasePhase] = useState<PurchasePhase>(PurchasePhase.NotStarted)
+    const [rentalPeriod, setRentalPeriod] =useState<Interval | undefined>(undefined)
 
-    const context : ItemContextService = {context : data, setContext : setData, selectItem,selectedItem : item?.id, onReport,selectCategory :setCategory, selectedCategory : category, editContext, setEditContext};
+    const onReport= useCallback((event : string)=>{
+        state.ip && report(event,state.ip, state.clientInfo)
+    },[state.clientInfo, state.ip])
+
+
+    const context : ItemContextService =useMemo(()=>({
+            context : data,
+            setContext : setData,
+            selectItem,
+            selectedItem : item?.id,
+            onReport,
+            selectCategory :setCategory,
+            selectedCategory : category,
+            editContext,
+            setEditContext,
+            purchasePhase,
+            setPurchasePhase,
+            rentalPeriod,
+            setRentalPeriod
+        }),
+        [category, data, editContext, item?.id, onReport, purchasePhase, rentalPeriod]);
+
     const userContext : UserContextService = {auth : auth, setAuth : setAuth}
+
     function submitItem(item: AddItemRequest) {
         setEditContext({...editContext, state : EditState.Submitting})
         creatItem(item,auth.token!)
@@ -119,24 +146,20 @@ const App: FC = () => {
         setItem(item)
     }
 
-    function onReport(event : string){
-        state.ip && report(event,state.ip, state.clientInfo)
-    }
-
-    function onGotIp(ip : string){
+    const onGotIp = useCallback(()=>(ip : string)=>{
         setState({...state, ip});
         report('Start',ip, state.clientInfo)
-    }
+    },[state])
 
-    function goHome(){
+    const goHome= useCallback(()=>{
         setState({...state,tab: HOME})
-    }
+    },[state])
 
     useEffect(()=>{
         getIP().then(onGotIp)
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    },[])
-    function getPage(){
+    },[onGotIp])
+
+    const page = useMemo(()=>{
 
         if(fetching){
             return <Center w={'100%'}
@@ -152,6 +175,14 @@ const App: FC = () => {
                 <ItemCreator context={context} />
             </UserGateway>
         }
+        if(purchasePhase !== PurchasePhase.NotStarted){
+            return <UserGateway quit={()=>{
+                setPurchasePhase(PurchasePhase.NotStarted)
+            }}>
+                <PaymentController />
+            </UserGateway>
+        }
+
         if(item){
             return <ItemView item={item}/>
         }
@@ -177,8 +208,9 @@ const App: FC = () => {
             default:
                 return <NotFound/>
         }
-    }
-  const   currentLanguage = systemLanguage();
+    }, [context, editContext, fetching, goHome, item, onReport, prevCategory, purchasePhase, state.tab])
+
+  const   currentLanguage = useMemo( ()=>systemLanguage(),[]);
 
   function changeTab(tab : string) {
       setState({...state,tab})
@@ -196,7 +228,7 @@ const App: FC = () => {
                         select={changeTab}
                         buttons={[HOME,ABOUT,CONTACT]}
                     />
-                      {getPage()}
+                      {page}
                   </UserContext.Provider>
               </ItemContext.Provider>
           </IntlProvider>

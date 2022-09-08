@@ -125,3 +125,7 @@ export function costOf(item : Item, interval : Interval){
 
     return hours * item.pricePerHour;
 }
+
+export function formattedCostOf(item : Item, interval : Interval):string{
+    return (costOf(item,interval)/100).toFixed(2)
+}

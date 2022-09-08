@@ -93,7 +93,7 @@ export const EmailMe : FC<EmailMeProps> = props => {
     async function submit(){
         setSendState(SENDING)
         try{
-            const resString = await sendEmail(state.from!,props.subject, state.body!);
+            const resString = await sendEmail({from : state.from!, subject : props.subject,body : state.body!});
             const result = JSON.parse(resString as string) as StatusCodeHolder;
             setSendState(result.statusCode === 200 ? SUCCESS : ERROR)
         } catch (e) {
