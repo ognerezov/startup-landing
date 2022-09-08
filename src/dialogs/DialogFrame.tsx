@@ -1,4 +1,5 @@
 import React, {FC} from 'react'
+import {createPortal} from "react-dom";
 import {
     Box,
     Center, Modal,
@@ -27,7 +28,8 @@ export const DialogFrame : FC<DialogFrameProps> = ({children,w,h,title,isOpen,on
     if(!isOpen) {
         return  null;
     }
-    return largeScreen ? <Modal
+    return largeScreen ? createPortal(
+        <Modal
             isOpen={isOpen}
             onClose={onClose}>
             <ModalOverlay />
@@ -43,14 +45,14 @@ export const DialogFrame : FC<DialogFrameProps> = ({children,w,h,title,isOpen,on
                     </Center>
                 </ModalBody>
             </ModalContent>
-        </Modal>
+        </Modal>,document.getElementById('overlay-root')!)
         : <Box
             position = {'fixed'}
             zIndex={4}
             w={'100vw'}
             h={'100vh'}
-            maxW={'100vh'} background={'white'} overflowY={'auto'} overflowX={'hidden'}
-            py = {'10vh'}
+            background={'white'} overflowY={'auto'} overflowX={'hidden'}
+            pb = {'10vh'}
         >
             <PageHeader>
                 <Spacer/>

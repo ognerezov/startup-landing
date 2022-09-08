@@ -94,5 +94,20 @@ export const en: Record<string, string> = {
 	'App.hello.business' : 'Build your rental business with us',
 
 	'Logout' : 'Log out',
-	'Alert.confirm' : 'Confirm your action'
+	'Alert.confirm' : 'Confirm your action',
+
+/*
+   to translate
+ */
+	'Book.select.date' : 'Select your rent dates',
+	'Book.select.pickup' : 'Select pickup time',
+	'Book.select.return' : 'Select return time',
+	'Book.pickup' : 'Pickup at:',
+	'Book.return' : 'Return at:',
+	'Book.clear.date' : 'Clear dates',
+	'Book.total' : 'Total: ',
+	'Book.success' : 'You successfully booked your item. Please wait for owners confirmation',
+
+	'Continue' : 'Confirm',
+ 	'Euro' : '€'
 };

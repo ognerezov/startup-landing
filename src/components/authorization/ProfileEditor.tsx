@@ -17,7 +17,7 @@ export const ProfileEditor : FC<ProfileEditorProps> = ({quit, auth,setAuth}) => 
     const intl = useIntl();
     const [user, userError, setUser] = useValidState<User>(auth.user || ANONYMOUS, validateUser)
     const [result,fetchState,submitError,submitUser] = useFetchState<Auth,User>('customer','PUT',auth)
-
+    console.log(user)
     useEffect(()=>{
         if(result === auth){
             return

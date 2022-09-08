@@ -35,14 +35,11 @@ export interface Item{
     apartment: string;
     room: string;
     floor  : number;
+    ownerAvailability : string;
 }
 
 export interface AddItemRequest{
     file ?: File;
-
-    // firstName ?: string;
-    // lastName ?: string;
-    // email : string;
     phone ?: string;
 
     lat : number;

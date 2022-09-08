@@ -29,7 +29,6 @@ export function useFetchState<T,R>(path: string, method : string, def :T):[
     function submit(r : R, auth ?: string){
         let url = getUrl(path);
         console.log(auth)
-        console.log(url)
         let body
         if (typeof  r ==='string'){
             url += r
@@ -37,6 +36,7 @@ export function useFetchState<T,R>(path: string, method : string, def :T):[
             body = JSON.stringify(r)
         }
         console.log(url)
+        console.log(body)
         const params : RequestInit = {
             method,
             mode: auth ? undefined : 'cors',

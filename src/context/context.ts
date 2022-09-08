@@ -2,6 +2,7 @@ import {createContext} from "react";
 import {AddItemRequest, Item} from "../model/items";
 import {Dict, ItemDict} from "../model/common";
 import {IMAGE_CLOUDFRONT_URL, THUMBNAIL_CLOUDFRONT_URL} from "../config/ServerAddress";
+import {Interval} from "../services/date/DateUtils";
 export const JPG = '.jpg';
 export const PNG = '.png';
 
@@ -18,6 +19,14 @@ export enum EditState{
     Submitting,
     Submitted,
     Error
+}
+
+export enum PurchasePhase{
+    NotStarted,
+    Started,
+    Confirmed,
+    Processing,
+    Payed
 }
 
 export interface ItemEditContext{
@@ -44,6 +53,10 @@ export interface ItemContextService {
     selectCategory : (category : number|undefined)=>void
     editContext : ItemEditContext
     setEditContext : (editContext : ItemEditContext) => void
+    purchasePhase : PurchasePhase,
+    setPurchasePhase : (phase : PurchasePhase)=>void
+    rentalPeriod ?: Interval
+    setRentalPeriod : (rentalPeriod : Interval) => void
 }
 
 export const ItemContext = createContext<ItemContextService>({
@@ -53,7 +66,10 @@ export const ItemContext = createContext<ItemContextService>({
     onReport : event =>{},
     selectCategory : category =>{},
     editContext : noneItemEditContext(item => {}),
-    setEditContext : context =>{}
+    setEditContext : context =>{},
+    purchasePhase : PurchasePhase.NotStarted,
+    setPurchasePhase :phase => {},
+    setRentalPeriod : rentalPeriod => {}
 });
 
 export function imageUrl(key : string):string{
