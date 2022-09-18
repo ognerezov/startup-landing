@@ -28,6 +28,7 @@ export const Alert : FC<AlertProps>= ({isOpen, title,text,buttonText,onCancel,on
         return null
     return (
          <AlertDialog
+                blockScrollOnMount={false}
                 isOpen={isOpen}
                 leastDestructiveRef={cancel}
                 onClose={onCancel}
@@ -43,7 +44,7 @@ export const Alert : FC<AlertProps>= ({isOpen, title,text,buttonText,onCancel,on
                         </AlertDialogBody>
 
                         <AlertDialogFooter>
-                            <TextButton onClick={onOk} id={'Cancel'} variant={textVar(largeScreen)} px={'1.5vmin'} mx={'0.5vmin'}/>
+                            <TextButton onClick={onCancel} id={'Cancel'} variant={textVar(largeScreen)} px={'1.5vmin'} mx={'0.5vmin'}/>
                             <TextButton onClick={onOk} id={buttonText} variant={textVar(largeScreen)+'_solid'} px={'1.5vmin'}/>
                         </AlertDialogFooter>
                     </AlertDialogContent>
