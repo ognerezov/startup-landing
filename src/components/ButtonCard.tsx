@@ -11,38 +11,45 @@ import gamingCat from '../images/categories/gaming.png'
 import kidsCat from '../images/categories/kids.png'
 import eventsCat from '../images/categories/events.png'
 import campingCat from '../images/categories/camping.png'
-import {ButtonCardProps, Dict} from "../model/common";
+import {Dict} from "../model/common";
+import {Category} from "./categories/model";
 
 export const IMAGES : Dict= {
     '1' : photoCat,
     '2' : dronesCat,
     '3' : sportsCat,
     '4' : musicCat,
-    '5' : hikingCat,
-    '6' : toolsCat,
-    '7' : gamingCat,
-    '8' : kidsCat,
-    '9' : eventsCat,
-    '10' : campingCat
+    '5' : toolsCat,
+    '6' : gamingCat,
+    '7' : kidsCat,
+    '8' : eventsCat,
+    '9' : campingCat,
+    '10' : hikingCat,
 }
 
 
-export const ButtonCard : FC<ButtonCardProps> = props => {
+interface ButtonCardProps{
+    category : Category
+    onSelect : (id : number)=>void
+    size : string
+}
+
+export const ButtonCard : FC<ButtonCardProps> = ({category,onSelect,size}) => {
     const intl = useIntl();
-    const text = intl.formatMessage({id: `Category.${props.id}`});
-    return <Box w={props.size} h={props.size}
+    const text = intl.formatMessage({id: `Category.${category.id}`});
+    return <Box w={size} h={size}
                 position='relative'
                 boxShadow='0.5vmin 0.5vmin 1vmin #000'
-                onClick={()=>{props.onSelect(props.id)}}
+                onClick={()=>{onSelect(category.id)}}
                 className='round-corners'
                 cursor='pointer'>
-        <img src={IMAGES[props.id+'']} className='round-corners' height='100%' alt={text}/>
+        <img src={IMAGES[category.id+'']} className='round-corners' height='100%' alt={text}/>
         <Box backgroundColor='white'
              position='absolute'
              borderRadius='2vmin 2vmin 0px 0px' w='100%' h='18%' top='0'>
             <Center width='100%' height='100%'>
                 <Text align='center' variant='regular' width='80%'>
-                    {intl.formatMessage({id: `Category.${props.id}`})}
+                    {intl.formatMessage({id: `Category.${category.id}`})}
                 </Text>
             </Center>
         </Box>

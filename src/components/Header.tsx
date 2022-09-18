@@ -16,7 +16,7 @@ interface HeaderProps{
     buttons : string[]
     context : ItemContextService
     ownerMode : boolean
-    toggleOwnerMode : () =>void
+    toggleOwnerMode : (mode : boolean) =>void
 }
 
 const Header : FC<HeaderProps> = props => {
@@ -39,12 +39,19 @@ const Header : FC<HeaderProps> = props => {
                 <UserHeader textVariant={textVariant()}/>
                 <Spacer/>
                 <TextButton
-                    onClick={props.toggleOwnerMode}
+                    onClick={()=>{
+                        props.toggleOwnerMode(!props.ownerMode)
+                        props.context.setEditContext({
+                            ...props.context.editContext,
+                            state : EditState.NotStarted
+                        })
+                    }}
                     id={props.ownerMode ? 'Items.search' : 'Items.my'}
                     px={'1.1vmin'} mx={'1.1vmin'} variant = {textVariant() +'_solid'}/>
-                    {props.context.selectedCategory && props.context.editContext.state === EditState.NotStarted ?
+                {(props.ownerMode || props.context.selectedCategory) && props.context.editContext.state === EditState.NotStarted ?
                     <TextButton
                     onClick={()=>{
+                        props.toggleOwnerMode(true)
                         props.context.setEditContext({
                          ...props.context.editContext,
                          state : EditState.Started,
@@ -54,8 +61,8 @@ const Header : FC<HeaderProps> = props => {
                     id={'Category.list.items'}
                     px={'1.1vmin'}
                     variant = {textVariant() +'_solid'}/>
-                    : null}
-        {  props.context.selectedItem || props.context.selectedCategory ?
+                : null}
+        {  props.context.selectedItem || props.context.selectedCategory || props.ownerMode ?
             <TextButton onClick={()=>{
                 if(props.context.editContext.state !== EditState.NotStarted){
                     props.context.setEditContext({...props.context.editContext, state : EditState.NotStarted})

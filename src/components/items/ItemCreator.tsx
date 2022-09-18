@@ -1,8 +1,8 @@
-import React, {FC, useEffect, useRef, useState} from 'react'
+import React, {FC, useEffect, useMemo, useRef, useState} from 'react'
 import {EditState, ItemContextService} from "../../context/context";
 import {
     Box, Button, Center,
-    FormControl, HStack, Spinner, Text,
+    FormControl, HStack, Select, Spinner, Text,
     useMediaQuery, VStack
 } from "@chakra-ui/react";
 import {QUERY_SCREEN_SIZE} from "../../pages/About";
@@ -117,14 +117,13 @@ export const ItemCreator : FC<ItemCreatorProps> = ({context}) => {
         return lon +', '+lat
     }
 
-    function isValid() : boolean{
+    const isValid : boolean = useMemo<boolean>(()=>{
         return !!item.name &&
-            // isEmail(item.email) &&
             !!item.file &&
             !!(item.pricePerHour || item.pricePerDay || item.pricePerWeek)
-    }
+    },[item.file, item.name, item.pricePerDay, item.pricePerHour, item.pricePerWeek])
 
-    function getForm(){
+    const form = useMemo(()=>{
         switch (context.editContext.state){
             case EditState.Submitting:
                 return  <Center w={'100%'} h={'100%'}>
@@ -161,6 +160,17 @@ export const ItemCreator : FC<ItemCreatorProps> = ({context}) => {
             case EditState.Started:
             default:
                 return <FormControl  maxHeight={'200vh'} pb={'5vh'}>
+                    <Select placeholder='Select category'
+                            onChange={ event =>{
+                                console.log(event.target.value)
+                                setItem({...item, category : +event.target.value})
+                            }}
+                    >
+                        {context.categories.map(category=>(
+                            <option value={category.id} key={category.id}><Text variant={'medium'}>{
+                                intl.formatMessage({id: `Category.${category.id}`})}</Text></option>
+                        ))}
+                    </Select>
                     <FileInput id={'img'}
                                label={'Create.item.image'}
                                onChange={ file =>
@@ -220,14 +230,14 @@ export const ItemCreator : FC<ItemCreatorProps> = ({context}) => {
                                 } />
                     <Center>
                         <Button
-                            disabled={!isValid()}
+                            disabled={!isValid}
                             className='bordered' w='60%' variant='ghost'  onClick={()=>context.editContext.submit(item)} id={'Submit'} >
                             {intl.formatMessage({id :'Submit'})}</Button>
                     </Center>
                 </FormControl>
         }
 
-    }
+    },[context, intl, isValid, item])
 
     return  <Box w={'100%'} h={'100%'}>
         <Annotation w={largeScreen ? '17vw' :'50vw'} h={'8vh'} left={largeScreen ? '10vw' :'0.8vw'} top={'21.7vh'} backgroundColor={'white'}>
@@ -255,7 +265,7 @@ export const ItemCreator : FC<ItemCreatorProps> = ({context}) => {
                 px = {largeScreen ? '15vw' : '1vw'}
                 py={'0.5vh'}
         >
-                {getForm()}
+                {form}
                 </Box>
 </Box>
 }

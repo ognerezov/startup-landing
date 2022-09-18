@@ -3,6 +3,7 @@ import {AddItemRequest, Item} from "../model/items";
 import {Dict, ItemDict} from "../model/common";
 import {IMAGE_CLOUDFRONT_URL, THUMBNAIL_CLOUDFRONT_URL} from "../config/ServerAddress";
 import {Interval} from "../services/date/DateUtils";
+import {Category} from "../components/categories/model";
 export const JPG = '.jpg';
 export const PNG = '.png';
 
@@ -57,6 +58,7 @@ export interface ItemContextService {
     setPurchasePhase : (phase : PurchasePhase)=>void
     rentalPeriod ?: Interval
     setRentalPeriod : (rentalPeriod : Interval) => void
+    categories : Category[]
 }
 
 export const ItemContext = createContext<ItemContextService>({
@@ -69,7 +71,8 @@ export const ItemContext = createContext<ItemContextService>({
     setEditContext : context =>{},
     purchasePhase : PurchasePhase.NotStarted,
     setPurchasePhase :phase => {},
-    setRentalPeriod : rentalPeriod => {}
+    setRentalPeriod : rentalPeriod => {},
+    categories :[],
 });
 
 export function imageUrl(key : string):string{

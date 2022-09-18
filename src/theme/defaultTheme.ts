@@ -592,6 +592,15 @@ const components = {
 			borderWidth : '1vmin'
 		}
 	},
+	Select: {
+		baseStyle: {
+			field: {
+				color: 'blue.300',
+				borderWidth: '1vmin',
+				borderColor: 'blue.300',
+			}
+		}
+	},
 };
 
 const fonts = {

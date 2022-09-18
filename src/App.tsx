@@ -11,7 +11,6 @@ import Contact from "./pages/Contact";
 import {getIP} from "./services/FetchIP";
 import {ClientInfo, getClientInfo} from "./services/ClientInfo";
 import {report} from "./services/BehaviorService";
-import {Categories} from "./components/categories/Categories";
 import {
     EditState,
     expandItems,
@@ -37,6 +36,9 @@ import {UserGateway} from "./components/authorization/UserGateway";
 import {PaymentController} from "./components/payment/PaymentController";
 import {Interval} from "./services/date/DateUtils";
 import {OwnerPage} from "./components/owner/OwnerPage";
+import {FetchState, useFetchState} from "./hooks/fetchState";
+import {Category, DEFAULT_CATEGORIES} from "./components/categories/model";
+import {Categories} from "./components/categories/Categories";
 
 interface AppState{
     tab : string
@@ -67,14 +69,21 @@ const App: FC = () => {
     const [purchasePhase, setPurchasePhase] = useState<PurchasePhase>(PurchasePhase.NotStarted)
     const [rentalPeriod, setRentalPeriod] =useState<Interval | undefined>(undefined)
     const [ownerMode, setOwnerMode] = useState<boolean>(false)
+    const [categories, getCategoriesState, , getCategories] = useFetchState<Category[],string>('categories','GET',DEFAULT_CATEGORIES)
+
+    useEffect(()=>{
+        if(getCategoriesState === FetchState.NotStarted){
+            getCategories('')
+        }
+    },[getCategories, getCategoriesState])
 
     const onReport= useCallback((event : string)=>{
         state.ip && report(event,state.ip, state.clientInfo)
     },[state.clientInfo, state.ip])
 
-    const toggleOwnerMode = useCallback(()=>{
-        setOwnerMode(!ownerMode)
-    },[ownerMode])
+    const toggleOwnerMode = useCallback((mode : boolean)=>{
+        setOwnerMode(mode)
+    },[])
 
     const context : ItemContextService =useMemo(()=>({
             context : data,
@@ -89,9 +98,10 @@ const App: FC = () => {
             purchasePhase,
             setPurchasePhase,
             rentalPeriod,
-            setRentalPeriod
+            setRentalPeriod,
+            categories
         }),
-        [category, data, editContext, item?.id, onReport, purchasePhase, rentalPeriod]);
+        [categories, category, data, editContext, item?.id, onReport, purchasePhase, rentalPeriod]);
 
     const userContext : UserContextService = {auth : auth, setAuth : setAuth}
 
@@ -173,16 +183,16 @@ const App: FC = () => {
                         <Spinner/>
                     </Center>
         }
-        if(ownerMode){
-            return <OwnerPage setOwnerMode={setOwnerMode}/>
-        }
 
-        if (editContext.state !== EditState.NotStarted ){
-            return <UserGateway quit={()=>{
-                setEditContext({...editContext,state : EditState.NotStarted})
-            }}>
-                <ItemCreator context={context} />
-            </UserGateway>
+        if(ownerMode){
+            if (editContext.state !== EditState.NotStarted ){
+                return <UserGateway quit={()=>{
+                    setEditContext({...editContext,state : EditState.NotStarted})
+                }}>
+                    <ItemCreator context={context} />
+                </UserGateway>
+            }
+            return <OwnerPage setOwnerMode={setOwnerMode}/>
         }
         if(purchasePhase !== PurchasePhase.NotStarted){
             return <UserGateway quit={()=>{
@@ -202,7 +212,7 @@ const App: FC = () => {
                     context={context}
                     setItems={setItems}
                     onReport={onReport}
-                    categories={[1,2,3,4,5,6,7,8,9,10]}/>
+                    categories={categories}/>
                 // return <Home onReport={onReport}/>
             case ABOUT:
                 return <About/>
@@ -217,7 +227,7 @@ const App: FC = () => {
             default:
                 return <NotFound/>
         }
-    }, [context, editContext, fetching, goHome, item, onReport, ownerMode, prevCategory, purchasePhase, state.tab])
+    }, [categories, context, editContext, fetching, goHome, item, onReport, ownerMode, prevCategory, purchasePhase, state.tab])
 
   const   currentLanguage = useMemo( ()=>systemLanguage(),[]);
 
