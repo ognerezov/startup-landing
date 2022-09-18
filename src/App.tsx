@@ -36,6 +36,7 @@ import {STORAGE_AUTH} from "./storage/localStorage";
 import {UserGateway} from "./components/authorization/UserGateway";
 import {PaymentController} from "./components/payment/PaymentController";
 import {Interval} from "./services/date/DateUtils";
+import {OwnerPage} from "./components/owner/OwnerPage";
 
 interface AppState{
     tab : string
@@ -65,11 +66,15 @@ const App: FC = () => {
     const [auth, setAuth] = useStorage<Auth>(STORAGE_AUTH, INITIAL_AUTH)
     const [purchasePhase, setPurchasePhase] = useState<PurchasePhase>(PurchasePhase.NotStarted)
     const [rentalPeriod, setRentalPeriod] =useState<Interval | undefined>(undefined)
+    const [ownerMode, setOwnerMode] = useState<boolean>(false)
 
     const onReport= useCallback((event : string)=>{
         state.ip && report(event,state.ip, state.clientInfo)
     },[state.clientInfo, state.ip])
 
+    const toggleOwnerMode = useCallback(()=>{
+        setOwnerMode(!ownerMode)
+    },[ownerMode])
 
     const context : ItemContextService =useMemo(()=>({
             context : data,
@@ -168,6 +173,10 @@ const App: FC = () => {
                         <Spinner/>
                     </Center>
         }
+        if(ownerMode){
+            return <OwnerPage setOwnerMode={setOwnerMode}/>
+        }
+
         if (editContext.state !== EditState.NotStarted ){
             return <UserGateway quit={()=>{
                 setEditContext({...editContext,state : EditState.NotStarted})
@@ -208,7 +217,7 @@ const App: FC = () => {
             default:
                 return <NotFound/>
         }
-    }, [context, editContext, fetching, goHome, item, onReport, prevCategory, purchasePhase, state.tab])
+    }, [context, editContext, fetching, goHome, item, onReport, ownerMode, prevCategory, purchasePhase, state.tab])
 
   const   currentLanguage = useMemo( ()=>systemLanguage(),[]);
 
@@ -223,6 +232,8 @@ const App: FC = () => {
               <ItemContext.Provider value={context}>
                   <UserContext.Provider value={userContext}>
                     <Header
+                        ownerMode={ownerMode}
+                        toggleOwnerMode={toggleOwnerMode}
                         context={context}
                         selected={state.tab}
                         select={changeTab}

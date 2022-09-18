@@ -15,6 +15,8 @@ interface HeaderProps{
     select : (val: string)=>void
     buttons : string[]
     context : ItemContextService
+    ownerMode : boolean
+    toggleOwnerMode : () =>void
 }
 
 const Header : FC<HeaderProps> = props => {
@@ -36,17 +38,23 @@ const Header : FC<HeaderProps> = props => {
                 <Spacer/>
                 <UserHeader textVariant={textVariant()}/>
                 <Spacer/>
-        {props.context.selectedCategory && props.context.editContext.state === EditState.NotStarted ? <TextButton
-            onClick={()=>{
-                props.context.setEditContext({
-                 ...props.context.editContext,
-                 state : EditState.Started,
-                 category : props.context.selectedCategory
-                })
-            }}
-            id={'Category.list.items'}
-            px={'1.1vmin'}
-            variant = {textVariant() +'_solid'}/> : null}
+                <TextButton
+                    onClick={props.toggleOwnerMode}
+                    id={props.ownerMode ? 'Items.search' : 'Items.my'}
+                    px={'1.1vmin'} mx={'1.1vmin'} variant = {textVariant() +'_solid'}/>
+                    {props.context.selectedCategory && props.context.editContext.state === EditState.NotStarted ?
+                    <TextButton
+                    onClick={()=>{
+                        props.context.setEditContext({
+                         ...props.context.editContext,
+                         state : EditState.Started,
+                         category : props.context.selectedCategory
+                        })
+                    }}
+                    id={'Category.list.items'}
+                    px={'1.1vmin'}
+                    variant = {textVariant() +'_solid'}/>
+                    : null}
         {  props.context.selectedItem || props.context.selectedCategory ?
             <TextButton onClick={()=>{
                 if(props.context.editContext.state !== EditState.NotStarted){

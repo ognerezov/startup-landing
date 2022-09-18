@@ -109,12 +109,12 @@ export const MapView :FC<MapViewProps> = ({items,images, className,highLightItem
     }),[highLightItem, updateTextLayer])
 
     const onItemMouseOver = useMemo(()=>{
-        console.log("set on mouse over")
-        console.log(items)
+        // console.log("set on mouse over")
+        // console.log(items)
         return function (features : MapboxGeoJSONFeature[]){
-        console.log("on mouse over")
+        // console.log("on mouse over")
         if(!items){
-            console.log('no items found')
+            // console.log('no items found')
             return;
         }
         for(const feature of features){

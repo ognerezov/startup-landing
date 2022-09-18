@@ -448,6 +448,30 @@ const components = {
 					color : 'white'
 				},
 			},
+			medium_danger : {
+				backgroundColor: 'red.100',
+				color: 'white',
+				py : '0.5vmin',
+				borderRadius : '0.5vmin',
+				fontWeight: '700',
+				fontSize: '2.0vh',
+				_hover: {
+					background: 'blue.400',
+					color : 'white'
+				},
+			},
+			medium_phone_danger : {
+				backgroundColor: 'red.100',
+				color: 'white',
+				py : '0.5vmin',
+				borderRadius : '0.5vmin',
+				fontWeight: '700',
+				fontSize: '1.5vh',
+				_hover: {
+					background: 'blue.400',
+					color : 'white'
+				},
+			},
 			medium_phone_semisolid : {
 				backgroundColor: 'blue.400',
 				color: 'white',

@@ -33,18 +33,6 @@ export const PriceBlock : FC<PriceBlockProps> = ({
             isOpen={true} onClose={()=>{setShowBookingForm(false)}}>
             <IntervalPicker item={item}/>
         </DialogFrame>
-       // return <EmailDialog
-       //     subject={`Book item request id: ${item.id} name:${item.name} owner: ${item.email}`}
-       //     title={intl.formatMessage({id:'Price.email'})}
-       //     isOpen={showBookingForm}
-       //     onClose={()=>{
-       //         data.onReport(`Booking of ${item.name} is canceled. Item id: ${item.id} `)
-       //         setShowBookingForm(false)
-       //     }}
-       //     onSuccess={()=>{
-       //         data.onReport(`Item ${item.name} was booked. Item id: ${item.id} `)
-       //         setSuccess(true)
-       //     }}/>
     }
     return showBookingForm ? <ItemContext.Consumer>{bookingForm}</ItemContext.Consumer> :
         <VStack
