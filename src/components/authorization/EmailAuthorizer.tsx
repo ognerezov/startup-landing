@@ -24,7 +24,7 @@ interface EmailAuthorizerProps extends UserContextService{
 export const EmailAuthorizer : FC<EmailAuthorizerProps> = ({quit,auth,setAuth}) => {
     const [email,error, setEmail] = useValidState<string>('',validateEmail)
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    const [emailLoginResult,emailLoginFetchState,emailLoginError,submitEmail] = useFetchState<BasicResponse,EmailRequest>('user/login','POST',EMPTY_RESPONSE)
+    const [,emailLoginFetchState,emailLoginError,submitEmail] = useFetchState<BasicResponse,EmailRequest>('user/login','POST',EMPTY_RESPONSE)
     const [otp,otpError, setOtp] = useValidState<number|string>('',validateOTP);
     const [otpResult,otpFetchState,otpSubmitError,submitOtp] = useFetchState<ValueResponse,string>('user/otp/','GET',EMPTY_VALUE_RESPONSE)
     const [authResult,userFetchState,tokenSubmitError,submitToken] = useFetchState<Auth | undefined,string>('customer','GET',undefined)

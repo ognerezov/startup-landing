@@ -10,6 +10,7 @@ import { Spot} from "../../model/geo";
 import {FetchState, useFetchState} from "../../hooks/fetchState";
 import {useGeoLocation} from "../../hooks/location";
 import {getLocation} from "../../services/GeolocationService";
+import {DEFAULT_R} from "../../backend/GeoSearch";
 
 interface CategoryViewerProps {
     id : number
@@ -29,7 +30,7 @@ export const CategoryViewer : FC<CategoryViewerProps> = props => {
 
     useEffect(()=>{
         getLocation().then(point =>{
-            submitQuery({...point,radius:30000})
+            submitQuery({...point,radius:DEFAULT_R})
         })
         // eslint-disable-next-line react-hooks/exhaustive-deps
     },[props.id])
@@ -125,10 +126,4 @@ export const CategoryViewer : FC<CategoryViewerProps> = props => {
         <Center w={'100wh'} h={'50vh'}>
             <Spinner/>
         </Center>
-        // <EmailDialog
-        // subject={'from empty category '+ props.id}
-        // title={props.title}
-        // isOpen={true}
-        // onClose={props.onExit}
-        // onSuccess={props.onExit}/>
 }

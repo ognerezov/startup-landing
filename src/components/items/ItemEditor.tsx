@@ -6,17 +6,14 @@ import {
     useMediaQuery, VStack
 } from "@chakra-ui/react";
 import {QUERY_SCREEN_SIZE} from "../../pages/About";
-import {EditItemRequest} from "../../model/items";
-import {DEFAULT_SPOT} from "../../backend/GeoSearch";
+import {Item} from "../../model/items";
 import {InputField} from "../common/InputField";
 import {useIntl} from "react-intl";
 import mapboxgl from "mapbox-gl";
 import MapboxGeocoder from "@mapbox/mapbox-gl-geocoder";
-import {getLocation} from "../../services/GeolocationService";
 import { Point } from '../../model/geo';
 import {Annotation} from "../common/Anotation";
 import {fetchAddress} from "../../services/MapboxUtil";
-import {FileInput} from "../common/FileInput";
 import {TextButton} from "../common/TextButton";
 import {goToItem} from "../../config/ServerAddress";
 
@@ -24,26 +21,13 @@ interface ItemCreatorProps{
     context : ItemContextService
 }
 
-export const ItemCreator : FC<ItemCreatorProps> = ({context}) => {
+export const ItemEditor : FC<ItemCreatorProps> = ({context}) => {
     const mapContainer = useRef<HTMLElement>(null);
     const map = useRef<mapboxgl.Map | null>(null);
     const [largeScreen] = useMediaQuery(QUERY_SCREEN_SIZE)
     const intl = useIntl();
-    const [item,setItem] = useState<EditItemRequest>(context.editContext.editItem ?
-        {...context.editContext.editItem, category : context.editContext.editItem.categoryId}:
-        {
-        name : '',
-        description : '',
-        price : 0.0,
-        pricePerHour : 0.0,
-        pricePerDay : 0.0,
-        pricePerWeek : 0.0,
-        pricePerMonth : 0.0,
-        pricePerYear : 0.0,
-        lon : DEFAULT_SPOT.lon,
-        lat : DEFAULT_SPOT.lat,
-        category : context.editContext.category
-    })
+    const [item,setItem] = useState<Item>(context.editContext.editItem!)
+    console.log(item)
 
     const marker = useRef<mapboxgl.Marker>()
     const recenter= useCallback((point: Point)=> {
@@ -51,7 +35,7 @@ export const ItemCreator : FC<ItemCreatorProps> = ({context}) => {
             .then(address => {
                 setItem({...item,...address, lon : point.lon, lat : point.lat})
             })
-            .catch(()=>setItem({...item,address : undefined, lon : point.lon, lat : point.lat}))
+            .catch(()=>setItem({...item, lon : point.lon, lat : point.lat}))
         map.current?.setCenter([point.lon, point.lat])
         marker.current && marker.current.remove();
         marker.current = new mapboxgl.Marker()
@@ -70,12 +54,12 @@ export const ItemCreator : FC<ItemCreatorProps> = ({context}) => {
         map.current.on('load', () => {
             console.log('map init data layers')
         })
-        map.current.on('click', (event) => {
-            recenter({
-                lat : event.lngLat.lat,
-                lon : event.lngLat.lng
-            })
-        });
+        // map.current.on('click', (event) => {
+        //     recenter({
+        //         lat : event.lngLat.lat,
+        //         lon : event.lngLat.lng
+        //     })
+        // });
         map.current.addControl(
             new MapboxGeocoder({
                 accessToken: mapboxgl.accessToken,
@@ -100,7 +84,7 @@ export const ItemCreator : FC<ItemCreatorProps> = ({context}) => {
         );
         map.current.addControl(new mapboxgl.FullscreenControl());
         map.current.addControl(new mapboxgl.NavigationControl());
-    },[recenter]);
+    },[]);
 
 
     useEffect(() => {
@@ -108,8 +92,7 @@ export const ItemCreator : FC<ItemCreatorProps> = ({context}) => {
             return;
         }
         initMap({lat : item.lat, lon: item.lon})
-        getLocation()
-            .then(recenter)
+        recenter({lat : item.lat, lon: item.lon})
     },[initMap, item, recenter]);
 
     function getAddressString(){
@@ -123,17 +106,16 @@ export const ItemCreator : FC<ItemCreatorProps> = ({context}) => {
     }
 
     const isValid : boolean = useMemo<boolean>(()=>{
-        return !!item.name &&
-            !!item.file &&
+        return !!item.name  &&
             !!(item.pricePerHour || item.pricePerDay || item.pricePerWeek)
-    },[item.file, item.name, item.pricePerDay, item.pricePerHour, item.pricePerWeek])
+    },[item.name, item.pricePerDay, item.pricePerHour, item.pricePerWeek])
 
     const form = useMemo(()=>{
         switch (context.editContext.state){
             case EditState.Submitting:
                 return  <Center w={'100%'} h={'100%'}>
-                            <Spinner/>
-                        </Center>
+                    <Spinner/>
+                </Center>
             case EditState.Submitted:
                 return <Center w={'100%'} h={'100%'} >
                     <VStack w={'80%'}>
@@ -141,35 +123,35 @@ export const ItemCreator : FC<ItemCreatorProps> = ({context}) => {
                             {intl.formatMessage({id: 'Create.item.success'})}
                         </Text>
                         <HStack w={'100%'} justifyContent={'center'}>
-                        <TextButton onClick={()=>{
-                            goToItem(context.editContext.id!)
-                        }} id={'Create.item.view'} px={'1.1vmin'} variant = 'medium_solid'/>
-                        <TextButton onClick={()=>{
-                            setItem({...item, file : undefined})
-                            context.setEditContext({...context.editContext, state : EditState.Started})
-                        }} id={'Create.item.another'} px={'1.1vmin'} variant = 'medium_solid'/>
+                            <TextButton onClick={()=>{
+                                goToItem(context.editContext.id!)
+                            }} id={'Create.item.view'} px={'1.1vmin'} variant = 'medium_solid'/>
+                            <TextButton onClick={()=>{
+                                setItem({...item})
+                                context.setEditContext({...context.editContext, state : EditState.Started})
+                            }} id={'Create.item.another'} px={'1.1vmin'} variant = 'medium_solid'/>
                         </HStack>
                     </VStack>
                 </Center>
             case EditState.Error:
                 return  <Center w={'100%'} h={'100%'}>
-                            <VStack w={'80%'}>
-                                <Text variant='error' >
-                                    {intl.formatMessage({id: 'Create.item.error'})}
-                                </Text>
-                                <TextButton onClick={()=>{
-                                        context.setEditContext({...context.editContext, state : EditState.Started})
-                                }} id={'Back'} px={'1.1vmin'} variant = 'medium'/>
-                            </VStack>
-                        </Center>
+                    <VStack w={'80%'}>
+                        <Text variant='error' >
+                            {intl.formatMessage({id: 'Create.item.error'})}
+                        </Text>
+                        <TextButton onClick={()=>{
+                            context.setEditContext({...context.editContext, state : EditState.Started})
+                        }} id={'Back'} px={'1.1vmin'} variant = 'medium'/>
+                    </VStack>
+                </Center>
             case EditState.Started:
             default:
                 return <FormControl  maxHeight={'200vh'} pb={'5vh'}>
                     <Select placeholder='Select category'
-                            value={item.category}
+                            value={item.categoryId}
                             onChange={ event =>{
                                 console.log(event.target.value)
-                                setItem({...item, category : +event.target.value})
+                                setItem({...item, category :  +event.target.value})
                             }}
                     >
                         {context.categories.map(category=>(
@@ -177,11 +159,6 @@ export const ItemCreator : FC<ItemCreatorProps> = ({context}) => {
                                 intl.formatMessage({id: `Category.${category.id}`})}</Text></option>
                         ))}
                     </Select>
-                    <FileInput id={'img'}
-                               label={'Create.item.image'}
-                               onChange={ file =>
-                                   setItem({...item,file})
-                               } />
                     <InputField id={'name'}
                                 value={item.name}
                                 label={'Create.item.name'}
@@ -195,49 +172,50 @@ export const ItemCreator : FC<ItemCreatorProps> = ({context}) => {
                                     setItem({...item,description : val + ''})
                                 } />
                     <InputField id={'p.hour'}
-                                value={item.pricePerHour}
+                                value={item.pricePerHour / 100}
                                 label={'Price.hour'}
                                 type={'number'}
-                                step={1.0}
+                                // step={1.0}
                                 onChange={ val =>
-                                    setItem({...item,pricePerHour : +val})
+                                    setItem({...item,pricePerHour : +val  * 100})
                                 } />
                     <InputField id={'p.day'}
-                                value={item.pricePerDay}
+                                value={+item.pricePerDay / 100}
                                 label={'Price.day'}
                                 type={'number'}
                                 step={1.0}
                                 onChange={ val =>
-                                    setItem({...item,pricePerDay : +val})
+                                    setItem({...item,pricePerDay : +val  * 100})
                                 } />
                     <InputField id={'p.week'}
-                                value={item.pricePerWeek}
+                                value={item.pricePerWeek / 100}
                                 label={'Price.week'}
                                 type={'number'}
                                 step={1.0}
                                 onChange={ val =>
-                                    setItem({...item,pricePerWeek : +val})
+                                    setItem({...item,pricePerWeek : +val  * 100})
                                 } />
                     <InputField id={'p.month'}
-                                value={item.pricePerMonth}
+                                value={item.pricePerMonth / 100}
                                 label={'Price.month'}
                                 type={'number'}
                                 step={1.0}
                                 onChange={ val =>
-                                    setItem({...item,pricePerMonth : +val})
+                                    setItem({...item,pricePerMonth : +val  * 100})
                                 } />
                     <InputField id={'cost'}
-                                value={item.price}
+                                value={item.price / 100}
                                 label={'Create.item.cost'}
                                 type={'number'}
                                 step={1.0}
                                 onChange={ val =>
-                                    setItem({...item,price : +val})
+                                    setItem({...item,price : +val * 100})
                                 } />
                     <Center>
                         <Button
                             disabled={!isValid}
-                            className='bordered' w='60%' variant='ghost'  onClick={()=>context.editContext.submit(item)} id={'Submit'} >
+                            className='bordered' w='60%' variant='ghost'
+                            onClick={()=>context.editContext.submit({...item, category : item.categoryId})} id={'Submit'} >
                             {intl.formatMessage({id :'Submit'})}</Button>
                     </Center>
                 </FormControl>
@@ -271,7 +249,7 @@ export const ItemCreator : FC<ItemCreatorProps> = ({context}) => {
                 px = {largeScreen ? '15vw' : '1vw'}
                 py={'0.5vh'}
         >
-                {form}
-                </Box>
-</Box>
+            {form}
+        </Box>
+    </Box>
 }

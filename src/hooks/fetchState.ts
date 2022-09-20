@@ -12,7 +12,16 @@ const OTHER_FETCH_ERROR = -2;
 const NOT_STARTED = -200;
 
 export function getErrorMessage(errorCode : number){
-    return 'Error.default';
+    switch (errorCode) {
+        default:
+        return 'Error.default';
+        case 401:
+            return 'Error.unauthorized'
+        case 403:
+            return 'Error.forbidden'
+        case 0:
+            return 'Error.network'
+    }
 }
 
 export function bearer(token : string){
@@ -20,15 +29,21 @@ export function bearer(token : string){
 }
 
 export function useFetchState<T,R>(path: string, method : string, def :T):[
-    T, FetchState, number, (r :R, auth ?: string)=>void
+    T, FetchState, number, (r :R, auth ?: string, voidResult ?:boolean)=>void,()=>void
 ]{
     const [state,setState] = useState<FetchState>(FetchState.NotStarted);
     const [result, setResult] = useState<T>(def)
     const [error, setError] = useState<number>(NOT_STARTED)
 
-    function submit(r : R, auth ?: string){
+    function reset (){
+        setResult(def)
+        setError(NOT_STARTED)
+        setState(FetchState.NotStarted)
+    }
+
+    function submit(r : R, auth ?: string, voidResult ?:boolean){
         let url = getUrl(path);
-        console.log(auth)
+        // console.log(auth)
         let body
         if (typeof  r ==='string'){
             url += r
@@ -60,7 +75,7 @@ export function useFetchState<T,R>(path: string, method : string, def :T):[
             .then(response =>{
                 setError(response.status)
                 setState(FetchState.Finished)
-                if (response.status <200 || response.status >=300){
+                if (response.status <200 || response.status >=400 || voidResult){
                    return
                 }
                 response
@@ -68,10 +83,11 @@ export function useFetchState<T,R>(path: string, method : string, def :T):[
                     .then(setResult)
                     .catch(()=>setError(PARSE_ERROR))
             }).catch(e=>{
+                console.log(e)
                 setState(FetchState.Finished)
                 setError(OTHER_FETCH_ERROR)
         })
     }
 
-    return [result,state,error,submit]
+    return [result,state,error,submit,reset]
 }

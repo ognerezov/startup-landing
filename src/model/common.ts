@@ -11,9 +11,3 @@ export interface ItemDict {
 export interface ItemsConsumer {
     items ?: Item[]
 }
-
-export interface ButtonCardProps{
-    id : number
-    onSelect : (id : number)=>void
-    size : string
-}

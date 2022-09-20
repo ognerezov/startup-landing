@@ -30,6 +30,7 @@ export const DialogFrame : FC<DialogFrameProps> = ({children,w,h,title,isOpen,on
     }
     return largeScreen ? createPortal(
         <Modal
+            blockScrollOnMount={false}
             isOpen={isOpen}
             onClose={onClose}>
             <ModalOverlay />

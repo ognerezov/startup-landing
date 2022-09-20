@@ -11,7 +11,6 @@ import Contact from "./pages/Contact";
 import {getIP} from "./services/FetchIP";
 import {ClientInfo, getClientInfo} from "./services/ClientInfo";
 import {report} from "./services/BehaviorService";
-import {Categories} from "./components/categories/Categories";
 import {
     EditState,
     expandItems,
@@ -22,13 +21,13 @@ import {
     noneItemEditContext,
     PurchasePhase
 } from "./context/context";
-import {AddItemRequest, Item} from "./model/items";
+import {EditItemRequest, Item} from "./model/items";
 import {ItemView} from "./components/items/ItemView";
 import {useParams} from "react-router";
 import {getItemById} from "./backend/GetById";
 import '@mapbox/mapbox-gl-geocoder/dist/mapbox-gl-geocoder.css';
 import {ItemCreator} from "./components/items/ItemCreator";
-import {creatItem} from "./backend/CreatItem";
+import {creatItem, updateItem} from "./backend/CreatItem";
 import {Auth} from "./model/user";
 import {useStorage} from "./hooks/storageHook";
 import {INITIAL_AUTH, UserContext, UserContextService} from "./context/userContext";
@@ -36,6 +35,11 @@ import {STORAGE_AUTH} from "./storage/localStorage";
 import {UserGateway} from "./components/authorization/UserGateway";
 import {PaymentController} from "./components/payment/PaymentController";
 import {Interval} from "./services/date/DateUtils";
+import {OwnerPage} from "./components/owner/OwnerPage";
+import {FetchState, useFetchState} from "./hooks/fetchState";
+import {Category, DEFAULT_CATEGORIES} from "./components/categories/model";
+import {Categories} from "./components/categories/Categories";
+import {ItemEditor} from "./components/items/ItemEditor";
 
 interface AppState{
     tab : string
@@ -65,11 +69,27 @@ const App: FC = () => {
     const [auth, setAuth] = useStorage<Auth>(STORAGE_AUTH, INITIAL_AUTH)
     const [purchasePhase, setPurchasePhase] = useState<PurchasePhase>(PurchasePhase.NotStarted)
     const [rentalPeriod, setRentalPeriod] =useState<Interval | undefined>(undefined)
+    const [ownerMode, setOwnerMode] = useState<boolean>(false)
+    const [categories, getCategoriesState, , getCategories] = useFetchState<Category[],string>('categories','GET',DEFAULT_CATEGORIES)
+
+
+    const editItem = useCallback((item : Item)=>{
+        setEditContext({...editContext,editItem : item, state : EditState.Started})
+    },[editContext])
+
+    useEffect(()=>{
+        if(getCategoriesState === FetchState.NotStarted){
+            getCategories('')
+        }
+    },[getCategories, getCategoriesState])
 
     const onReport= useCallback((event : string)=>{
         state.ip && report(event,state.ip, state.clientInfo)
     },[state.clientInfo, state.ip])
 
+    const toggleOwnerMode = useCallback((mode : boolean)=>{
+        setOwnerMode(mode)
+    },[])
 
     const context : ItemContextService =useMemo(()=>({
             context : data,
@@ -84,14 +104,29 @@ const App: FC = () => {
             purchasePhase,
             setPurchasePhase,
             rentalPeriod,
-            setRentalPeriod
+            setRentalPeriod,
+            categories,
+            editItem,
         }),
-        [category, data, editContext, item?.id, onReport, purchasePhase, rentalPeriod]);
+        [categories, category, data, editContext, editItem, item?.id, onReport, purchasePhase, rentalPeriod]);
 
     const userContext : UserContextService = {auth : auth, setAuth : setAuth}
 
-    function submitItem(item: AddItemRequest) {
+    function submitItem(item: EditItemRequest) {
         setEditContext({...editContext, state : EditState.Submitting})
+        if (item.id){
+            updateItem(item as Item,auth.token!)
+                .then(() => {
+                    console.log("item edited")
+                    setEditContext({...editContext, state : EditState.Started, editItem : item as Item})
+                })
+                .catch(e => {
+                    onReport('error updating an item: ' + e)
+                    console.log('error: '+e)
+                    setEditContext({...editContext, state : EditState.Error})
+                })
+            return
+        }
         creatItem(item,auth.token!)
             .then(data => {
                 onReport('item submitted: ' + data.id)
@@ -168,12 +203,19 @@ const App: FC = () => {
                         <Spinner/>
                     </Center>
         }
-        if (editContext.state !== EditState.NotStarted ){
-            return <UserGateway quit={()=>{
-                setEditContext({...editContext,state : EditState.NotStarted})
-            }}>
-                <ItemCreator context={context} />
-            </UserGateway>
+
+        if(ownerMode){
+            if (editContext.state !== EditState.NotStarted ){
+                return <UserGateway quit={()=>{
+                    setEditContext({...editContext,state : EditState.NotStarted})
+                }}>
+                    { editContext.editItem ?
+                        <ItemEditor context={context}/> :
+                        <ItemCreator context={context}/>
+                    }
+                </UserGateway>
+            }
+            return <OwnerPage setOwnerMode={setOwnerMode}/>
         }
         if(purchasePhase !== PurchasePhase.NotStarted){
             return <UserGateway quit={()=>{
@@ -193,8 +235,7 @@ const App: FC = () => {
                     context={context}
                     setItems={setItems}
                     onReport={onReport}
-                    categories={[1,2,3,4,5,6,7,8,9,10]}/>
-                // return <Home onReport={onReport}/>
+                    categories={categories}/>
             case ABOUT:
                 return <About/>
             case CONTACT :
@@ -208,7 +249,7 @@ const App: FC = () => {
             default:
                 return <NotFound/>
         }
-    }, [context, editContext, fetching, goHome, item, onReport, prevCategory, purchasePhase, state.tab])
+    }, [categories, context, editContext, fetching, goHome, item, onReport, ownerMode, prevCategory, purchasePhase, state.tab])
 
   const   currentLanguage = useMemo( ()=>systemLanguage(),[]);
 
@@ -223,6 +264,8 @@ const App: FC = () => {
               <ItemContext.Provider value={context}>
                   <UserContext.Provider value={userContext}>
                     <Header
+                        ownerMode={ownerMode}
+                        toggleOwnerMode={toggleOwnerMode}
                         context={context}
                         selected={state.tab}
                         select={changeTab}

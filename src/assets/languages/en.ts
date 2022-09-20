@@ -11,12 +11,12 @@ export const en: Record<string, string> = {
 	'Category.2' : 'Drones',
 	'Category.3' : 'Sports',
 	'Category.4' : 'Music',
-	'Category.5' : 'Other',
-	'Category.6' : 'Tools',
-	'Category.7' : 'Gaming',
-	'Category.8' : 'For kids',
-	'Category.9' : 'For events',
-	'Category.10' : 'Camping',
+	'Category.10' : 'Other',
+	'Category.5' : 'Tools',
+	'Category.6' : 'Gaming',
+	'Category.7' : 'For kids',
+	'Category.8' : 'For events',
+	'Category.9' : 'Camping',
 	'Category.view.list' : "View list",
 	'Category.view.map' : "View map",
 	'Category.list.items' : 'List your item',
@@ -80,7 +80,7 @@ export const en: Record<string, string> = {
 	'Login.otp.wrong.format' : 'Wrong code format',
 	'Login.otp.success' : 'Verification code accepted. Fetching you user details...',
 
-	'Error.default' : 'Operation error please contact support team',
+	'Error.default' : 'Operation error. Please contact support team',
 
 	'Profile.complete' : 'Please complete your profile',
 	'Profile.email' : 'Email address',
@@ -109,5 +109,19 @@ export const en: Record<string, string> = {
 	'Book.success' : 'You successfully booked your item. Please wait for owners confirmation',
 
 	'Continue' : 'Confirm',
- 	'Euro' : '€'
+ 	'Currency' : '€',
+	'Confirm.question' : "Are you sure? You can't undo this action afterwards?",
+
+	'Items.my' : 'My items',
+	'Items.search' : 'My rents',
+	'Items.fetch.error' : 'Error getting your items. Please contact administration',
+	'Delete' : 'Delete',
+	'Items.update' : 'Update',
+	'Items.edit' : 'Edit',
+
+	'Error.forbidden' : 'Operation forbidden. Please contact support team',
+	'Error.unauthorized' : 'Authorization error. Please contact support team',
+	'Error.network' : 'Network error. Please check your internet connection',
+
+	'Confirm.delete' : 'Proceed with DELETE operation?'
 };

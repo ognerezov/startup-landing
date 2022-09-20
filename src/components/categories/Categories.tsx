@@ -8,10 +8,11 @@ import {Item} from "../../model/items";
 import {ItemContextService} from "../../context/context";
 import mainImage from "../../images/main.jpg";
 import earn from "../../images/earn.jpeg";
+import {Category} from "./model";
 
 
 interface CategoriesProps {
-    categories : number[]
+    categories : Category[]
     onReport : (event : string)=>void
     setItems : (items : Item[]) => void;
     context : ItemContextService
@@ -28,10 +29,10 @@ export const Categories : FC<CategoriesProps> = props => {
     }),[props])
 
     const items = useMemo(()=>{
-        return <Fragment>{props.categories.map(id=>(
-            <ButtonCard id={id} key={id}
+        return <>{props.categories.map(category=>(
+            <ButtonCard category={category} key={category.id}
                         onSelect={onChangeCategory} size={largeScreen ? '15vw' : '90vw'}/>
-        ))}</Fragment>
+        ))}</>
     },[largeScreen, onChangeCategory, props.categories]);
 
     const content = useMemo<React.ReactNode>(()=> {
