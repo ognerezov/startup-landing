@@ -6,7 +6,8 @@ import {ACCESS_TOKEN, Images, loadImages} from "../../services/MapboxUtil";
 import {IItemContext} from "../../context/context";
 import {Item} from "../../model/items";
 import {goToItem} from "../../config/ServerAddress";
-import {Point} from "../../model/geo"; // eslint-disable-line import/no-webpack-loader-syntax
+import {Point} from "../../model/geo";
+import {useItemPrice} from "../../hooks/currency"; // eslint-disable-line import/no-webpack-loader-syntax
 
 mapboxgl.accessToken = ACCESS_TOKEN;
 
@@ -26,6 +27,7 @@ export const MapView :FC<MapViewProps> = ({items,images, className,highLightItem
     const [zoom, setZoom] = useState<number>(13);
     const [areImagesLoading, setImagesLoading] = useState<boolean>(false);
     const [mapWasLoaded, setMapWasLoaded] = useState<boolean>(false);
+    const priceFormat = useItemPrice()
 
     const onSelectFeatures =useMemo(()=>( function (features : MapboxGeoJSONFeature[]){
         for(const feature of features){
@@ -44,7 +46,6 @@ export const MapView :FC<MapViewProps> = ({items,images, className,highLightItem
 
     const onImagesLoaded = useMemo(()=>(function (loaded: Images) {
         const features: GeoJSON.Feature<GeoJSON.Geometry>[] = [];
-        console.log('setting images')
         for (const key in loaded) {
             if (!loaded[key] || map.current!.hasImage(key)) continue;
             map.current!.addImage(key, loaded[key]!, {
@@ -61,7 +62,7 @@ export const MapView :FC<MapViewProps> = ({items,images, className,highLightItem
                     },
                     'properties': {
                         'image-name': key,
-                        'name': (items![key].pricePerDay / 100) + '€/day',
+                        'name': priceFormat(item),
                         'id': key,
                         'type': 'item',
                         'size': 0.25,
@@ -70,10 +71,9 @@ export const MapView :FC<MapViewProps> = ({items,images, className,highLightItem
                 }
             )
         }
-        console.log(features.length)
         setImagesLoading(false)
         updateItemLayer(map.current!, features)
-    }),[items, updateItemLayer])
+    }),[items, priceFormat, updateItemLayer])
 
     useEffect(()=>{
         if(areImagesLoading || !items || !images || !map.current || Object.keys(items).length === 0 || Object.keys(images).length === 0){
@@ -130,7 +130,7 @@ export const MapView :FC<MapViewProps> = ({items,images, className,highLightItem
                         },
                         'properties': {
                             'image-name': id,
-                            'name': (item.pricePerHour / 100) + '€/hour',
+                            'name': priceFormat(item),
                             'id': id,
                             'type': 'item',
                             'size': 0.25,
@@ -143,7 +143,7 @@ export const MapView :FC<MapViewProps> = ({items,images, className,highLightItem
                 return;
             }
         }
-    }},[highLightItem, items, updateTextLayer])
+    }},[highLightItem, items, priceFormat, updateTextLayer])
 
     useEffect(()=>{
         if(!map.current || !items){

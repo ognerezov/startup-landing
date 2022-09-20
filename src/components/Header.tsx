@@ -64,6 +64,10 @@ const Header : FC<HeaderProps> = props => {
                 : null}
         {  props.context.selectedItem || props.context.selectedCategory || props.ownerMode ?
             <TextButton onClick={()=>{
+                if(props.ownerMode){
+                    props.context.setEditContext({...props.context.editContext, editItem : undefined, state : EditState.NotStarted})
+                    return
+                }
                 if(props.context.editContext.state !== EditState.NotStarted){
                     props.context.setEditContext({...props.context.editContext, state : EditState.NotStarted})
                     if(props.context.editContext.category) {

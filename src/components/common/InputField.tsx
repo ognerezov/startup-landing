@@ -25,6 +25,7 @@ export const InputField : FC<InputFieldProps> = ({id, onChange,value,autoFocus, 
         <FormLabel variant={'medium'} htmlFor={id}>{intl.formatMessage({id :label})}</FormLabel>
         {type ==='number' ?
             <NumberInput
+                        value={value as number}
                         variant={'flushed'} size="md" step={step} defaultValue={0} min={0}
                          onChange={(valueAsString, valueAsNumber) => onChange(valueAsNumber)}
             >

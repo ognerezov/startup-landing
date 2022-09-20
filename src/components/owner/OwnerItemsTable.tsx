@@ -21,11 +21,12 @@ import {UserContext} from "../../context/userContext";
 interface OwnerItemsTableProps{
     items ?: Item[]
     refresh : ()=>void
+    editItem : (item : Item)=>void
 }
 
-export const OwnerItemsTable : FC<OwnerItemsTableProps> = ({items,refresh})=>{
+export const OwnerItemsTable : FC<OwnerItemsTableProps> = ({items,refresh, editItem})=>{
     const [largeScreen] = useMediaQuery(QUERY_SCREEN_SIZE)
-    const convert = useCurrency(0);
+    const convert = useCurrency();
     const [delItem, setDelItem] = useState<Item | undefined>(undefined)
 
     const onDeleteConfirm = useMemo(()=>(
@@ -102,7 +103,7 @@ export const OwnerItemsTable : FC<OwnerItemsTableProps> = ({items,refresh})=>{
                                     </Td>
                                     <Td width={'15%'}>
                                         <HStack spacing={'1vmin'} width={'100%'}>
-                                            <TextButton onClick={()=>{}} px={'1vmin'} variant={'medium_solid'} id={'Items.edit'}/>
+                                            <TextButton onClick={()=>{editItem(item)}} px={'1vmin'} variant={'medium_solid'} id={'Items.edit'}/>
                                             <TextButton onClick={()=>{setDelItem(item)}} px={'1vmin'}  variant={'medium_danger'} id={'Delete'}/>
                                         </HStack>
                                     </Td>
@@ -121,5 +122,5 @@ export const OwnerItemsTable : FC<OwnerItemsTableProps> = ({items,refresh})=>{
                 not supported on mobile
 
             </Box>
-    },[convert, delItem, items, largeScreen, onDeleteConfirm])
+    },[convert, delItem, items, largeScreen, onDeleteConfirm, editItem])
 }

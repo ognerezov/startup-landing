@@ -21,7 +21,7 @@ export interface Item{
     email : string;
     phone : string;
     avatar : string;
-    category : string;
+    category : number;
     placePicture : string;
     lat : number;
     lon  : number;
@@ -36,6 +36,9 @@ export interface Item{
     room: string;
     floor  : number;
     ownerAvailability : string;
+}
+export interface EditItemRequest extends AddItemRequest{
+    id ?: number
 }
 
 export interface AddItemRequest{

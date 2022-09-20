@@ -43,7 +43,7 @@ export function useFetchState<T,R>(path: string, method : string, def :T):[
 
     function submit(r : R, auth ?: string, voidResult ?:boolean){
         let url = getUrl(path);
-        console.log(auth)
+        // console.log(auth)
         let body
         if (typeof  r ==='string'){
             url += r

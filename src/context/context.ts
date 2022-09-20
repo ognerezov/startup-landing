@@ -1,5 +1,5 @@
 import {createContext} from "react";
-import {AddItemRequest, Item} from "../model/items";
+import {AddItemRequest, EditItemRequest, Item} from "../model/items";
 import {Dict, ItemDict} from "../model/common";
 import {IMAGE_CLOUDFRONT_URL, THUMBNAIL_CLOUDFRONT_URL} from "../config/ServerAddress";
 import {Interval} from "../services/date/DateUtils";
@@ -33,8 +33,9 @@ export enum PurchasePhase{
 export interface ItemEditContext{
     id ?: number
     category ?: number
-    submit :(item : AddItemRequest)=>void
+    submit :(item : Item | EditItemRequest)=>void
     state : EditState
+    editItem ?: Item
 }
 
 export function noneItemEditContext(submit :(item : AddItemRequest)=>void) :ItemEditContext{
@@ -59,6 +60,7 @@ export interface ItemContextService {
     rentalPeriod ?: Interval
     setRentalPeriod : (rentalPeriod : Interval) => void
     categories : Category[]
+    editItem : (item : Item) => void
 }
 
 export const ItemContext = createContext<ItemContextService>({
@@ -73,6 +75,7 @@ export const ItemContext = createContext<ItemContextService>({
     setPurchasePhase :phase => {},
     setRentalPeriod : rentalPeriod => {},
     categories :[],
+    editItem : item => {}
 });
 
 export function imageUrl(key : string):string{

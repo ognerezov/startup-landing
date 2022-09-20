@@ -4,6 +4,7 @@ import {Item} from "../../model/items";
 import {AbsoluteCenter, Center, Spinner, Text} from "@chakra-ui/react";
 import {useIntl} from "react-intl";
 import {OwnerItemsTable} from "./OwnerItemsTable";
+import {ItemContext} from "../../context/context";
 
 interface OwnerItemsProps{
     token: string
@@ -37,7 +38,14 @@ export const OwnerItems : FC<OwnerItemsProps> =({token})=>{
                 </Center>
             case FetchState.Finished:
                 return error === 200 ?
-                    <OwnerItemsTable items={items} refresh={refresh}/>:
+                    <ItemContext.Consumer>
+                        {context =>(
+                            <OwnerItemsTable
+                                items={items}
+                                refresh={refresh}
+                                editItem={context.editItem}/>
+                        )}
+                    </ItemContext.Consumer>:
                     <Center w={'100%'} h={'100%'}>
                         <Text variant='error'>
                             {intl.formatMessage({id: getErrorMessage(error)})}
