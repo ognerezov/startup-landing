@@ -94,5 +94,32 @@ export const es: Record<string, string> = {
     'App.hello.business' : 'Potencia tu negocio alquilando tus productos y genera más clientes',
 
     'Logout' : 'Cerrar sesión',
-    'Alert.confirm' : 'Confirmar'
+    'Alert.confirm' : 'Confirmar',
+    'Book.select.date' : 'Selecciona la fecha de alquiler',
+    'Book.select.pickup' : 'Hora de recogida',
+    'Book.select.return' : 'Hora de devolución',
+    'Book.pickup' : 'Recoger en:',
+    'Book.return' : 'Devolver en:',
+    'Book.clear.date' : 'Borrar fechas',
+    'Book.total' : 'Total: ',
+    'Book.success' : 'Has reservado correctamente el artículo. Por favor, espere la confirmación de los propietarios.',
+
+    'Continue' : 'Confirmar',
+    'Currency' : '€',
+    'Confirm.question' : "¿Estás seguro? No puedes deshacer esta acción.",
+
+    'Items.my' : 'Mis artículos',
+    'Items.search' : 'Mis alquileres',
+    'Items.fetch.error' : 'Error al reservar. Por favor, ponte en contacto con nosotros',
+    'Delete' : 'Borrar',
+    'Items.update' : 'Actualizar',
+    'Items.edit' : 'Editar',
+
+    'Error.forbidden' : 'Operación denegada. Contacta con el equipo de soporte',
+    'Error.unauthorized' : 'Error de autorización. error. Contacta con el equipo de soporte',
+    'Error.network' : 'Error de conexión. Comprueba tu acceso a Internet',
+
+    'Confirm.delete' : 'Confirmar la eliminación del artículo',
+
+    'Confirmation.email.id' : 'Número de reserva:',
 };

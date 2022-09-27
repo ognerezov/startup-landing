@@ -123,5 +123,6 @@ export const en: Record<string, string> = {
 	'Error.unauthorized' : 'Authorization error. Please contact support team',
 	'Error.network' : 'Network error. Please check your internet connection',
 
-	'Confirm.delete' : 'Proceed with DELETE operation?'
+	'Confirm.delete' : 'Proceed with DELETE operation?',
+	'Confirmation.email.id' : 'Book item request id: ',
 };

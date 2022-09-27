@@ -51,6 +51,13 @@ const HOME = 'Home'
 const ABOUT = 'About'
 const CONTACT = 'Contact'
 
+/*
+I try to make a summary:
+- Possibility to edit the profile to put the name of the store (exampl: Ana is a pharmacy worker, in the product you can see Ana and should write PHARMACY GILABERT SOLER)
+- Profile picture for business
+- When a reservation is made, send a copy to the client with the details of the store (address, telephone, working hours of the business, pick up time, contact person, etc. and with the reminder of the deposit and how to make it; a copy to the Store with the client's data, to be able to contact him if necessary or give any instructions, send him the reserved item, the days, the amount, etc. and the name and telephone number of the client); and finally a copy of an email that we can manage, something like: bookings@rentsby.com so that in this case I as COO or the person who needs to have access, have the info there.
+ */
+
 interface RouteParams{
     scope ?: string
     id ?: string

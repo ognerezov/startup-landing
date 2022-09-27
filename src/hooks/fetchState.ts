@@ -50,8 +50,8 @@ export function useFetchState<T,R>(path: string, method : string, def :T):[
         }else {
             body = JSON.stringify(r)
         }
-        console.log(url)
-        console.log(body)
+        // console.log(url)
+        // console.log(body)
         const params : RequestInit = {
             method,
             mode: auth ? undefined : 'cors',
@@ -69,7 +69,7 @@ export function useFetchState<T,R>(path: string, method : string, def :T):[
             },
             body
         }
-        console.log(params)
+        // console.log(params)
         setState(FetchState.InProgress);
         fetch(url,params)
             .then(response =>{
