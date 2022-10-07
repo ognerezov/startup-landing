@@ -1,7 +1,7 @@
 import {Item} from "../../model/items";
 import React, {FC, useMemo, useState} from "react";
 import {
-    Box, useMediaQuery, Table,
+    useMediaQuery, Table,
     Thead,
     Tbody,
     Tr,
@@ -24,10 +24,15 @@ interface OwnerItemsTableProps{
     editItem : (item : Item)=>void
 }
 
-export const OwnerItemsTable : FC<OwnerItemsTableProps> = ({items,refresh, editItem})=>{
+
+export const OwnerItemsTable : FC<OwnerItemsTableProps> = ({items : data,refresh, editItem})=>{
     const [largeScreen] = useMediaQuery(QUERY_SCREEN_SIZE)
     const convert = useCurrency();
     const [delItem, setDelItem] = useState<Item | undefined>(undefined)
+
+    const items = useMemo(()=>{
+        return data?.sort((item1,item2)=>item1.id-item2.id)
+    },[data])
 
     const onDeleteConfirm = useMemo(()=>(
         function (confirmed : boolean) {
@@ -44,7 +49,7 @@ export const OwnerItemsTable : FC<OwnerItemsTableProps> = ({items,refresh, editI
             return <NoItemsFound/>
         }
 
-        return largeScreen ?
+        return (
                 <> {delItem ?<UserContext.Consumer>{auth =>(auth.auth.token ?
                         <DeleteConfirmDialog onClose={onDeleteConfirm} id ={delItem.id} title={delItem.name}  token={auth.auth.token}/> : null
                     )}
@@ -62,12 +67,17 @@ export const OwnerItemsTable : FC<OwnerItemsTableProps> = ({items,refresh, editI
                             <Tr>
                                 <Th>Id</Th>
                                 <Th>Picture</Th>
+
+                                {largeScreen ?
+                                    <>
+
                                 <Th>Name</Th>
                                 <Th>Price/hour</Th>
                                 <Th>Price/day</Th>
                                 <Th>Price/week</Th>
                                 <Th>Price/month</Th>
                                 <Th>Value</Th>
+                                </>: null}
                                 <Th ></Th>
                             </Tr>
                         </Thead>
@@ -81,26 +91,31 @@ export const OwnerItemsTable : FC<OwnerItemsTableProps> = ({items,refresh, editI
                                         <ItemImage
                                             path={item.id + DEFAULT_IMAGE} alt={item.name} width={'100%'}/>
                                     </Td>
-                                    <Td      style={{
-                                        wordWrap: "break-word",
-                                    }}>
-                                        {item.name}
-                                    </Td>
-                                    <Td >
-                                        {convert(item.pricePerHour)}
-                                    </Td>
-                                    <Td >
-                                        {convert(item.pricePerDay)}
-                                    </Td>
-                                    <Td >
-                                        {convert(item.pricePerWeek)}
-                                    </Td>
-                                    <Td >
-                                        {convert(item.pricePerMonth)}
-                                    </Td>
-                                    <Td >
-                                        {convert(item.price)}
-                                    </Td>
+
+                                    {largeScreen ?
+                                            <>
+                                        <Td      style={{
+                                            wordWrap: "break-word",
+                                        }}>
+                                            {item.name}
+                                        </Td>
+                                        <Td >
+                                            {convert(item.pricePerHour)}
+                                        </Td>
+                                        <Td >
+                                            {convert(item.pricePerDay)}
+                                        </Td>
+                                        <Td >
+                                            {convert(item.pricePerWeek)}
+                                        </Td>
+                                        <Td >
+                                            {convert(item.pricePerMonth)}
+                                        </Td>
+                                        <Td >
+                                            {convert(item.price)}
+                                        </Td>
+                                        </>: null
+                                     }
                                     <Td width={'15%'}>
                                         <HStack spacing={'1vmin'} width={'100%'}>
                                             <TextButton onClick={()=>{editItem(item)}} px={'1vmin'} variant={'medium_solid'} id={'Items.edit'}/>
@@ -112,15 +127,15 @@ export const OwnerItemsTable : FC<OwnerItemsTableProps> = ({items,refresh, editI
                         </Tbody>
                     </Table>
                 </TableContainer></>
- :
-            <Box
-                width='100vw'
-                height='94vh'
-                position='fixed' top='6vh'
-                left='0'
-            >
-                not supported on mobile
-
-            </Box>
+            )
+            // <Box
+            //     width='100vw'
+            //     height='94vh'
+            //     position='fixed' top='6vh'
+            //     left='0'
+            // >
+            //     not supported on mobile
+            //
+            // </Box>
     },[convert, delItem, items, largeScreen, onDeleteConfirm, editItem])
 }
