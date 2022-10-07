@@ -23,7 +23,6 @@ export const FileInput : FC<FileInputProps> = ({id, onChange, label}) => {
                 size="md"
                 variant={'flushed'}
                 type={'file'}
-                capture
                 accept={'image/png, image/jpg, image/bmp, image/gif, image/svg+xml, image/tiff'}
                 multiple={false}
                 id={id}

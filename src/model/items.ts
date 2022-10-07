@@ -99,3 +99,16 @@ export function toFormData(item : any) : FormData{
 
     return data;
 }
+
+export function isValid(item : AddItemRequest): boolean{
+    return typeof (item.category) === 'number' &&
+        !!item.name &&
+        !!item.file &&
+        !!(item.pricePerHour || item.pricePerDay || item.pricePerWeek)
+}
+
+export function isValidItem(item : Item): boolean{
+    return item.categoryId > 0 &&
+        !!item.name &&
+        !!(item.pricePerHour || item.pricePerDay || item.pricePerWeek)
+}

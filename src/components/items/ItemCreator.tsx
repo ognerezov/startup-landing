@@ -6,7 +6,7 @@ import {
     useMediaQuery, VStack
 } from "@chakra-ui/react";
 import {QUERY_SCREEN_SIZE} from "../../pages/About";
-import {EditItemRequest} from "../../model/items";
+import {EditItemRequest, isValid, Item} from "../../model/items";
 import {DEFAULT_SPOT} from "../../backend/GeoSearch";
 import {InputField} from "../common/InputField";
 import {useIntl} from "react-intl";
@@ -22,9 +22,10 @@ import {goToItem} from "../../config/ServerAddress";
 
 interface ItemCreatorProps{
     context : ItemContextService
+    submit :(item : Item | EditItemRequest)=>void
 }
 
-export const ItemCreator : FC<ItemCreatorProps> = ({context}) => {
+export const ItemCreator : FC<ItemCreatorProps> = ({context, submit}) => {
     const mapContainer = useRef<HTMLElement>(null);
     const map = useRef<mapboxgl.Map | null>(null);
     const [largeScreen] = useMediaQuery(QUERY_SCREEN_SIZE)
@@ -49,15 +50,16 @@ export const ItemCreator : FC<ItemCreatorProps> = ({context}) => {
     const recenter= useCallback((point: Point)=> {
         fetchAddress(point)
             .then(address => {
-                setItem({...item,...address, lon : point.lon, lat : point.lat})
+                setItem(item=>({...item,...address, lon : point.lon, lat : point.lat}))
             })
-            .catch(()=>setItem({...item,address : undefined, lon : point.lon, lat : point.lat}))
+            .catch(()=>{
+                setItem(item=>({...item,address : undefined, lon : point.lon, lat : point.lat}))})
         map.current?.setCenter([point.lon, point.lat])
         marker.current && marker.current.remove();
         marker.current = new mapboxgl.Marker()
             .setLngLat([point.lon, point.lat])
             .addTo(map.current!);
-    },[item])
+    },[])
 
     const initMap = useCallback((point : Point)=> {
         map.current = new mapboxgl.Map({
@@ -76,20 +78,18 @@ export const ItemCreator : FC<ItemCreatorProps> = ({context}) => {
                 lon : event.lngLat.lng
             })
         });
-        map.current.addControl(
-            new MapboxGeocoder({
-                accessToken: mapboxgl.accessToken,
-                placeholder: 'input location',
-                marker: false,
-            })
-        );
-        map.current.addControl(
-            new MapboxGeocoder({
-                accessToken: mapboxgl.accessToken,
-                placeholder: 'input location',
-                marker: false,
-            })
-        );
+
+        const geoCoder = new MapboxGeocoder({
+            accessToken: mapboxgl.accessToken,
+            placeholder: 'input location',
+            mapboxgl: mapboxgl,
+            marker: true,
+            flyTo : false
+        })
+
+
+        map.current.addControl(new mapboxgl.FullscreenControl());
+        map.current.addControl(geoCoder);
         map.current.addControl(
             new mapboxgl.GeolocateControl({
                 positionOptions: {
@@ -98,10 +98,17 @@ export const ItemCreator : FC<ItemCreatorProps> = ({context}) => {
                 trackUserLocation: true,
             })
         );
-        map.current.addControl(new mapboxgl.FullscreenControl());
-        map.current.addControl(new mapboxgl.NavigationControl());
-    },[recenter]);
 
+        map.current.addControl(new mapboxgl.NavigationControl());
+        geoCoder.on('result', function(ev) {
+            // console.log(ev)
+            const point : Point = {
+                lat : ev.result.geometry.coordinates[1],
+                lon : ev.result.geometry.coordinates[0]
+            }
+            recenter(point)
+        });
+    },[recenter]);
 
     useEffect(() => {
         if (map.current) {
@@ -110,9 +117,10 @@ export const ItemCreator : FC<ItemCreatorProps> = ({context}) => {
         initMap({lat : item.lat, lon: item.lon})
         getLocation()
             .then(recenter)
+            .catch(()=>{})
     },[initMap, item, recenter]);
 
-    function getAddressString(){
+    const addressString= useMemo(()=>{
         if(item.address){
             return item.address;
         }
@@ -120,13 +128,8 @@ export const ItemCreator : FC<ItemCreatorProps> = ({context}) => {
         const lon = (item.lon+'').slice(0,8);
         const lat = (item.lat + '').slice(0,8);
         return lon +', '+lat
-    }
+    },[item.address, item.lat, item.lon])
 
-    const isValid : boolean = useMemo<boolean>(()=>{
-        return !!item.name &&
-            !!item.file &&
-            !!(item.pricePerHour || item.pricePerDay || item.pricePerWeek)
-    },[item.file, item.name, item.pricePerDay, item.pricePerHour, item.pricePerWeek])
 
     const form = useMemo(()=>{
         switch (context.editContext.state){
@@ -173,11 +176,13 @@ export const ItemCreator : FC<ItemCreatorProps> = ({context}) => {
                             }}
                     >
                         {context.categories.map(category=>(
-                            <option value={category.id} key={category.id}><Text variant={'medium'}>{
-                                intl.formatMessage({id: `Category.${category.id}`})}</Text></option>
+                            <option value={category.id} key={category.id}>
+                                    {intl.formatMessage({id: `Category.${category.id}`})}
+                            </option>
                         ))}
                     </Select>
-                    <FileInput id={'img'}
+                    <FileInput
+                                id={'img'}
                                label={'Create.item.image'}
                                onChange={ file =>
                                    setItem({...item,file})
@@ -236,14 +241,14 @@ export const ItemCreator : FC<ItemCreatorProps> = ({context}) => {
                                 } />
                     <Center>
                         <Button
-                            disabled={!isValid}
-                            className='bordered' w='60%' variant='ghost'  onClick={()=>context.editContext.submit(item)} id={'Submit'} >
+                            disabled={!isValid(item)}
+                            className='bordered' w='60%' variant='ghost'  onClick={()=>submit(item)} id={'Submit'} >
                             {intl.formatMessage({id :'Submit'})}</Button>
                     </Center>
                 </FormControl>
         }
 
-    },[context, intl, isValid, item])
+    },[context, intl, item, submit])
 
     return  <Box w={'100%'} h={'100%'}>
         <Annotation w={largeScreen ? '17vw' :'50vw'} h={'8vh'} left={largeScreen ? '10vw' :'0.8vw'} top={'21.7vh'} backgroundColor={'white'}>
@@ -255,7 +260,7 @@ export const ItemCreator : FC<ItemCreatorProps> = ({context}) => {
                 </Center>
                 <Center>
                     <Text variant ='tiny'>
-                        {getAddressString()}
+                        {addressString}
                     </Text>
                 </Center>
             </VStack>

@@ -32,9 +32,9 @@ const Header : FC<HeaderProps> = props => {
                 borderColor={'blue.300'}
                 borderBottomWidth={'1px'}
                 position='fixed'
-                left='0' top='0' width='100vw' height = '6vh'
+                left='0' top='0' width='100vw' height = '4.5vh'
                 zIndex={3}>
-                <img onClick={goHome} className={'img-btn'} src={fav} height={'5.6vh'} alt={intl.formatMessage({id: 'Company.name'})}/>
+                <img onClick={goHome} className={'img-btn'} src={fav} height={'4vh'} alt={intl.formatMessage({id: 'Company.name'})}/>
                 <Spacer/>
                 <UserHeader textVariant={textVariant()}/>
                 <Spacer/>

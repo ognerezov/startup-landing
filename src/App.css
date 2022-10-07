@@ -9,7 +9,6 @@
   background: linear-gradient(90.48deg, #E8F8F8 0.31%, #64E3E3 53.07%, #E064E3 96.79%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
-  text-fill-color: transparent;
   white-space: pre;
 }
 
@@ -83,7 +82,7 @@
 }
 
 .map-container-mini-portrait{
-  height: 30vh;
+  height: 33vh;
   width: 100%;
 }
 

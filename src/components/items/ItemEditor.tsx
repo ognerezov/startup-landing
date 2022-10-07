@@ -6,7 +6,7 @@ import {
     useMediaQuery, VStack
 } from "@chakra-ui/react";
 import {QUERY_SCREEN_SIZE} from "../../pages/About";
-import {Item} from "../../model/items";
+import {EditItemRequest, isValidItem, Item} from "../../model/items";
 import {InputField} from "../common/InputField";
 import {useIntl} from "react-intl";
 import mapboxgl from "mapbox-gl";
@@ -19,9 +19,10 @@ import {goToItem} from "../../config/ServerAddress";
 
 interface ItemCreatorProps{
     context : ItemContextService
+    submit :(item : Item | EditItemRequest)=>void
 }
 
-export const ItemEditor : FC<ItemCreatorProps> = ({context}) => {
+export const ItemEditor : FC<ItemCreatorProps> = ({context, submit}) => {
     const mapContainer = useRef<HTMLElement>(null);
     const map = useRef<mapboxgl.Map | null>(null);
     const [largeScreen] = useMediaQuery(QUERY_SCREEN_SIZE)
@@ -33,15 +34,16 @@ export const ItemEditor : FC<ItemCreatorProps> = ({context}) => {
     const recenter= useCallback((point: Point)=> {
         fetchAddress(point)
             .then(address => {
-                setItem({...item,...address, lon : point.lon, lat : point.lat})
+                setItem(item=>({...item,...address, lon : point.lon, lat : point.lat}))
             })
-            .catch(()=>setItem({...item, lon : point.lon, lat : point.lat}))
+            .catch(()=>{
+                setItem(item=>({...item, lon : point.lon, lat : point.lat}))})
         map.current?.setCenter([point.lon, point.lat])
         marker.current && marker.current.remove();
         marker.current = new mapboxgl.Marker()
             .setLngLat([point.lon, point.lat])
             .addTo(map.current!);
-    },[item])
+    },[])
 
     const initMap = useCallback((point : Point)=> {
         map.current = new mapboxgl.Map({
@@ -54,26 +56,15 @@ export const ItemEditor : FC<ItemCreatorProps> = ({context}) => {
         map.current.on('load', () => {
             console.log('map init data layers')
         })
-        // map.current.on('click', (event) => {
-        //     recenter({
-        //         lat : event.lngLat.lat,
-        //         lon : event.lngLat.lng
-        //     })
-        // });
-        map.current.addControl(
-            new MapboxGeocoder({
-                accessToken: mapboxgl.accessToken,
-                placeholder: 'input location',
-                marker: false,
-            })
-        );
-        map.current.addControl(
-            new MapboxGeocoder({
-                accessToken: mapboxgl.accessToken,
-                placeholder: 'input location',
-                marker: false,
-            })
-        );
+
+        const geoCoder = new MapboxGeocoder({
+            accessToken: mapboxgl.accessToken,
+            placeholder: 'input location',
+            mapboxgl: mapboxgl,
+            marker: true,
+        })
+        map.current.addControl(new mapboxgl.FullscreenControl());
+        // map.current.addControl(geoCoder);
         map.current.addControl(
             new mapboxgl.GeolocateControl({
                 positionOptions: {
@@ -82,9 +73,16 @@ export const ItemEditor : FC<ItemCreatorProps> = ({context}) => {
                 trackUserLocation: true,
             })
         );
-        map.current.addControl(new mapboxgl.FullscreenControl());
         map.current.addControl(new mapboxgl.NavigationControl());
-    },[]);
+        geoCoder.on('result', function(ev) {
+            // console.log(ev)
+            const point : Point = {
+                lat : ev.result.geometry.coordinates[1],
+                lon : ev.result.geometry.coordinates[0]
+            }
+            recenter(point)
+        });
+    },[recenter]);
 
 
     useEffect(() => {
@@ -95,7 +93,7 @@ export const ItemEditor : FC<ItemCreatorProps> = ({context}) => {
         recenter({lat : item.lat, lon: item.lon})
     },[initMap, item, recenter]);
 
-    function getAddressString(){
+    const addressString= useMemo(()=>{
         if(item.address){
             return item.address;
         }
@@ -103,12 +101,7 @@ export const ItemEditor : FC<ItemCreatorProps> = ({context}) => {
         const lon = (item.lon+'').slice(0,8);
         const lat = (item.lat + '').slice(0,8);
         return lon +', '+lat
-    }
-
-    const isValid : boolean = useMemo<boolean>(()=>{
-        return !!item.name  &&
-            !!(item.pricePerHour || item.pricePerDay || item.pricePerWeek)
-    },[item.name, item.pricePerDay, item.pricePerHour, item.pricePerWeek])
+    },[item.address, item.lat, item.lon])
 
     const form = useMemo(()=>{
         switch (context.editContext.state){
@@ -155,8 +148,9 @@ export const ItemEditor : FC<ItemCreatorProps> = ({context}) => {
                             }}
                     >
                         {context.categories.map(category=>(
-                            <option value={category.id} key={category.id}><Text variant={'medium'}>{
-                                intl.formatMessage({id: `Category.${category.id}`})}</Text></option>
+                            <option value={category.id} key={category.id}>
+                                    {intl.formatMessage({id: `Category.${category.id}`})}
+                            </option>
                         ))}
                     </Select>
                     <InputField id={'name'}
@@ -213,15 +207,16 @@ export const ItemEditor : FC<ItemCreatorProps> = ({context}) => {
                                 } />
                     <Center>
                         <Button
-                            disabled={!isValid}
+                            disabled={!isValidItem(item)}
                             className='bordered' w='60%' variant='ghost'
-                            onClick={()=>context.editContext.submit({...item, category : item.categoryId})} id={'Submit'} >
+                            onClick={()=>submit({...item, category : item.categoryId})} id={'Submit'} >
                             {intl.formatMessage({id :'Submit'})}</Button>
                     </Center>
                 </FormControl>
         }
 
-    },[context, intl, isValid, item])
+    },[context, intl, item, submit])
+
 
     return  <Box w={'100%'} h={'100%'}>
         <Annotation w={largeScreen ? '17vw' :'50vw'} h={'8vh'} left={largeScreen ? '10vw' :'0.8vw'} top={'21.7vh'} backgroundColor={'white'}>
@@ -233,7 +228,7 @@ export const ItemEditor : FC<ItemCreatorProps> = ({context}) => {
                 </Center>
                 <Center>
                     <Text variant ='tiny'>
-                        {getAddressString()}
+                        {addressString}
                     </Text>
                 </Center>
             </VStack>

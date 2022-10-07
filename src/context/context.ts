@@ -1,5 +1,5 @@
 import {createContext} from "react";
-import {AddItemRequest, EditItemRequest, Item} from "../model/items";
+import {Item} from "../model/items";
 import {Dict, ItemDict} from "../model/common";
 import {IMAGE_CLOUDFRONT_URL, THUMBNAIL_CLOUDFRONT_URL} from "../config/ServerAddress";
 import {Interval} from "../services/date/DateUtils";
@@ -33,14 +33,12 @@ export enum PurchasePhase{
 export interface ItemEditContext{
     id ?: number
     category ?: number
-    submit :(item : Item | EditItemRequest)=>void
     state : EditState
     editItem ?: Item
 }
 
-export function noneItemEditContext(submit :(item : AddItemRequest)=>void) :ItemEditContext{
+export function noneItemEditContext() :ItemEditContext{
     return {
-        submit,
         state : EditState.NotStarted
     }
 }
@@ -69,7 +67,7 @@ export const ItemContext = createContext<ItemContextService>({
     selectItem : item =>{},
     onReport : event =>{},
     selectCategory : category =>{},
-    editContext : noneItemEditContext(item => {}),
+    editContext : noneItemEditContext(),
     setEditContext : context =>{},
     purchasePhase : PurchasePhase.NotStarted,
     setPurchasePhase :phase => {},

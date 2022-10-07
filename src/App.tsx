@@ -21,7 +21,7 @@ import {
     noneItemEditContext,
     PurchasePhase
 } from "./context/context";
-import {EditItemRequest, Item} from "./model/items";
+import {AddItemRequest, EditItemRequest, Item} from "./model/items";
 import {ItemView} from "./components/items/ItemView";
 import {useParams} from "react-router";
 import {getItemById} from "./backend/GetById";
@@ -71,14 +71,13 @@ const App: FC = () => {
     const [item, setItem] = useState<Item|undefined>(undefined)
     const [category, setCategory] = useState<number|undefined>(undefined)
     const [prevCategory, setPrevCategory] = useState<number|undefined>(undefined)
-    const [editContext, setEditContext] = useState<ItemEditContext>(noneItemEditContext(submitItem))
+    const [editContext, setEditContext] = useState<ItemEditContext>(noneItemEditContext())
     const [fetching, setFetching] = useState<boolean>(false)
     const [auth, setAuth] = useStorage<Auth>(STORAGE_AUTH, INITIAL_AUTH)
     const [purchasePhase, setPurchasePhase] = useState<PurchasePhase>(PurchasePhase.NotStarted)
     const [rentalPeriod, setRentalPeriod] =useState<Interval | undefined>(undefined)
     const [ownerMode, setOwnerMode] = useState<boolean>(false)
     const [categories, getCategoriesState, , getCategories] = useFetchState<Category[],string>('categories','GET',DEFAULT_CATEGORIES)
-
 
     const editItem = useCallback((item : Item)=>{
         setEditContext({...editContext,editItem : item, state : EditState.Started})
@@ -119,7 +118,7 @@ const App: FC = () => {
 
     const userContext : UserContextService = {auth : auth, setAuth : setAuth}
 
-    function submitItem(item: EditItemRequest) {
+    const submitItem :(item : AddItemRequest)=>void= useCallback((item: EditItemRequest) =>{
         setEditContext({...editContext, state : EditState.Submitting})
         if (item.id){
             updateItem(item as Item,auth.token!)
@@ -144,7 +143,7 @@ const App: FC = () => {
                 console.log('error: '+e)
                 setEditContext({...editContext, state : EditState.Error})
             })
-    }
+    },[auth.token, editContext, onReport])
 
     useEffect( ()=>{
         if(params.scope === 'item' && params.id){
@@ -198,7 +197,7 @@ const App: FC = () => {
     },[state])
 
     useEffect(()=>{
-        getIP().then(onGotIp)
+        getIP().then(onGotIp).catch(console.log)
     },[onGotIp])
 
     const page = useMemo(()=>{
@@ -217,8 +216,8 @@ const App: FC = () => {
                     setEditContext({...editContext,state : EditState.NotStarted})
                 }}>
                     { editContext.editItem ?
-                        <ItemEditor context={context}/> :
-                        <ItemCreator context={context}/>
+                        <ItemEditor context={context} submit={submitItem}/> :
+                        <ItemCreator context={context} submit={submitItem}/>
                     }
                 </UserGateway>
             }
@@ -256,7 +255,7 @@ const App: FC = () => {
             default:
                 return <NotFound/>
         }
-    }, [categories, context, editContext, fetching, goHome, item, onReport, ownerMode, prevCategory, purchasePhase, state.tab])
+    }, [categories, context, editContext, fetching, goHome, item, onReport, ownerMode, prevCategory, purchasePhase, state.tab, submitItem])
 
   const   currentLanguage = useMemo( ()=>systemLanguage(),[]);
 

@@ -59,7 +59,7 @@ export function useFetchState<T,R>(path: string, method : string, def :T):[
             redirect: 'follow',
             credentials : auth ? 'include' : undefined,
             headers: auth ? {
-                'Access-Control-Allow-Origin': 'http://localhost:8080, https://app.rentsby.com, https://rentsby.com, https://89kkdndqhb.execute-api.eu-west-1.amazonaws.com',
+                'Access-Control-Allow-Origin': 'http://localhost:8080, http://192.168.1.37:8080, https://app.rentsby.com, https://rentsby.com, https://89kkdndqhb.execute-api.eu-west-1.amazonaws.com',
                 'Authorization' : auth,
                 'Access-Control-Allow-Headers': '*',
                 'Access-Control-Allow-Methods' : 'GET, POST, PATCH, PUT, DELETE, OPTIONS',
